@@ -18,10 +18,10 @@ const User = require('../../models/User');      //Model Name "User"
 // @access  Public
 router.get("/test", (req, res) => res.json({msg: "Users Works"}));  //intead of /api/users/test
 
-// @route   Get api/users/register
+// @route   POST api/users/register
 // @desc    Register users
 // @access  Public
-router.post("/register", (req, res) => {
+router.post('/register', (req, res) => {
     const { errors, isValid } = validateRegisterInput(req.body);
 
     if(!isValid) {
