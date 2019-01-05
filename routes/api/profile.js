@@ -13,12 +13,53 @@ const Profile = require('../../models/Profile');
 // Load User Model
 const User = require('../../models/User');
 
+const Rider = require('../../models/Rider');
+
+const Vendor = require('../../models/Vendor');
+
+const Package = require('../../models/Package');
+
 
 // @route   Get api/profile/test
 // @desc    Test profile route
 // @access  Public
 router.get("/test", (req, res) => res.json({msg: "Profile Works"}));
 
+// @route   POST api/profile/add_rider
+// @desc    Add rider
+// @access  Private
+router.post(
+  '/add_rider',
+  passport.authenticate('jwt', { session: false }),
+  (req, res) => {
+    const newRider = new Rider({
+      name: req.body.name,
+      contact: req.body.contact
+    });
+    newRider
+      .save()
+      .then(rider => res.json(rider))
+      .catch(err => console.log(err));
+  }
+);
+
+// @route   POST api/profile/add_vendor
+// @desc    Add vendor
+// @access  Private
+router.post(
+  '/add_vendor',
+  passport.authenticate('jwt', { session: false }),
+  (req, res) => {
+    const newVendor = new Vendor({
+      name: req.body.name,
+      contact: req.body.contact
+    });
+    newVendor
+      .save()
+      .then(vendor => res.json(vendor))
+      .catch(err => console.log(err));
+  }
+);
 
 // @route   Get api/profile
 // @desc    Get current user profile
@@ -41,7 +82,7 @@ router.get('/', passport.authenticate('jwt', { session: false }), (req, res) => 
 // @route   GET api/profile/all
 // @desc    Get all profiles
 // @access  Public
-router.get('/all', (re, res) => {
+router.get('/all', (req, res) => {
   const errors = {};
 
   Profile.find()
@@ -83,7 +124,7 @@ router.get('/user/:user_id', (req, res) => {
   const errors = {};
 
   Profile.findOne({ user: req.params.user_id })    // This will enable to get the profile
-  .populate('user', ['name', 'avatar'])           // by any id, not just logged in id.
+  .populate('user', ['name', 'avatar'])            // by any id, not just logged in id.
   .then(profile => {
     if(!profile) {
       errors.noprofile = 'There is no profile for this user';
@@ -94,6 +135,36 @@ router.get('/user/:user_id', (req, res) => {
   })
   .catch(err => res.status(404).json({ profile: 'There is no profile for this user'}));
 });
+
+// @route   POST api/profile/add_package
+// @desc    Create or Edit package
+// @access  Private
+router.post(
+  '/add_package',
+  passport.authenticate('jwt', { session: false }),
+  (req, res) => {
+    const packageFields = {};
+    if(req.body.packageNo) packageFields.packageNo = req.body.packageNo;
+    if(req.body.cod) packageFields.cod = req.body.cod;
+    if(req.body.dc) packageFields.dc = req.body.dc;
+    if(req.body.status) packageFields.status = req.body.status;
+    if(req.body.vendorname) {
+      Vendor.findOne({ vendor: req.body.vendorname })
+        .then(vendor => {
+          if(!vendor) {
+            res.status(404).json('Vendor name does not exist');
+          } else {
+            packageFields.vendorname = req.body.vendorname;
+
+            new Package(packageFields).save()
+              .then(package => res.json(package))
+              .catch(err => console.log(err));
+          }
+        });
+        
+    }
+  }
+);
 
 // @route   POST api/profile
 // @desc    Create or Edit user profile
@@ -229,7 +300,7 @@ router.post(
       })
   });
 
-// @route   POST api/profile/experience/:exp_id
+// @route   DELETE api/profile/experience/:exp_id
 // @desc    Delete experience from profile
 // @access  Private
 router.delete(
