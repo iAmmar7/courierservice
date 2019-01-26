@@ -7,16 +7,19 @@ const passport = require('passport');
 const validateProfileInput = require('../../validation/profile');
 const validateExperienceInput = require('../../validation/experience');
 const validateEducationInput = require('../../validation/education');
+const validateRiderInput = require('../../validation/rider');
+const validateVendorInput = require('../../validation/vendor');
+const validatePackageInput = require('../../validation/package');
 
 // Load Profile Model
 const Profile = require('../../models/Profile');
 // Load User Model
 const User = require('../../models/User');
-
+// Load Rider Model
 const Rider = require('../../models/Rider');
-
+// Load Vendor Model
 const Vendor = require('../../models/Vendor');
-
+// Load Package Model
 const Package = require('../../models/Package');
 
 
@@ -32,9 +35,18 @@ router.post(
   '/add_rider',
   passport.authenticate('jwt', { session: false }),
   (req, res) => {
+    const { errors, isValid } = validateRiderInput(req.body);
+
+    // Check Validation
+    if(!isValid) {
+      // Return any errors
+      return res.status(400).json(errors);
+    }
+
     const newRider = new Rider({
       name: req.body.name,
-      contact: req.body.contact
+      contact: req.body.contact,
+      chargesperdelivery: req.body.chargesperdelivery
     });
     newRider
       .save()
@@ -50,16 +62,130 @@ router.post(
   '/add_vendor',
   passport.authenticate('jwt', { session: false }),
   (req, res) => {
+    const { errors, isValid } = validateVendorInput(req.body);
+
+    // Check Validation
+    if(!isValid) {
+      // Return any errors
+      return res.status(400).json(errors);
+    }
+
     const newVendor = new Vendor({
       name: req.body.name,
-      contact: req.body.contact
+      contact: req.body.contact,
+      address: req.body.address
     });
+
     newVendor
       .save()
       .then(vendor => res.json(vendor))
       .catch(err => console.log(err));
   }
 );
+
+// @route   POST api/profile/add_package
+// @desc    Create or Edit package
+// @access  Private
+router.post(
+  '/add_package',
+  passport.authenticate('jwt', { session: false }),
+  (req, res) => {
+    const { errors, isValid } = validatePackageInput(req.body);
+
+    // Check Validation
+    if(!isValid) {
+      // Return any errors
+      return res.status(400).json(errors);
+    }
+
+    // Get Fields
+    const packageFields = {};
+    if(req.body.customername) packageFields.customername = req.body.customername;
+    if(req.body.customerphone) packageFields.customerphone = req.body.customerphone;
+    if(req.body.address) packageFields.address = req.body.address;
+    if(req.body.cod) packageFields.cod = req.body.cod;
+    if(req.body.dc) packageFields.dc = req.body.dc;
+    if(req.body.status) packageFields.status = req.body.status;
+    if(req.body.vendorname) {
+      Vendor.findOne({"name": req.body.vendorname})
+        .then(vendor => {
+          if(!vendor) {
+            res.status(404).json('Vendor name does not exist');
+          } else {
+            packageFields.vendorname = req.body.vendorname;
+
+            new Package(packageFields).save()
+              .then(package => res.json(package))
+              .catch(err => console.log(err));
+          }
+        });
+    }
+  }
+);
+
+// @route   GET api/profile/all_riders
+// @desc    Get all riders
+// @access  Private
+router.get(
+  '/all_riders',
+  passport.authenticate('jwt', { session: false }),
+  (req, res) => {
+  const errors = {};
+
+  Rider.find()
+  .then(riders => {
+    if(!riders) {
+      errors.norider = 'There are no Riders';
+      return res.status(404).json(errors);
+    }
+
+    res.json(riders);
+  })
+  .catch(err => res.status(404).json({ rider: 'There are no riders'}));
+})
+
+// @route   GET api/profile/all_vendors
+// @desc    Get all vendors
+// @access  Private
+router.get(
+  '/all_vendors',
+  passport.authenticate('jwt', { session: false }),
+  (req, res) => {
+  const errors = {};
+
+  Vendor.find()
+  .then(vendors => {
+    if(!vendors) {
+      errors.novendor = 'There are no Vendors';
+      return res.status(404).json(errors);
+    }
+
+    res.json(vendors);
+  })
+  .catch(err => res.status(404).json({ rider: 'There are no vendors'}));
+})
+
+// @route   GET api/profile/all_packages
+// @desc    Get all packages
+// @access  Private
+router.get(
+  '/all_packages',
+  passport.authenticate('jwt', { session: false }),
+  (req, res) => {
+  const errors = {};
+
+  Package.find()
+  .then(packages => {
+    if(!packages) {
+      errors.nopackage = 'There are no Packages';
+      return res.status(404).json(errors);
+    }
+
+    res.json(packages);
+  })
+  .catch(err => res.status(404).json({ package: 'There are no packages'}));
+})
+
 
 // @route   Get api/profile
 // @desc    Get current user profile
@@ -135,36 +261,6 @@ router.get('/user/:user_id', (req, res) => {
   })
   .catch(err => res.status(404).json({ profile: 'There is no profile for this user'}));
 });
-
-// @route   POST api/profile/add_package
-// @desc    Create or Edit package
-// @access  Private
-router.post(
-  '/add_package',
-  passport.authenticate('jwt', { session: false }),
-  (req, res) => {
-    const packageFields = {};
-    if(req.body.packageNo) packageFields.packageNo = req.body.packageNo;
-    if(req.body.cod) packageFields.cod = req.body.cod;
-    if(req.body.dc) packageFields.dc = req.body.dc;
-    if(req.body.status) packageFields.status = req.body.status;
-    if(req.body.vendorname) {
-      Vendor.findOne({ vendor: req.body.vendorname })
-        .then(vendor => {
-          if(!vendor) {
-            res.status(404).json('Vendor name does not exist');
-          } else {
-            packageFields.vendorname = req.body.vendorname;
-
-            new Package(packageFields).save()
-              .then(package => res.json(package))
-              .catch(err => console.log(err));
-          }
-        });
-        
-    }
-  }
-);
 
 // @route   POST api/profile
 // @desc    Create or Edit user profile
@@ -361,6 +457,5 @@ router.delete(
           .then(() => res.json({ success: true }))
       })
   });
-
 
 module.exports = router;

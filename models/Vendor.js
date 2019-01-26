@@ -7,8 +7,11 @@ const VendorSchema = new Schema({
     required: true
   },
   contact: {
-      type: Number,
-      required: true
+    type: Number,
+    required: true
+  },
+  address: {
+    type: String,
   }
 });
 

@@ -2,12 +2,12 @@ const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 
 const PackageSchema = new Schema({
-  packageNo: {
-    type: Number,
-    index: true,
-    unique: true
-  },
-  date: {
+  // packageNo: {
+  //   type: Number,
+  //   index: true,
+  //   unique: true
+  // },
+  arrivaldate: {
     type: Date,
     default: Date.now
   },
@@ -15,18 +15,18 @@ const PackageSchema = new Schema({
     type: Date,
     default: Date.now
   },
-  // customername: {
-  //   type: String,
-  //   required: true
-  // },
-  // customerphone: {
-  //   type: Number,
-  //   require: true
-  // },
-  // address: {
-  //   type: String,
-  //   required: true
-  // },
+  customername: {
+    type: String,
+    required: true
+  },
+  customerphone: {
+    type: Number,
+    require: true
+  },
+  address: {
+    type: String,
+    required: true
+  },
   vendorname: {
     type: String,
     required: true

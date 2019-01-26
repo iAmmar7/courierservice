@@ -9,6 +9,14 @@ const RiderSchema = new Schema({
   contact: {
       type: Number,
       required: true
+  },
+  chargesperdelivery: {
+    type: Number,
+    required: true
+  },
+  hiredate: {
+    type: Date,
+    default: Date.now
   }
 });
 
