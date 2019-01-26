@@ -43,15 +43,15 @@ router.post(
       return res.status(400).json(errors);
     }
 
-    const newRider = new Rider({
-      name: req.body.name,
-      contact: req.body.contact,
-      chargesperdelivery: req.body.chargesperdelivery
-    });
-    newRider
-      .save()
-      .then(rider => res.json(rider))
-      .catch(err => console.log(err));
+    const riderFields = {};
+    riderFields.user = req.user.id;
+    if(req.body.name) riderFields.name = req.body.name;
+    if(req.body.contact) riderFields.contact = req.body.contact;
+    if(req.body.chargesperdelivery) riderFields.chargesperdelivery = req.body.chargesperdelivery;
+
+    new Rider(riderFields).save()
+    .then(rider => res.json(rider))
+    .catch(err => console.log(err));
   }
 );
 
@@ -70,16 +70,15 @@ router.post(
       return res.status(400).json(errors);
     }
 
-    const newVendor = new Vendor({
-      name: req.body.name,
-      contact: req.body.contact,
-      address: req.body.address
-    });
+    const vendorFields = {};
+    vendorFields.user = req.user.id;
+    if(req.body.name) vendorFields.name = req.body.name;
+    if(req.body.contact) vendorFields.contact = req.body.contact;
+    if(req.body.address) vendorFields.address = req.body.address;
 
-    newVendor
-      .save()
-      .then(vendor => res.json(vendor))
-      .catch(err => console.log(err));
+    new Vendor(vendorFields).save()
+    .then(vendor => res.json(vendor))
+    .catch(err => console.log(err));
   }
 );
 
@@ -100,12 +99,25 @@ router.post(
 
     // Get Fields
     const packageFields = {};
+    packageFields.user = req.user.id;
     if(req.body.customername) packageFields.customername = req.body.customername;
     if(req.body.customerphone) packageFields.customerphone = req.body.customerphone;
     if(req.body.address) packageFields.address = req.body.address;
     if(req.body.cod) packageFields.cod = req.body.cod;
     if(req.body.dc) packageFields.dc = req.body.dc;
     if(req.body.status) packageFields.status = req.body.status;
+    
+    if(req.body.ridername) {
+      Rider.findOne({"name": req.body.ridername})
+        .then(rider => {
+          if(!rider) {
+            res.status(404).json("Rider does not exist")
+          } else {
+            packageFields.ridername = req.body.ridername;
+          }
+        })
+    }
+
     if(req.body.vendorname) {
       Vendor.findOne({"name": req.body.vendorname})
         .then(vendor => {

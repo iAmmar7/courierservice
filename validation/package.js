@@ -14,11 +14,11 @@ module.exports = function validatePackageInput(data) {
     errors.vendorname = "Vendor name is required";
   }
 
-  if(data.ridername) {
-    if(Validator.isEmpty(data.ridername)) {
-      errors.ridername = "Rider name is required";
-    }
-  }
+  // if(data.ridername) {
+  //   if(Validator.isEmpty(data.ridername)) {
+  //     errors.ridername = "Rider name is required";
+  //   }
+  // }
 
   if(Validator.isEmpty(data.customername)) {
     errors.customername = "Customer name is required";
