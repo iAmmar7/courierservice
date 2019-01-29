@@ -68,3 +68,17 @@ class App extends Component {
 }
 
 export default App;
+
+
+/*
+  Why do we need authentication, jwt-decoder etc in App.js??
+  The reason is if we set our user here then every time he reload or comes from
+  another or go to another page, the App.js will have access to token which is
+  stored in localStorage. So the user will always be logged in if the token is
+  there.
+  And then we the token of a user expires that if condition checks it and
+  redirect it to ./login page if token is expired.
+
+  Switch is used to redirect in protected route. That's how user it takes us 
+  ./login page when user.isAuthenticated is false.
+ */

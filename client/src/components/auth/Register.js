@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import { withRouter } from 'react-router-dom';
+import { withRouter } from 'react-router-dom'; 
 import classnames from 'classnames';
 import { connect } from 'react-redux';    //connects REACT with REDUX
 import { registerUser } from '../../actions/authActions';
@@ -27,7 +27,7 @@ class Register extends Component {
   }
 
   componentWillReceiveProps(nextProps) {
-    if(nextProps.errors) {
+    if(nextProps.errors) {                        //REDUX state errors
       this.setState({errors: nextProps.errors})
     }
   }
@@ -118,3 +118,24 @@ const mapStateToProps = (state) => ({
 });
 
 export default connect(mapStateToProps, { registerUser })(withRouter(Register));
+
+
+/*1-A container is a REACT COMPONENT which works with REDUX.
+
+  2-componentWillTakeProps(nextProps) means when component take props it will
+    render again, so what we are doing, we are setting the REDUX STATE ERRORS
+    to COMPONENT STATE ERRORS, so that we don't need to change our whole
+    component properties everywhere. 
+
+  3-withRouter() is used because we are pushing to login when register is
+    successful using authReducer. Since we are checking our axios respone in
+    REDUX ACTION so we need this "withRouter from react-router-dom" so that
+    we can use 'history.push(./login)' in our action.
+    Otherwise to redirect in a component, simply, if we applied axios response in this
+    component then we can easily use 'this.props.history.push(./login)'. This could
+    do the same.
+
+  4-componentDidMount() checks if the user is logged in, so there is no sense in going
+  to Resister, Login and Landing if the user is logged in. In all three components
+  we sent the user to Dashboard everytime he tries to go to these 3 pages using URL.
+*/

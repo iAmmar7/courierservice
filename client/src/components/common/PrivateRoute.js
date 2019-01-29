@@ -3,15 +3,15 @@ import { Route, Redirect } from 'react-router-dom';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 
-const PrivateRoute = ({component: Component, auth, ...rest }) => (
+const PrivateRoute = ({ component: Component, auth, ...rest }) => (
   <Route
     {...rest}
-    render = {props => 
+    render={props =>
       auth.isAuthenticated === true ? (
         <Component {...props} />
       ) : (
-        <Redirect to="/login" />
-      )
+          <Redirect to="/login" />
+        )
     }
   />
 );
@@ -25,3 +25,10 @@ const mapStateToProps = (state) => ({
 });
 
 export default connect(mapStateToProps)(PrivateRoute);
+
+/*
+  1-In REACT it is little difficult to make a route protected.
+    There is no default way to do this with react-router-dom. So we make
+    additional component to make work with this, by giving some additional
+    features to this component.
+*/

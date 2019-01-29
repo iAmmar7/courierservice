@@ -1,6 +1,6 @@
 import axios from 'axios';
 import setAuthToken from '../utils/setAuthToken';
-import jwt_decode from 'jwt-decode';
+import jwt_decode from 'jwt-decode';              // Define below
 
 import { GET_ERRORS, SET_CURRENT_USER } from './types';
 
@@ -62,8 +62,8 @@ export const logoutUser = () => dispatch => {
 //  1- to go from one route to anohter route is easy in React Component:
 //  this.props.history.push('/login');
 //  but we cant really do that here because we are in ACTIONS (REDUX)
-//  we will pass registerUser another variable in Register.js so that
-//  we can catch that over here with 'react-route-dom' "withRouter"
+//  we will pass registerUser another variable in Register Component (REACT)
+//  so that we can catch that over here with 'react-route-dom' "withRouter"
 
 //  2- Token is in Bearer form (Remember POSTMAN header Authorization) it means it is
 //  is in long string form, so to extract a user from that string we need to
