@@ -144,7 +144,7 @@ router.get(
   (req, res) => {
   const errors = {};
 
-  Rider.find()
+  Rider.find({ user: req.user.id })
   .then(riders => {
     if(!riders) {
       errors.norider = 'There are no Riders';
@@ -165,7 +165,28 @@ router.get(
   (req, res) => {
   const errors = {};
 
-  Vendor.find()
+  Vendor.find({ user: req.user.id })
+  .then(vendors => {
+    if(!vendors) {
+      errors.novendor = 'There are no Vendors';
+      return res.status(404).json(errors);
+    }
+
+    res.json(vendors);
+  })
+  .catch(err => res.status(404).json({ vendor: 'There are no vendors'}));
+})
+
+// @route   GET api/profile/vendors_name
+// @desc    Get all vendors
+// @access  Private
+router.get(
+  '/vendors_name',
+  passport.authenticate('jwt', { session: false }),
+  (req, res) => {
+  const errors = {};
+
+  Vendor.find({ user: req.user.id }).select('name')
   .then(vendors => {
     if(!vendors) {
       errors.novendor = 'There are no Vendors';
@@ -186,7 +207,7 @@ router.get(
   (req, res) => {
   const errors = {};
 
-  Package.find()
+  Package.find({ user: req.user.id })
   .then(packages => {
     if(!packages) {
       errors.nopackage = 'There are no Packages';

@@ -17,6 +17,9 @@ import Register from './components/auth/Register';
 import Login from './components/auth/Login';
 import Dashboard from './components/dashboard/Dashboard';
 import CreateProfile from './components/create-profile/CreateProfile';
+import AddRider from './components/rider/AddRider';
+import AddVendor from './components/vendor/AddVendor';
+import AddPackage from './components/package/AddPackage';
 
 import './App.css';
 
@@ -57,6 +60,15 @@ class App extends Component {
             </Switch>
             <Switch>    
               <PrivateRoute exact path="/create-profile" component={ CreateProfile } />       
+            </Switch>
+            <Switch>    
+              <PrivateRoute exact path="/add_rider" component={ AddRider } />       
+            </Switch>
+            <Switch>    
+              <PrivateRoute exact path="/add_vendor" component={ AddVendor } />       
+            </Switch>
+            <Switch>    
+              <PrivateRoute exact path="/add_package" component={ AddPackage } />       
             </Switch>
             </div>
             <Footer />

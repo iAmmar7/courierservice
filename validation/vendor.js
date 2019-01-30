@@ -20,10 +20,8 @@ module.exports = function validateVendorInput(data) {
     errors.contact = "Phone number is required";
   }
 
-  if(data.address) {
-    if(Validator.isEmpty(data.address)) {
+  if(Validator.isEmpty(data.address)) {
       errors.address = "Address field is required";
-    }
   }
 
   return {

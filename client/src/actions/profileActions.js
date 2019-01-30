@@ -5,7 +5,10 @@ import {
   PROFILE_LOADING, 
   CLEAR_CURRENT_PROFILE, 
   GET_ERRORS, 
-  SET_CURRENT_USER 
+  SET_CURRENT_USER, 
+  GET_RIDERS,
+  GET_VENDORS,
+  GET_PACKAGES
 } from './types';
 
 // Get current profile
@@ -29,6 +32,96 @@ export const getCurrentProfile = () => dispatch => {
 // Create Profile
 export const createProfile = (profileData, history) => dispatch => {
   axios.post('/api/profile', profileData)
+    .then(res => history.push('/dashboard'))
+    .catch(err => 
+      dispatch({
+        type: GET_ERRORS,
+        payload: err.response.data
+      })
+    );
+}
+
+// Get Riders
+export const getRiders = () => dispatch => {
+  dispatch(setProfileLoading());
+  axios.get('/api/profile/all_riders')
+    .then(res => 
+      dispatch({
+        type: GET_RIDERS,
+        payload: res.data
+      })
+    )
+    .catch(err => 
+      dispatch({
+        type: GET_PROFILE,
+        payload: {}
+      })
+    );
+}
+
+// Add Rider
+export const addRider = (riderData, history) => dispatch => {
+  axios.post('/api/profile/add_rider', riderData)
+    .then(res =>history.push('/dashboard'))
+    .catch(err => 
+      dispatch({
+        type: GET_ERRORS,
+        payload: err.response.data
+      })
+    );
+}
+
+// Get Vendors
+export const getVendors = () => dispatch => {
+  dispatch(setProfileLoading());
+  axios.get('/api/profile/all_vendors')
+    .then(res => 
+      dispatch({
+        type: GET_VENDORS,
+        payload: res.data
+      })
+    )
+    .catch(err => 
+      dispatch({
+        type: GET_PROFILE,
+        payload: {}
+      })
+    );
+}
+
+// Add Vendor
+export const addVendor = (vendorData, history) => dispatch => {
+  axios.post('/api/profile/add_vendor', vendorData)
+    .then(res => history.push('/dashboard'))
+    .catch(err => 
+      dispatch({
+        type: GET_ERRORS,
+        payload: err.response.data
+      })
+    );
+}
+
+// Get Packages
+export const getPackages = () => dispatch => {
+  dispatch(setProfileLoading());
+  axios.get('/api/profile/all_packages')
+    .then(res => 
+      dispatch({
+        type: GET_PACKAGES,
+        payload: res.data
+      })
+    )
+    .catch(err => 
+      dispatch({
+        type: GET_PROFILE,
+        payload: {}
+      })
+    );
+}
+
+// Add Package
+export const addPackage = (packageData, history) => dispatch => {
+  axios.post('/api/profile/add_package', packageData)
     .then(res => history.push('/dashboard'))
     .catch(err => 
       dispatch({

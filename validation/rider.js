@@ -21,7 +21,7 @@ module.exports = function validateRiderInput(data) {
   }
 
   if(Validator.isEmpty(data.chargesperdelivery)) {
-    errors.chargesperdelivery = "Charger per delivery is required";
+    errors.chargesperdelivery = "Charges per delivery is required";
   }
 
   return {

@@ -16,6 +16,11 @@ const VendorSchema = new Schema({
   },
   address: {
     type: String,
+    required: true
+  },
+  hiredate: {
+    type: Date,
+    default: Date.now
   }
 });
 
