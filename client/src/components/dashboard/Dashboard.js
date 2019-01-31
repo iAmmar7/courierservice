@@ -37,17 +37,26 @@ class Dashboard extends Component {
         <div>
           <p className="lead text-muted">Welcome { user.name }</p>
           <div className="d-flex justify-content-center">
-            <Link to='/add_rider' className="btn btn-lg btn-info mx-2">
+            <Link to='/add-rider' className="btn btn-lg btn-info mx-2">
               Add New Rider
             </Link>
-            <Link to='/add_vendor' className="btn btn-lg btn-info mx-2">
+            <Link to='/add-vendor' className="btn btn-lg btn-info mx-2">
               Add New Vendor
             </Link>
           </div>
           <hr/>
           <div className="d-flex justify-content-center">
-            <Link to='/add_package' className="btn btn-secondary btn-lg btn-block w-25 p-2">
+            <Link to='/add-package' className="btn btn-dark btn-lg btn-block w-25 p-2">
               Add New Package
+            </Link>
+          </div>
+          <hr/>
+          <div className="d-flex justify-content-center">
+            <Link to='/all-riders' className="btn btn-lg btn-secondary mx-2 px-5">
+              Riders Profile
+            </Link>
+            <Link to='/all-vendors' className="btn btn-lg btn-secondary mx-2 px-5">
+              Vendors Profile
             </Link>
           </div>
         </div>

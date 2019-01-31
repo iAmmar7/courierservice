@@ -3,7 +3,9 @@ import {
   PROFILE_LOADING, 
   CLEAR_CURRENT_PROFILE, 
   GET_RIDERS,
+  GET_RIDER_PROFILES,
   GET_VENDORS,
+  GET_VENDOR_PROFILES,
   GET_PACKAGES
 } from '../actions/types';
 
@@ -35,12 +37,24 @@ export default function(state = initialState, action) {
         riders: action.payload,
         loading: false
       }
+    case GET_RIDER_PROFILES:
+      return {
+        ...state,
+        riders: action.payload,
+        loading: false
+      };
     case GET_VENDORS: 
       return {
         ...state,
         vendors: action.payload,
         loading: false
       }
+    case GET_VENDOR_PROFILES:
+      return {
+        ...state,
+        vendors: action.payload,
+        loading: false
+      };
     case GET_PACKAGES: 
       return {
         ...state,

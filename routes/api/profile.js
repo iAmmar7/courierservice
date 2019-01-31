@@ -32,7 +32,7 @@ router.get("/test", (req, res) => res.json({msg: "Profile Works"}));
 // @desc    Add rider
 // @access  Private
 router.post(
-  '/add_rider',
+  '/add-rider',
   passport.authenticate('jwt', { session: false }),
   (req, res) => {
     const { errors, isValid } = validateRiderInput(req.body);
@@ -59,7 +59,7 @@ router.post(
 // @desc    Add vendor
 // @access  Private
 router.post(
-  '/add_vendor',
+  '/add-vendor',
   passport.authenticate('jwt', { session: false }),
   (req, res) => {
     const { errors, isValid } = validateVendorInput(req.body);
@@ -86,7 +86,7 @@ router.post(
 // @desc    Create or Edit package
 // @access  Private
 router.post(
-  '/add_package',
+  '/add-package',
   passport.authenticate('jwt', { session: false }),
   (req, res) => {
     const { errors, isValid } = validatePackageInput(req.body);
@@ -111,7 +111,8 @@ router.post(
       Rider.findOne({"name": req.body.ridername})
         .then(rider => {
           if(!rider) {
-            res.status(404).json("Rider does not exist")
+            errors.norider = "Rider name does not exist";
+            res.status(404).json(errors);
           } else {
             packageFields.ridername = req.body.ridername;
           }
@@ -122,7 +123,8 @@ router.post(
       Vendor.findOne({"name": req.body.vendorname})
         .then(vendor => {
           if(!vendor) {
-            res.status(404).json('Vendor name does not exist');
+            errors.noVendor = "Vendor name does not exist";
+            res.status(404).json(errors);
           } else {
             packageFields.vendorname = req.body.vendorname;
 
@@ -139,7 +141,7 @@ router.post(
 // @desc    Get all riders
 // @access  Private
 router.get(
-  '/all_riders',
+  '/all-riders',
   passport.authenticate('jwt', { session: false }),
   (req, res) => {
   const errors = {};
@@ -160,7 +162,7 @@ router.get(
 // @desc    Get all vendors
 // @access  Private
 router.get(
-  '/all_vendors',
+  '/all-vendors',
   passport.authenticate('jwt', { session: false }),
   (req, res) => {
   const errors = {};
@@ -177,32 +179,11 @@ router.get(
   .catch(err => res.status(404).json({ vendor: 'There are no vendors'}));
 })
 
-// @route   GET api/profile/vendors_name
-// @desc    Get all vendors
-// @access  Private
-router.get(
-  '/vendors_name',
-  passport.authenticate('jwt', { session: false }),
-  (req, res) => {
-  const errors = {};
-
-  Vendor.find({ user: req.user.id }).select('name')
-  .then(vendors => {
-    if(!vendors) {
-      errors.novendor = 'There are no Vendors';
-      return res.status(404).json(errors);
-    }
-
-    res.json(vendors);
-  })
-  .catch(err => res.status(404).json({ rider: 'There are no vendors'}));
-})
-
 // @route   GET api/profile/all_packages
 // @desc    Get all packages
 // @access  Private
 router.get(
-  '/all_packages',
+  '/all-packages',
   passport.authenticate('jwt', { session: false }),
   (req, res) => {
   const errors = {};
