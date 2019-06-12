@@ -2,21 +2,22 @@ import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import { 
-  getCurrentProfile, 
-  deleteAccount, 
-  getRiders, 
+import {
+  getCurrentProfile,
+  deleteAccount,
+  getRiders,
   getVendors,
   getPackages
 } from '../../actions/profileActions';
 import Spinner from '../common/Spinner';
+import AllPackages from '../package/AllPackages';
 // import ProfileActions from './ProfileActions';
 
 class Dashboard extends Component {
   componentDidMount() {
     this.props.getCurrentProfile();
-    this.props.getRiders();
-    this.props.getVendors();
+    // this.props.getRiders();
+    // this.props.getVendors();
     this.props.getPackages();
   }
 
@@ -26,16 +27,17 @@ class Dashboard extends Component {
 
   render() {
     const { user } = this.props.auth;
-    const { profile, loading } = this.props.profile;
+    const { profile, loading, packages } = this.props.profile;
 
     let dashboardContent;
+    let packageContent;
 
-    if(profile === null || loading) {
+    if (profile === null || loading) {
       dashboardContent = <Spinner />;
     } else {
       dashboardContent = (
         <div>
-          <p className="lead text-muted">Welcome { user.name }</p>
+          <p className="lead text-muted">Welcome {user.name}</p>
           <div className="d-flex justify-content-center">
             <Link to='/add-rider' className="btn btn-lg btn-info mx-2">
               Add New Rider
@@ -44,13 +46,13 @@ class Dashboard extends Component {
               Add New Vendor
             </Link>
           </div>
-          <hr/>
+          <hr />
           <div className="d-flex justify-content-center">
             <Link to='/add-package' className="btn btn-dark btn-lg btn-block w-25 p-2">
               Add New Package
             </Link>
           </div>
-          <hr/>
+          <hr />
           <div className="d-flex justify-content-center">
             <Link to='/all-riders' className="btn btn-lg btn-secondary mx-2 px-5">
               Riders Profile
@@ -89,19 +91,35 @@ class Dashboard extends Component {
       //     </div>
       //   );
       // }
+      if (packages) {
+        if (typeof packages === 'object') {
+          packageContent = (
+            <AllPackages data={packages} />
+          )
+        } else {
+          packageContent = <Spinner />
+        }
+      } else {
+        packageContent = <Spinner />
+      }
     }
-    
+
     return (
-      <div className="dashboard">
-        <div className="conatainer">
-          <div className="row">
-            <div className="col-md-12">
-              <h1 className="display-4">Dashborad</h1>
-              {dashboardContent}
+      <div>
+        <div className="dashboard">
+          <div className="conatainer">
+            <div className="row">
+              <div className="col-md-12">
+                <h1 className="display-4">Dashborad</h1>
+                {dashboardContent}
+              </div>
             </div>
           </div>
         </div>
+        <br />
+        {packageContent}
       </div>
+      // < AllPackages />
     )
   }
 }
@@ -121,10 +139,10 @@ Dashboard.propTypes = {
   profile: PropTypes.object.isRequired
 }
 
-export default connect(mapStateToProps, { 
-  getCurrentProfile, 
-  getRiders, 
+export default connect(mapStateToProps, {
+  getCurrentProfile,
+  getRiders,
   getVendors,
   getPackages,
   deleteAccount,
- })(Dashboard);
+})(Dashboard);

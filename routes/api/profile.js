@@ -1,7 +1,7 @@
 const express = require("express");
 const router = express.Router();
 const mongoose = require('mongoose');
-const passport = require('passport'); 
+const passport = require('passport');
 
 // Load Validation
 const validateProfileInput = require('../../validation/profile');
@@ -26,7 +26,7 @@ const Package = require('../../models/Package');
 // @route   Get api/profile/test
 // @desc    Test profile route
 // @access  Public
-router.get("/test", (req, res) => res.json({msg: "Profile Works"}));
+router.get("/test", (req, res) => res.json({ msg: "Profile Works" }));
 
 // @route   POST api/profile/add_rider
 // @desc    Add rider
@@ -38,20 +38,20 @@ router.post(
     const { errors, isValid } = validateRiderInput(req.body);
 
     // Check Validation
-    if(!isValid) {
+    if (!isValid) {
       // Return any errors
       return res.status(400).json(errors);
     }
 
     const riderFields = {};
     riderFields.user = req.user.id;
-    if(req.body.name) riderFields.name = req.body.name;
-    if(req.body.contact) riderFields.contact = req.body.contact;
-    if(req.body.chargesperdelivery) riderFields.chargesperdelivery = req.body.chargesperdelivery;
+    if (req.body.name) riderFields.name = req.body.name;
+    if (req.body.contact) riderFields.contact = req.body.contact;
+    if (req.body.chargesperdelivery) riderFields.chargesperdelivery = req.body.chargesperdelivery;
 
     new Rider(riderFields).save()
-    .then(rider => res.json(rider))
-    .catch(err => console.log(err));
+      .then(rider => res.json(rider))
+      .catch(err => console.log(err));
   }
 );
 
@@ -65,20 +65,20 @@ router.post(
     const { errors, isValid } = validateVendorInput(req.body);
 
     // Check Validation
-    if(!isValid) {
+    if (!isValid) {
       // Return any errors
       return res.status(400).json(errors);
     }
 
     const vendorFields = {};
     vendorFields.user = req.user.id;
-    if(req.body.name) vendorFields.name = req.body.name;
-    if(req.body.contact) vendorFields.contact = req.body.contact;
-    if(req.body.address) vendorFields.address = req.body.address;
+    if (req.body.name) vendorFields.name = req.body.name;
+    if (req.body.contact) vendorFields.contact = req.body.contact;
+    if (req.body.address) vendorFields.address = req.body.address;
 
     new Vendor(vendorFields).save()
-    .then(vendor => res.json(vendor))
-    .catch(err => console.log(err));
+      .then(vendor => res.json(vendor))
+      .catch(err => console.log(err));
   }
 );
 
@@ -92,7 +92,7 @@ router.post(
     const { errors, isValid } = validatePackageInput(req.body);
 
     // Check Validation
-    if(!isValid) {
+    if (!isValid) {
       // Return any errors
       return res.status(400).json(errors);
     }
@@ -100,17 +100,17 @@ router.post(
     // Get Fields
     const packageFields = {};
     packageFields.user = req.user.id;
-    if(req.body.customername) packageFields.customername = req.body.customername;
-    if(req.body.customerphone) packageFields.customerphone = req.body.customerphone;
-    if(req.body.address) packageFields.address = req.body.address;
-    if(req.body.cod) packageFields.cod = req.body.cod;
-    if(req.body.dc) packageFields.dc = req.body.dc;
-    if(req.body.status) packageFields.status = req.body.status;
-    
-    if(req.body.ridername) {
-      Rider.findOne({"name": req.body.ridername})
+    if (req.body.customername) packageFields.customername = req.body.customername;
+    if (req.body.customerphone) packageFields.customerphone = req.body.customerphone;
+    if (req.body.address) packageFields.address = req.body.address;
+    if (req.body.cod) packageFields.cod = req.body.cod;
+    if (req.body.dc) packageFields.dc = req.body.dc;
+    if (req.body.status) packageFields.status = req.body.status;
+
+    if (req.body.ridername) {
+      Rider.findOne({ "name": req.body.ridername })
         .then(rider => {
-          if(!rider) {
+          if (!rider) {
             errors.norider = "Rider name does not exist";
             res.status(404).json(errors);
           } else {
@@ -119,10 +119,10 @@ router.post(
         })
     }
 
-    if(req.body.vendorname) {
-      Vendor.findOne({"name": req.body.vendorname})
+    if (req.body.vendorname) {
+      Vendor.findOne({ "name": req.body.vendorname })
         .then(vendor => {
-          if(!vendor) {
+          if (!vendor) {
             errors.noVendor = "Vendor name does not exist";
             res.status(404).json(errors);
           } else {
@@ -144,19 +144,19 @@ router.get(
   '/all-riders',
   passport.authenticate('jwt', { session: false }),
   (req, res) => {
-  const errors = {};
+    const errors = {};
 
-  Rider.find({ user: req.user.id })
-  .then(riders => {
-    if(!riders) {
-      errors.norider = 'There are no Riders';
-      return res.status(404).json(errors);
-    }
+    Rider.find({ user: req.user.id })
+      .then(riders => {
+        if (!riders) {
+          errors.norider = 'There are no Riders';
+          return res.status(404).json(errors);
+        }
 
-    res.json(riders);
+        res.json(riders);
+      })
+      .catch(err => res.status(404).json({ rider: 'There are no riders' }));
   })
-  .catch(err => res.status(404).json({ rider: 'There are no riders'}));
-})
 
 // @route   GET api/profile/all_vendors
 // @desc    Get all vendors
@@ -165,19 +165,19 @@ router.get(
   '/all-vendors',
   passport.authenticate('jwt', { session: false }),
   (req, res) => {
-  const errors = {};
+    const errors = {};
 
-  Vendor.find({ user: req.user.id })
-  .then(vendors => {
-    if(!vendors) {
-      errors.novendor = 'There are no Vendors';
-      return res.status(404).json(errors);
-    }
+    Vendor.find({ user: req.user.id })
+      .then(vendors => {
+        if (!vendors) {
+          errors.novendor = 'There are no Vendors';
+          return res.status(404).json(errors);
+        }
 
-    res.json(vendors);
+        res.json(vendors);
+      })
+      .catch(err => res.status(404).json({ vendor: 'There are no vendors' }));
   })
-  .catch(err => res.status(404).json({ vendor: 'There are no vendors'}));
-})
 
 // @route   GET api/profile/all_packages
 // @desc    Get all packages
@@ -186,19 +186,42 @@ router.get(
   '/all-packages',
   passport.authenticate('jwt', { session: false }),
   (req, res) => {
-  const errors = {};
+    const errors = {};
 
-  Package.find({ user: req.user.id })
-  .then(packages => {
-    if(!packages) {
-      errors.nopackage = 'There are no Packages';
-      return res.status(404).json(errors);
-    }
+    Package.find({ user: req.user.id })
+      .then(packages => {
+        if (!packages) {
+          errors.nopackage = 'There are no Packages';
+          return res.status(404).json(errors);
+        }
 
-    res.json(packages);
+        res.json(packages);
+      })
+      .catch(err => res.status(404).json({ package: 'There are no packages' }));
   })
-  .catch(err => res.status(404).json({ package: 'There are no packages'}));
-})
+
+// @route   DELETE api/profile/all-packages/:pckg_id
+// @desc    Delete package
+// @access  Private
+router.delete(
+  '/all-packages/:id',
+  passport.authenticate('jwt', { session: false }),
+  (req, res) => {
+
+    Profile.findOne({ user: req.user.id })
+      .then(profile => {
+        Package.findById(req.params.id)
+          .then(package => {
+            if (package.user.toString() !== req.user.id) {
+              return res.status(401).json({ notauthorized: "User not authorized" });
+            }
+
+            //Delete
+            package.remove().then(() => res.json({ success: true }));
+          })
+          .catch(err => res.status(404).json({ packagenotfound: "No package found" }));
+      })
+  });
 
 
 // @route   Get api/profile
@@ -208,9 +231,9 @@ router.get('/', passport.authenticate('jwt', { session: false }), (req, res) => 
   const errors = {};
 
   Profile.findOne({ user: req.user.id })      //refers to Profile.js model's user id
-    .populate('user', [ 'name', 'avatar' ])
+    .populate('user', ['name', 'avatar'])
     .then(profile => {
-      if(!profile) {
+      if (!profile) {
         errors.noprofile = 'There is no Profile for this user';
         res.status(404).json(errors)
       }
@@ -226,16 +249,16 @@ router.get('/all', (req, res) => {
   const errors = {};
 
   Profile.find()
-  .populate('user', [ 'name', 'avatar' ])
-  .then(profiles => {
-    if(!profiles) {
-      errors.noprofile = 'There are no Profiles';
-      return res.status(404).json(errors);
-    }
+    .populate('user', ['name', 'avatar'])
+    .then(profiles => {
+      if (!profiles) {
+        errors.noprofile = 'There are no Profiles';
+        return res.status(404).json(errors);
+      }
 
-    res.json(profiles);
-  })
-  .catch(err => res.status(404).json({ profile: 'There are no profiles'}));
+      res.json(profiles);
+    })
+    .catch(err => res.status(404).json({ profile: 'There are no profiles' }));
 })
 
 // @route   GET api/profile/handle/:handle
@@ -245,16 +268,16 @@ router.get('/handle/:handle', (req, res) => {
   const errors = {};
 
   Profile.findOne({ handle: req.params.handle })    // req.body.handle means only logged in profile
-  .populate('user', ['name', 'avatar'])
-  .then(profile => {
-    if(!profile) {
-      errors.noprofile = 'There is no profile for this user';
-      res.status(404).json(errors);
-    }
+    .populate('user', ['name', 'avatar'])
+    .then(profile => {
+      if (!profile) {
+        errors.noprofile = 'There is no profile for this user';
+        res.status(404).json(errors);
+      }
 
-    res.json(profile);
-  })
-  .catch(err => res.status(404).json(err));
+      res.json(profile);
+    })
+    .catch(err => res.status(404).json(err));
 });
 
 // @route   GET api/profile/user/:user_id
@@ -264,16 +287,16 @@ router.get('/user/:user_id', (req, res) => {
   const errors = {};
 
   Profile.findOne({ user: req.params.user_id })    // This will enable to get the profile
-  .populate('user', ['name', 'avatar'])            // by any id, not just logged in id.
-  .then(profile => {
-    if(!profile) {
-      errors.noprofile = 'There is no profile for this user';
-      res.status(404).json(errors);
-    }
+    .populate('user', ['name', 'avatar'])            // by any id, not just logged in id.
+    .then(profile => {
+      if (!profile) {
+        errors.noprofile = 'There is no profile for this user';
+        res.status(404).json(errors);
+      }
 
-    res.json(profile);
-  })
-  .catch(err => res.status(404).json({ profile: 'There is no profile for this user'}));
+      res.json(profile);
+    })
+    .catch(err => res.status(404).json({ profile: 'There is no profile for this user' }));
 });
 
 // @route   POST api/profile
@@ -286,7 +309,7 @@ router.post(
     const { errors, isValid } = validateProfileInput(req.body);
 
     // Check Validation
-    if(!isValid) {
+    if (!isValid) {
       // Return any errors
       return res.status(400).json(errors);
     }
@@ -294,35 +317,35 @@ router.post(
     // Get fields
     const profileFeilds = {};
     profileFeilds.user = req.user.id;
-    if(req.body.handle) profileFeilds.handle = req.body.handle;
-    if(req.body.company) profileFeilds.company = req.body.company;
-    if(req.body.website) profileFeilds.website = req.body.website;
-    if(req.body.location) profileFeilds.location = req.body.location;
-    if(req.body.bio) profileFeilds.bio = req.body.bio;
-    if(req.body.status) profileFeilds.status = req.body.status;
-    if(req.body.githubusername) profileFeilds.githubusername = req.body.githubusername;
+    if (req.body.handle) profileFeilds.handle = req.body.handle;
+    if (req.body.company) profileFeilds.company = req.body.company;
+    if (req.body.website) profileFeilds.website = req.body.website;
+    if (req.body.location) profileFeilds.location = req.body.location;
+    if (req.body.bio) profileFeilds.bio = req.body.bio;
+    if (req.body.status) profileFeilds.status = req.body.status;
+    if (req.body.githubusername) profileFeilds.githubusername = req.body.githubusername;
 
     // Skills - Split into array
-    if(typeof req.body.skills !== 'undefined') {
+    if (typeof req.body.skills !== 'undefined') {
       profileFeilds.skills = req.body.skills.split(',');    //Comma separted values
     }
 
     // Socail
     profileFeilds.social = {};
-    if(req.body.youtube) profileFeilds.social.youtube = req.body.youtube;
-    if(req.body.twitter) profileFeilds.social.twitter = req.body.twitter;
-    if(req.body.facebook) profileFeilds.social.facebook = req.body.facebook;
-    if(req.body.linkedin) profileFeilds.social.linkedin = req.body.linkedin;
-    if(req.body.instagram) profileFeilds.social.instagram = req.body.instagram;
+    if (req.body.youtube) profileFeilds.social.youtube = req.body.youtube;
+    if (req.body.twitter) profileFeilds.social.twitter = req.body.twitter;
+    if (req.body.facebook) profileFeilds.social.facebook = req.body.facebook;
+    if (req.body.linkedin) profileFeilds.social.linkedin = req.body.linkedin;
+    if (req.body.instagram) profileFeilds.social.instagram = req.body.instagram;
 
     Profile.findOne({ user: req.user.id })
       .then(profile => {
-        if(profile) {
+        if (profile) {
           // Update
           Profile.findOneAndUpdate(
             { user: req.user.id },
             { $set: profileFeilds },
-            { new: true}
+            { new: true }
           ).then(profile => res.json(profile))
         } else {
           // Create
@@ -330,9 +353,9 @@ router.post(
           // Check if handle exist
           Profile.findOne({ handle: profileFeilds.handle })
             .then(profile => {
-              if(profile) {
+              if (profile) {
                 errors.handle = 'That handle already exist';
-                res.status(400).json(errors); 
+                res.status(400).json(errors);
               }
 
               // Save Profile
@@ -352,7 +375,7 @@ router.post(
     const { errors, isValid } = validateExperienceInput(req.body);
 
     // Check Validation
-    if(!isValid) {
+    if (!isValid) {
       // Return any errors
       return res.status(400).json(errors);
     }
@@ -386,7 +409,7 @@ router.post(
     const { errors, isValid } = validateEducationInput(req.body);
 
     // Check Validation
-    if(!isValid) {
+    if (!isValid) {
       // Return any errors
       return res.status(400).json(errors);
     }

@@ -48,7 +48,7 @@ const PackageSchema = new Schema({
     type: Boolean,
     default: false
   }
-  
+
 });
 
 module.exports = Package = mongoose.model('package', PackageSchema);

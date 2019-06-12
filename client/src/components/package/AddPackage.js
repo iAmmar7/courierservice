@@ -3,6 +3,7 @@ import { connect } from 'react-redux';
 import { withRouter } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import TextFieldGroup from '../common/TextFieldGroup';
+import SelectListGroup from '../common/SelectListGroup';
 import { addPackage, getVendors, getRiders } from '../../actions/profileActions';
 import Spinner from '../common/Spinner';
 
@@ -26,13 +27,13 @@ class AddPackage extends Component {
     this.onChange = this.onChange.bind(this);
   }
 
-  // componentDidMount() {
-  //   this.props.getRiders();
-  //   this.props.getVendors();
-  // }
+  componentDidMount() {
+    this.props.getVendors();
+    this.props.getRiders();
+  }
 
   componentWillReceiveProps(nextProps) {
-    if(nextProps.errors) {
+    if (nextProps.errors) {
       this.setState({ errors: nextProps.errors })
     }
   }
@@ -52,12 +53,27 @@ class AddPackage extends Component {
       dc: this.state.dc
     };
 
+    console.log(packageData)
+
     // Call an action
     this.props.addPackage(packageData, this.props.history);
+
   }
 
   onChange(e) {
-    this.setState({ [e.target.name] : e.target.value })
+    this.setState({ [e.target.name]: e.target.value })
+  }
+
+  getDropdownList(arr) {
+    var list = [{ label: "* Choose Vendor/Ridern", value: '' }]
+    if (arr.length > 0) {
+      for (let i = 0; i < arr.length; i++) {
+        list = [...list, { label: arr[i].name, value: arr[i].name }];
+      }
+    } else {
+      list = []
+    }
+    return list;
   }
 
   render() {
@@ -66,27 +82,26 @@ class AddPackage extends Component {
 
     let addPackageContent;
 
-    // let vendorSelection = [ 
-    //   {label: "* Choose your Vendor", value: 1},
-    //   {label: vendors[0].name, value: 2},
-    //   {label: vendors[1].name, value: 3},
-    // ];
+    let vendorSelection = this.getDropdownList(vendors);
+    let riderSelection = this.getDropdownList(riders);
 
-    // let riderSelection = [ 
-    //   {label: "* Choose your Rider", value: 1},
-    //   {label: riders[0].name, value: 2},
-    //   {label: riders[1].name, value: 3},
-    // ];
-
-    if(vendors === {} || riders === {} || loading) {
+    if (vendors === {} || riders === {} || loading) {
       addPackageContent = <Spinner />
     } else {
       addPackageContent = (
         <form onSubmit={this.onSubmit}>
-          <TextFieldGroup
+          {/* <TextFieldGroup
             placeholder="* Vendor Name"
             name="vendorname"
             value={this.state.vendorname}
+            onChange={this.onChange}
+            error={errors.vendorname}
+            info="Select a vendor from whom this package is recieved"
+          /> */}
+          <SelectListGroup
+            name="vendorname"
+            value={this.state.vendorname}
+            options={vendorSelection}
             onChange={this.onChange}
             error={errors.vendorname}
             info="Select a vendor from whom this package is recieved"
@@ -124,14 +139,22 @@ class AddPackage extends Component {
             error={errors.arrivaldate}
             info="Date at which vendor gives you the package"
           />
-          <TextFieldGroup
+          <SelectListGroup
+            name="ridername"
+            // value={"riderSelection"}
+            options={riderSelection}
+            onChange={this.onChange}
+            error={errors.ridername}
+            info="Select a rider who delivered this package"
+          />
+          {/* <TextFieldGroup
             placeholder="Rider Name"
             name="ridername"
             value={this.state.ridername}
             onChange={this.onChange}
             error={errors.ridername}
             info="Select a rider who delivered this package"
-          />
+          /> */}
           <TextFieldGroup
             placeholder="Deliver Date"
             name="deliverdate"
@@ -167,25 +190,6 @@ class AddPackage extends Component {
         </form>
       );
     }
-
-
-    // for(var i = 0; i < vendors.lenght; i++) {
-    //   vendorSelection.push({ 
-    //     label: vendors[i].name, 
-    //     value: i
-    //   });
-    // }
-
-    // Select options for vendors
-    // if(vendors === {} || loading) {
-    //   vendorSelection = <Spinner />
-    // } else {
-    //   if(vendors > 0 ) {
-    //     vendorSelection = vendors.name;
-    //   } else {
-    //     vendorSelection = "No Vendor  found";
-    //   }
-    // }
 
     return (
       <div>
