@@ -27,10 +27,9 @@ class Dashboard extends Component {
 
   render() {
     const { user } = this.props.auth;
-    const { profile, loading, packages } = this.props.profile;
+    const { profile, loading } = this.props.profile;
 
     let dashboardContent;
-    let packageContent;
 
     if (profile === null || loading) {
       dashboardContent = <Spinner />;
@@ -91,17 +90,6 @@ class Dashboard extends Component {
       //     </div>
       //   );
       // }
-      if (packages) {
-        if (typeof packages === 'object') {
-          packageContent = (
-            <AllPackages data={packages} />
-          )
-        } else {
-          packageContent = <Spinner />
-        }
-      } else {
-        packageContent = <Spinner />
-      }
     }
 
     return (
@@ -117,9 +105,8 @@ class Dashboard extends Component {
           </div>
         </div>
         <br />
-        {packageContent}
+        <AllPackages />
       </div>
-      // < AllPackages />
     )
   }
 }

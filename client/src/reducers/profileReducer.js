@@ -1,12 +1,13 @@
-import { 
-  GET_PROFILE, 
-  PROFILE_LOADING, 
-  CLEAR_CURRENT_PROFILE, 
+import {
+  GET_PROFILE,
+  PROFILE_LOADING,
+  CLEAR_CURRENT_PROFILE,
   GET_RIDERS,
   GET_RIDER_PROFILES,
   GET_VENDORS,
   GET_VENDOR_PROFILES,
-  GET_PACKAGES
+  GET_PACKAGES,
+  SET_PACKAGE
 } from '../actions/types';
 
 const initialState = {
@@ -14,24 +15,25 @@ const initialState = {
   riders: {},
   vendors: {},
   packages: {},
-  profiles: null,
+  // profiles: null,
+  packageEdit: {},
   loading: false
 };
 
-export default function(state = initialState, action) {
-  switch(action.type) {
+export default function (state = initialState, action) {
+  switch (action.type) {
     case PROFILE_LOADING:
       return {
         ...state,
         loading: true
       }
-    case GET_PROFILE: 
+    case GET_PROFILE:
       return {
         ...state,
         profile: action.payload,
         loading: false
       }
-    case GET_RIDERS: 
+    case GET_RIDERS:
       return {
         ...state,
         riders: action.payload,
@@ -43,7 +45,7 @@ export default function(state = initialState, action) {
         riders: action.payload,
         loading: false
       };
-    case GET_VENDORS: 
+    case GET_VENDORS:
       return {
         ...state,
         vendors: action.payload,
@@ -55,19 +57,25 @@ export default function(state = initialState, action) {
         vendors: action.payload,
         loading: false
       };
-    case GET_PACKAGES: 
+    case GET_PACKAGES:
       return {
         ...state,
         packages: action.payload,
         loading: false
+      };
+    case SET_PACKAGE:
+      return {
+        ...state,
+        packageID: action.payload,
+        loading: false
       }
-    case CLEAR_CURRENT_PROFILE: 
+    case CLEAR_CURRENT_PROFILE:
       return {
         ...state,
         profile: null,
         riders: null
       }
-    default: 
+    default:
       return state;
   }
 }

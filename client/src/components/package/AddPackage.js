@@ -11,20 +11,23 @@ class AddPackage extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      vendorname: '',
-      customername: '',
-      customerphone: '',
-      address: '',
+      data: props.packageData,
+      vendorname: 'John',
+      customername: 'ABC',
+      customerphone: '12345678900',
+      address: 'ABC',
       arrivaldate: '',
       ridername: '',
       deliverdate: '',
       cod: '',
       dc: '',
-      errors: {}
+      errors: {},
+      hashValue: 'Add Package'
     }
 
     this.onSubmit = this.onSubmit.bind(this);
     this.onChange = this.onChange.bind(this);
+    this.changeState = this.changeState.bind(this);
   }
 
   componentDidMount() {
@@ -65,7 +68,8 @@ class AddPackage extends Component {
   }
 
   getDropdownList(arr) {
-    var list = [{ label: "* Choose Vendor/Ridern", value: '' }]
+    var list = [{ label: "* Choose Vendor/Rider", value: '' }]
+
     if (arr.length > 0) {
       for (let i = 0; i < arr.length; i++) {
         list = [...list, { label: arr[i].name, value: arr[i].name }];
@@ -76,118 +80,61 @@ class AddPackage extends Component {
     return list;
   }
 
-  render() {
-    const { errors } = this.state;
-    const { vendors, riders, loading } = this.props.profile;
+  changeState(obj) {
+    console.log(obj);
+    this.setState({
+      vendorname: obj.vendorname,
+      customername: obj.customername,
+      customerphone: obj.customerphone,
+      address: obj.address,
+      arrivaldate: obj.arrivaldate,
+      ridername: obj.ridername,
+      deliverdate: obj.deliverdate,
+      cod: obj.cod,
+      dc: obj.dc,
+      hashValue: 'Edit Package'
+    })
+  }
 
-    let addPackageContent;
+  render() {
+    const { errors } = this.props;
+    const { vendors, riders, loading, packageEdit } = this.props.profile;
 
     let vendorSelection = this.getDropdownList(vendors);
     let riderSelection = this.getDropdownList(riders);
+    let allVendors, allRiders;
 
-    if (vendors === {} || riders === {} || loading) {
-      addPackageContent = <Spinner />
+    if (Object.entries(packageEdit).length !== 0 && packageEdit.constructor !== Object) {
+      this.changeState(packageEdit);
+    }
+
+    if (vendors === {} || loading) {
+      allVendors = <Spinner />
     } else {
-      addPackageContent = (
-        <form onSubmit={this.onSubmit}>
-          {/* <TextFieldGroup
-            placeholder="* Vendor Name"
-            name="vendorname"
-            value={this.state.vendorname}
-            onChange={this.onChange}
-            error={errors.vendorname}
-            info="Select a vendor from whom this package is recieved"
-          /> */}
-          <SelectListGroup
-            name="vendorname"
-            value={this.state.vendorname}
-            options={vendorSelection}
-            onChange={this.onChange}
-            error={errors.vendorname}
-            info="Select a vendor from whom this package is recieved"
-          />
-          <TextFieldGroup
-            placeholder="* Customer Name"
-            name="customername"
-            value={this.state.customername}
-            onChange={this.onChange}
-            error={errors.customername}
-            info="Name of the customer"
-          />
-          <TextFieldGroup
-            placeholder="* Customer Phone"
-            name="customerphone"
-            value={this.state.customerphone}
-            onChange={this.onChange}
-            error={errors.customerphone}
-            info="Phone number of the customer"
-          />
-          <TextFieldGroup
-            placeholder="* Address"
-            name="address"
-            value={this.state.address}
-            onChange={this.onChange}
-            error={errors.address}
-            info="Where to deliver this package?"
-          />
-          <TextFieldGroup
-            placeholder="Arrival Date"
-            name="arrivaldate"
-            type="date"
-            value={this.state.arrivaldate}
-            onChange={this.onChange}
-            error={errors.arrivaldate}
-            info="Date at which vendor gives you the package"
-          />
-          <SelectListGroup
-            name="ridername"
-            // value={"riderSelection"}
-            options={riderSelection}
-            onChange={this.onChange}
-            error={errors.ridername}
-            info="Select a rider who delivered this package"
-          />
-          {/* <TextFieldGroup
-            placeholder="Rider Name"
-            name="ridername"
-            value={this.state.ridername}
-            onChange={this.onChange}
-            error={errors.ridername}
-            info="Select a rider who delivered this package"
-          /> */}
-          <TextFieldGroup
-            placeholder="Deliver Date"
-            name="deliverdate"
-            type="date"
-            value={this.state.deliverdate}
-            onChange={this.onChange}
-            error={errors.deliverdate}
-            info="Date at which this package is delivered to the customer"
-          />
-          <TextFieldGroup
-            placeholder="Cash On Delivery"
-            name="cod"
-            type="number"
-            value={this.state.cod}
-            onChange={this.onChange}
-            error={errors.cod}
-            info="An amount that coustomer gives on delivery"
-          />
-          <TextFieldGroup
-            placeholder="Delivery Charges"
-            name="dc"
-            type="number"
-            value={this.state.dc}
-            onChange={this.onChange}
-            error={errors.dc}
-            info="Delivery charges on this package"
-          />
-          <input
-            type="submit"
-            value="Submit"
-            className="btn btn-info btn-block mt-4"
-          />
-        </form>
+      allVendors = (
+        <SelectListGroup
+          name="vendorname"
+          options={vendorSelection}
+          value={this.state.vendorname}
+          onChange={this.onChange}
+          error={errors.vendorname}
+          info="Select a vendor from whom this package is recieved"
+        />
+      );
+    }
+
+    if (riders === {} || loading) {
+      allRiders = <Spinner />
+    } else {
+      allRiders = (
+        <SelectListGroup
+          name="vendorname"
+          options={riderSelection}
+          value={this.state.ridername}
+          onChange={this.onChange}
+          error={errors.ridername}
+          info="Select a rider who delivered this package"
+        />
       );
     }
 
@@ -197,12 +144,80 @@ class AddPackage extends Component {
           <div className="container">
             <div className="row">
               <div className="col-md-8 m-auto">
-                <h1 className="display-4 text-center">Add Package</h1>
+                <h1 className="display-4 text-center">{this.state.hashValue}</h1>
                 <p className="lead text-center">
                   Let's get some information to add new package to our database
                 </p>
                 <small className="d-block pb-3">* = required fields</small>
-                {addPackageContent}
+                <form onSubmit={this.onSubmit}>
+                  {allVendors}
+                  <TextFieldGroup
+                    placeholder="* Customer Name"
+                    name="customername"
+                    value={this.state.customername}
+                    onChange={this.onChange}
+                    error={errors.customername}
+                    info="Name of the customer"
+                  />
+                  <TextFieldGroup
+                    placeholder="* Customer Phone"
+                    name="customerphone"
+                    value={this.state.customerphone}
+                    onChange={this.onChange}
+                    error={errors.customerphone}
+                    info="Phone number of the customer"
+                  />
+                  <TextFieldGroup
+                    placeholder="* Address"
+                    name="address"
+                    value={this.state.address}
+                    onChange={this.onChange}
+                    error={errors.address}
+                    info="Where to deliver this package?"
+                  />
+                  <TextFieldGroup
+                    placeholder="Arrival Date"
+                    name="arrivaldate"
+                    type="date"
+                    value={this.state.arrivaldate}
+                    onChange={this.onChange}
+                    error={errors.arrivaldate}
+                    info="Date at which vendor gives you the package"
+                  />
+                  {allRiders}
+                  <TextFieldGroup
+                    placeholder="Deliver Date"
+                    name="deliverdate"
+                    type="date"
+                    value={this.state.deliverdate}
+                    onChange={this.onChange}
+                    error={errors.deliverdate}
+                    info="Date at which this package is delivered to the customer"
+                  />
+                  <TextFieldGroup
+                    placeholder="Cash On Delivery"
+                    name="cod"
+                    type="number"
+                    value={this.state.cod}
+                    onChange={this.onChange}
+                    error={errors.cod}
+                    info="An amount that coustomer gives on delivery"
+                  />
+                  <TextFieldGroup
+                    placeholder="Delivery Charges"
+                    name="dc"
+                    type="number"
+                    value={this.state.dc}
+                    onChange={this.onChange}
+                    error={errors.dc}
+                    info="Delivery charges on this package"
+                  />
+                  <input
+                    type="submit"
+                    value="Submit"
+                    className="btn btn-info btn-block mt-4"
+                  />
+                </form>
               </div>
             </div>
           </div>
@@ -221,7 +236,7 @@ AddPackage.propTypes = {
   profile: PropTypes.object.isRequired,
   errors: PropTypes.object.isRequired,
   getRiders: PropTypes.func.isRequired,
-  getVendors: PropTypes.func.isRequired
+  getVendors: PropTypes.func.isRequired,
 }
 
 export default connect(mapStateToProps, {

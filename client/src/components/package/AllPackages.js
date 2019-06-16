@@ -1,5 +1,11 @@
 import React from 'react';
 import MaterialTable from 'material-table';
+import PropTypes from 'prop-types';
+import { withRouter } from 'react-router-dom';
+import { connect } from 'react-redux';
+import { removePackage, setPackage, getPackages } from '../../actions/profileActions';
+import Spinner from '../common/Spinner';
+import axios from 'axios';
 
 class AllPackages extends React.Component {
   constructor(props) {
@@ -9,7 +15,7 @@ class AllPackages extends React.Component {
         { title: 'Customer Name', field: 'customername' },
         { title: 'Customer Phone', field: 'customerphone' },
         { title: 'Address', field: 'address' },
-        { title: 'Arrival Date', field: 'arrivaldate', type: 'datetime' },
+        { title: 'Arrival Date', field: 'arrivaldate', type: 'date' },
         {
           title: 'Vendor Name',
           field: 'vendorname',
@@ -17,7 +23,7 @@ class AllPackages extends React.Component {
         },
         { title: 'COD', field: 'cod', type: 'numeric' },
         { title: 'DC', field: 'dc', type: 'numeric' },
-        { title: 'Delivery Date', field: 'deliverdate', type: 'datetime' },
+        { title: 'Delivery Date', field: 'deliverdate', type: 'date' },
         {
           title: 'Rider Name',
           field: 'ridername',
@@ -29,205 +35,124 @@ class AllPackages extends React.Component {
           // lookup: { 34: 'Delivered', 63: 'Pending', 98: 'Returned' }
         }
       ],
-      data: props.data,
-      alternateData: [
-        {
-          customername: 'Mehmet',
-          customerphone: '03333977937',
-          address: 'Gulshan 5 near Disco Bakery',
-          arrivaldate: '02.06.2019',
-          vendorname: 2,
-          cod: 2000,
-          dc: 150,
-          deliverdate: new Date().toJSON().slice(0, 10).replace(/-/g, '/'),
-          ridername: 1,
-          status: 63
-        },
-        {
-          customername: 'Zerya Betül',
-          customerphone: '03333977937',
-          address: 'Gulshan 5 near Disco Bakery',
-          arrivaldate: '03.06.2019',
-          vendorname: 2,
-          cod: 2000,
-          dc: 150,
-          deliverdate: new Date().toJSON().slice(0, 10).replace(/-/g, '/'),
-          ridername: 1,
-          status: 63
-        },
-      ]
+      data: []
+    };
+
+    this.deletePackage = this.deletePackage.bind(this);
+    this.getPackage = this.getPackage.bind(this);
+  }
+
+  componentDidMount() {
+    this.props.getPackages();
+  }
+
+  componentWillReceiveProps() {
+    const { packages } = this.props.profile;
+    if (Object.entries(packages).length !== 0 && packages.constructor !== Object) {
+      this.setState({
+        data: packages
+      })
     }
   }
 
+  deletePackage(packageId) {
+    console.log(packageId);
+
+    // Call Action
+    // this.props.removePackage(packageId);
+
+    axios.delete(`/api/profile/all-packages/${packageId}`)
+      .then(res =>
+        console.log(res)
+      )
+      .catch(err =>
+        console.log(err)
+      );
+  }
+
+  getPackage(obj) {
+    console.log(obj);
+
+    // Call Action
+    this.props.setPackage(obj);
+  }
+
   render() {
-    // let packageContent;
-    if (this.state.data === null) {
-      this.setState({
-        data: this.state.alternateData
-      })
-      // this.state.data = this.state.alternateData;
+    const { packages, loading } = this.props.profile;
+    let packageContent;
+
+    if (loading) {
+      packageContent = <Spinner />
+    } else if (Object.entries(packages).length === 0 && packages.constructor === Object) {
+      packageContent = <Spinner />
+    } else {
+
+      for (let i in packages) {
+        if (packages[i].arrivaldate) {
+          packages[i].arrivaldate = packages[i].arrivaldate.toString().split('T')[0];
+        }
+        if (packages[i].deliverdate) {
+          packages[i].deliverdate = packages[i].deliverdate.toString().split('T')[0];
+        }
+      }
+
+      packageContent =
+        <MaterialTable
+          title="Recent Packages"
+          columns={this.state.columns}
+          data={this.state.data}
+          editable={{
+            onRowAdd: newData =>
+              new Promise(resolve => {
+                setTimeout(() => {
+                  resolve();
+                  const data = [...this.state.data];
+                  data.push(newData);
+                  this.setState({ ...this.state.data, data });
+                }, 600);
+              }),
+            onRowUpdate: (newData, oldData) =>
+              new Promise(resolve => {
+                setTimeout(() => {
+                  resolve();
+                  // const data = [...this.state.data];
+                  this.getPackage(newData);
+                  // data[data.indexOf(oldData)] = newData;
+                  // this.setState({ ...this.state.data, data });
+                }, 600);
+              }),
+            onRowDelete: oldData =>
+              new Promise(resolve => {
+                setTimeout(() => {
+                  resolve();
+                  console.log(oldData._id);
+                  const data = [...this.state.data];
+                  data.splice(data.indexOf(oldData), 1);
+                  this.setState({ ...this.state.data, data });
+                  this.deletePackage(oldData._id);
+                }, 600);
+              }),
+          }}
+        />
     }
+
     return (
-      <MaterialTable
-        title="Recent Packages"
-        columns={this.state.columns}
-        data={this.state.data}
-        editable={{
-          onRowAdd: newData =>
-            new Promise(resolve => {
-              setTimeout(() => {
-                resolve();
-                const data = [...this.state.data];
-                data.push(newData);
-                this.setState({ ...this.state.data, data });
-              }, 600);
-            }),
-          // onRowUpdate: (newData, oldData) => {
-          //   if (newData.customerphone) {
-          //     return (
-          //       new Promise(resolve => {
-          //         setTimeout(() => {
-          //           resolve();
-          //           const data = [...this.state.data];
-          //           console.log(newData);
-          //           console.log(oldData._id);
-          //           data[data.indexOf(oldData)] = newData;
-          //           this.setState({ ...this.state.data, data });
-          //         }, 600);
-          //       })
-          //     )
-          //   } else {
-          //     return (
-          //       new Promise(resolve => {
-          //         resolve();
-          //         const data = [...this.state.data];
-          //         console.log(newData, data);
-          //         alert("Please enter required fields")
-          //       })
-          //     )
-          //   }
-          // },
-          onRowDelete: oldData =>
-            new Promise(resolve => {
-              setTimeout(() => {
-                resolve();
-                const data = [...this.state.data];
-                data.splice(data.indexOf(oldData), 1);
-                this.setState({ ...this.state.data, data });
-              }, 600);
-            }),
-        }}
-      />
+      <div>
+        {packageContent}
+      </div>
     );
   }
 }
 
-export default AllPackages;
-// export default function MaterialTableDemo(props) {
-//   const [state, setState] = React.useState({
-//     columns: props.columns,
-//     data: props.data
-//     // columns: [
-//     //   { title: 'Customer Name', field: 'customername' },
-//     //   { title: 'Customer Phone', field: 'customerphone', type: 'numeric' },
-//     //   { title: 'Address', field: 'address' },
-//     //   { title: 'Arrival Date', field: 'arrivaldate', type: 'date' },
-//     //   {
-//     //     title: 'Vendor Name',
-//     //     field: 'vendorname',
-//     //     // lookup: { 1: 'ABC', 2: 'XYZ', 3: 'HIJ' },
-//     //   },
-//     //   { title: 'COD', field: 'cod', type: 'numeric' },
-//     //   { title: 'DC', field: 'dc', type: 'numeric' },
-//     //   { title: 'Delivery Date', field: 'deliverdate', type: 'date' },
-//     //   {
-//     //     title: 'Rider Name',
-//     //     field: 'ridername',
-//     //     // lookup: { 1: 'ABC', 2: 'XYZ', 3: 'HIJ' }
-//     //   },
-//     //   {
-//     //     title: 'Status',
-//     //     field: 'status',
-//     //     // lookup: { 34: 'Delivered', 63: 'Pending', 98: 'Returned' }
-//     //   }
-//     // ],
-//     // data: [
-//     //   {
-//     //     customername: 'Mehmet',
-//     //     customerphone: '03333977937',
-//     //     address: 'Gulshan 5 near Disco Bakery',
-//     //     arrivaldate: '02.06.2019',
-//     //     vendorname: 2,
-//     //     cod: 2000,
-//     //     dc: 150,
-//     //     deliverdate: new Date().toJSON().slice(0, 10).replace(/-/g, '/'),
-//     //     ridername: 1,
-//     //     status: 63
-//     //   },
-//     //   {
-//     //     customername: 'Zerya Betül',
-//     //     customerphone: '03333977937',
-//     //     address: 'Gulshan 5 near Disco Bakery',
-//     //     arrivaldate: '02.06.2019',
-//     //     vendorname: 2,
-//     //     cod: 2000,
-//     //     dc: 150,
-//     //     deliverdate: new Date().toJSON().slice(0, 10).replace(/-/g, '/'),
-//     //     ridername: 1,
-//     //     status: 63
-//     //   },
-//     // ],
-//   });
+AllPackages.propTypes = {
+  removePackage: PropTypes.func.isRequired,
+  setPackage: PropTypes.func.isRequired,
+  getPackages: PropTypes.func.isRequired
+}
 
-//   return (
-//     <MaterialTable
-//       title="Recent Packages"
-//       columns={state.columns}
-//       data={state.data}
-//       editable={{
-//         onRowAdd: newData =>
-//           new Promise(resolve => {
-//             setTimeout(() => {
-//               resolve();
-//               const data = [...state.data];
-//               data.push(newData);
-//               setState({ ...state, data });
-//             }, 600);
-//           }),
-//         onRowUpdate: (newData, oldData) => {
-//           if (newData.customerphone) {
-//             return (
-//               new Promise(resolve => {
-//                 setTimeout(() => {
-//                   resolve();
-//                   const data = [...state.data];
-//                   console.log(newData);
-//                   data[data.indexOf(oldData)] = newData;
-//                   setState({ ...state, data });
-//                 }, 600);
-//               })
-//             )
-//           } else {
-//             return (
-//               new Promise(resolve => {
-//                 resolve();
-//                 const data = [...state.data];
-//                 console.log(newData, data);
-//                 alert("Please enter required fields")
-//               })
-//             )
-//           }
-//         },
-//         onRowDelete: oldData =>
-//           new Promise(resolve => {
-//             setTimeout(() => {
-//               resolve();
-//               const data = [...state.data];
-//               data.splice(data.indexOf(oldData), 1);
-//               setState({ ...state, data });
-//             }, 600);
-//           }),
-//       }}
-//     />
-//   );
-// }
+const mapStateToProps = (state) => ({
+  error: state.errors,
+  profile: state.profile
+});
+
+export default connect(mapStateToProps, { removePackage, setPackage, getPackages })(withRouter(AllPackages));
