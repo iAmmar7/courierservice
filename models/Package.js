@@ -13,11 +13,11 @@ const PackageSchema = new Schema({
   // },
   arrivaldate: {
     type: Date,
-    default: Date.now
+    default: Date()
   },
   deliverdate: {
     type: Date,
-    default: Date.now
+    // default: Date()
   },
   customername: {
     type: String,
@@ -45,8 +45,8 @@ const PackageSchema = new Schema({
     type: Number
   },
   status: {
-    type: Boolean,
-    default: false
+    type: String,
+    default: 'pending'
   }
 
 });

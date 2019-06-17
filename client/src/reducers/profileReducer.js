@@ -66,7 +66,7 @@ export default function (state = initialState, action) {
     case SET_PACKAGE:
       return {
         ...state,
-        packageID: action.payload,
+        packageEdit: action.payload,
         loading: false
       }
     case CLEAR_CURRENT_PROFILE:

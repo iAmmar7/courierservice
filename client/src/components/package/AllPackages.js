@@ -33,26 +33,14 @@ class AllPackages extends React.Component {
           title: 'Status',
           field: 'status',
           // lookup: { 34: 'Delivered', 63: 'Pending', 98: 'Returned' }
+          lookup: { true: 'true', false: 'false' }
         }
       ],
-      data: []
+      data: props.data
     };
 
     this.deletePackage = this.deletePackage.bind(this);
     this.getPackage = this.getPackage.bind(this);
-  }
-
-  componentDidMount() {
-    this.props.getPackages();
-  }
-
-  componentWillReceiveProps() {
-    const { packages } = this.props.profile;
-    if (Object.entries(packages).length !== 0 && packages.constructor !== Object) {
-      this.setState({
-        data: packages
-      })
-    }
   }
 
   deletePackage(packageId) {
@@ -73,26 +61,36 @@ class AllPackages extends React.Component {
   getPackage(obj) {
     console.log(obj);
 
+    // this.props.history.push("/add-package");
     // Call Action
-    this.props.setPackage(obj);
+    this.props.setPackage(obj, this.props.history);
+  }
+
+  formatDate = date => {
+    let formattedDate = date.toString().split('T')[0];
+    formattedDate = new Date(formattedDate);
+    formattedDate = `${formattedDate.getDate()}/${formattedDate.getMonth() + 1}/${formattedDate.getFullYear()}`;
+    return formattedDate;
   }
 
   render() {
-    const { packages, loading } = this.props.profile;
+    const { loading, packageEdit } = this.props.profile;
+    const { data } = this.state;
     let packageContent;
 
+    console.log(packageEdit)
     if (loading) {
       packageContent = <Spinner />
-    } else if (Object.entries(packages).length === 0 && packages.constructor === Object) {
+    } else if (Object.entries(data).length === 0 && data.constructor === Object) {
       packageContent = <Spinner />
     } else {
 
-      for (let i in packages) {
-        if (packages[i].arrivaldate) {
-          packages[i].arrivaldate = packages[i].arrivaldate.toString().split('T')[0];
+      for (let i in data) {
+        if (data[i].arrivaldate) {
+          data[i].arrivaldate = this.formatDate(data[i].arrivaldate);
         }
-        if (packages[i].deliverdate) {
-          packages[i].deliverdate = packages[i].deliverdate.toString().split('T')[0];
+        if (data[i].deliverdate) {
+          data[i].deliverdate = this.formatDate(data[i].deliverdate);
         }
       }
 
@@ -115,11 +113,11 @@ class AllPackages extends React.Component {
               new Promise(resolve => {
                 setTimeout(() => {
                   resolve();
-                  // const data = [...this.state.data];
                   this.getPackage(newData);
-                  // data[data.indexOf(oldData)] = newData;
-                  // this.setState({ ...this.state.data, data });
                 }, 600);
+                const data = [...this.state.data];
+                data[data.indexOf(oldData)] = newData;
+                this.setState({ ...this.state.data, data });
               }),
             onRowDelete: oldData =>
               new Promise(resolve => {

@@ -12,10 +12,10 @@ class AddPackage extends Component {
     super(props);
     this.state = {
       data: props.packageData,
-      vendorname: 'John',
-      customername: 'ABC',
-      customerphone: '12345678900',
-      address: 'ABC',
+      vendorname: '',
+      customername: '',
+      customerphone: '',
+      address: '',
       arrivaldate: '',
       ridername: '',
       deliverdate: '',
@@ -39,6 +39,24 @@ class AddPackage extends Component {
     if (nextProps.errors) {
       this.setState({ errors: nextProps.errors })
     }
+
+    console.log(nextProps);
+    // const { packageEdit } = this.props.profile;
+    // if (packageEdit) {
+    //   console.log(packageEdit)
+    //   this.setState({
+    //     vendorname: packageEdit.vendorname,
+    //     customername: packageEdit.customername,
+    //     customerphone: packageEdit.customerphone,
+    //     address: packageEdit.address,
+    //     arrivaldate: packageEdit.arrivaldate,
+    //     ridername: packageEdit.ridername,
+    //     deliverdate: packageEdit.deliverdate,
+    //     cod: packageEdit.cod,
+    //     dc: packageEdit.dc,
+    //     hashValue: 'Edit Package'
+    //   })
+    // }
   }
 
   onSubmit(e) {
@@ -82,18 +100,17 @@ class AddPackage extends Component {
 
   changeState(obj) {
     console.log(obj);
-    this.setState({
-      vendorname: obj.vendorname,
-      customername: obj.customername,
-      customerphone: obj.customerphone,
-      address: obj.address,
-      arrivaldate: obj.arrivaldate,
-      ridername: obj.ridername,
-      deliverdate: obj.deliverdate,
-      cod: obj.cod,
-      dc: obj.dc,
-      hashValue: 'Edit Package'
-    })
+    // this.setState({
+    // customername: obj.customername,
+    // customerphone: obj.customerphone,
+    // address: obj.address,
+    // arrivaldate: obj.arrivaldate,
+    // ridername: obj.ridername,
+    // deliverdate: obj.deliverdate,
+    // cod: obj.cod,
+    // dc: obj.dc,
+    // hashValue: 'Edit Package'
+    // })
   }
 
   render() {
@@ -104,7 +121,8 @@ class AddPackage extends Component {
     let riderSelection = this.getDropdownList(riders);
     let allVendors, allRiders;
 
-    if (Object.entries(packageEdit).length !== 0 && packageEdit.constructor !== Object) {
+    console.log(packageEdit)
+    if (packageEdit !== {}) {
       this.changeState(packageEdit);
     }
 

@@ -128,9 +128,23 @@ router.post(
           } else {
             packageFields.vendorname = req.body.vendorname;
 
-            new Package(packageFields).save()
-              .then(package => res.json(package))
-              .catch(err => console.log(err));
+            if (req.body._id) {
+              Package.findOne({ "_id": req.body._id })
+                .then(package => {
+                  if (!package) {
+                    errors.nopackage = "There is no Package with this ID";
+                    res.status(404).json(errors);
+                  } else {
+                    Package.updateOne({ "_id": req.body._id }, { $set: packageFields })
+                      .then(res.json(package))
+                      .catch(err => console.log(err))
+                  }
+                })
+            } else {
+              new Package(packageFields).save()
+                .then(package => res.json(package))
+                .catch(err => console.log(err));
+            }
           }
         });
     }

@@ -167,7 +167,8 @@ export const setPackage = (obj, history) => dispatch => {
     type: SET_PACKAGE,
     payload: obj
   })
-  history.push('./add-package');
+  history.push('/add-package');
+  dispatch(setProfileLoading());
 }
 
 // Add Package
