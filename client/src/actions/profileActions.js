@@ -183,6 +183,18 @@ export const addPackage = (packageData, history) => dispatch => {
     );
 }
 
+// Edit Package
+export const editPackage = packageData => dispatch => {
+  axios.post('/api/profile/add-package', packageData)
+    .then(res => console.log("Succeed", res))
+    .catch(err =>
+      dispatch({
+        type: GET_ERRORS,
+        payload: err.response.data
+      })
+    )
+}
+
 // Delete Package
 export const removePackage = (packageID) => dispatch => {
   axios.delete(`/api/profile/all-packages/${packageID}`)

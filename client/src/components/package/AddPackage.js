@@ -77,7 +77,7 @@ class AddPackage extends Component {
     console.log(packageData)
 
     // Call an action
-    this.props.addPackage(packageData, this.props.history);
+    // this.props.addPackage(packageData, this.props.history);
 
   }
 
@@ -146,7 +146,7 @@ class AddPackage extends Component {
     } else {
       allRiders = (
         <SelectListGroup
-          name="vendorname"
+          name="ridername"
           options={riderSelection}
           value={this.state.ridername}
           onChange={this.onChange}
@@ -180,6 +180,7 @@ class AddPackage extends Component {
                   <TextFieldGroup
                     placeholder="* Customer Phone"
                     name="customerphone"
+                    type="number"
                     value={this.state.customerphone}
                     onChange={this.onChange}
                     error={errors.customerphone}
