@@ -18,15 +18,18 @@ import Login from './components/auth/Login';
 import Dashboard from './components/dashboard/Dashboard';
 import CreateProfile from './components/create-profile/CreateProfile';
 import AddRider from './components/rider/AddRider';
-import RiderProfiles from './components/rider/RiderProfiles';
+import AllRiders from './components/rider/AllRiders';
+import RiderProfile from './components/rider/RiderProfile';
 import AddVendor from './components/vendor/AddVendor';
 import VendorProfiles from './components/vendor/VendorProfiles';
 import AddPackage from './components/package/AddPackage';
 
-import './App.css';
+import './css/App.css';
+import './css/theme.css';
+import './css/material-design-iconic-font.css';
 
 // Check for Token
-if(localStorage.jwtToken) {
+if (localStorage.jwtToken) {
   // Set auth token header auth
   setAuthToken(localStorage.jwtToken);
   // Decode token and get user info and expression
@@ -36,53 +39,56 @@ if(localStorage.jwtToken) {
 
   // Check for expired token
   const currentTime = Date.now() / 1000;
-  if(decoded.exp < currentTime) {
+  if (decoded.exp < currentTime) {
     // Logout User
     store.dispatch(logoutUser());
     // Clear current Profile
-    store.dispatch(clearCurrentProfile());    
+    store.dispatch(clearCurrentProfile());
     // Redirect to Login
-    window.location.href = '/login'; 
+    window.location.href = '/login';
   }
 }
 
 class App extends Component {
   render() {
     return (
-      <Provider store={ store }>
+      <Provider store={store}>
         <Router>
           <div className="App">
             <Navbar />
-            <Route exact path="/" component={ Landing } />
+            <Route exact path="/" component={Landing} />
             <div className="container">
-            <Route exact path="/register" component={ Register } />
-            <Route exact path="/login" component={ Login } />
-            <Switch>    
-              <PrivateRoute exact path="/dashboard" component={ Dashboard } />       
-            </Switch>
-            <Switch>    
-              <PrivateRoute exact path="/create-profile" component={ CreateProfile } />       
-            </Switch>
-            <Switch>    
-              <PrivateRoute exact path="/add-rider" component={ AddRider } />       
-            </Switch>
-            <Switch>    
-              <PrivateRoute exact path="/add-vendor" component={ AddVendor } />       
-            </Switch>
-            <Switch>    
-              <PrivateRoute exact path="/add-package" component={ AddPackage } />       
-            </Switch>
-            <Switch>    
-              <PrivateRoute exact path="/all-riders" component={ RiderProfiles } />       
-            </Switch>
-            <Switch>    
-              <PrivateRoute exact path="/all-vendors" component={ VendorProfiles } />       
-            </Switch>
+              <Route exact path="/register" component={Register} />
+              <Route exact path="/login" component={Login} />
+              <Switch>
+                <PrivateRoute exact path="/dashboard" component={Dashboard} />
+              </Switch>
+              <Switch>
+                <PrivateRoute exact path="/create-profile" component={CreateProfile} />
+              </Switch>
+              <Switch>
+                <PrivateRoute exact path="/add-rider" component={AddRider} />
+              </Switch>
+              <Switch>
+                <PrivateRoute exact path="/add-vendor" component={AddVendor} />
+              </Switch>
+              <Switch>
+                <PrivateRoute exact path="/add-package" component={AddPackage} />
+              </Switch>
+              <Switch>
+                <PrivateRoute exact path="/all-riders" component={AllRiders} />
+              </Switch>
+              <Switch>
+                <PrivateRoute exact path="/all-vendors" component={VendorProfiles} />
+              </Switch>
+              <Switch>
+                <PrivateRoute exact path="/all-riders/rider" component={RiderProfile} />
+              </Switch>
             </div>
             <Footer />
           </div>
         </Router>
-        </Provider>
+      </Provider>
     );
   }
 }
@@ -99,6 +105,6 @@ export default App;
   And then we the token of a user expires that if condition checks it and
   redirect it to ./login page if token is expired.
 
-  Switch is used to redirect in protected route. That's how user it takes us 
+  Switch is used to redirect in protected route. That's how user it takes us
   ./login page when user.isAuthenticated is false.
  */

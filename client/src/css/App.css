@@ -4,7 +4,7 @@ img {
 
 .landing {
   position: relative;
-  background: url('./img/action-adult-bike-417005.jpg') no-repeat;
+  background: url('../img/action-adult-bike-417005.jpg') no-repeat;
   background-size: cover;
   background-position: center;
   height: 85.7vh;
@@ -36,4 +36,25 @@ img {
 
 .form-control::placeholder {
   color: #bbb !important;
+}
+
+.card-item {
+  transition: 0.6s all;
+}
+.card-item:hover {
+  transform: scale(1.05);
+}
+.card-title {
+  color: white;
+}
+
+.props {
+  font-size: 130%;
+}
+
+.bar-chart {
+  overflow-y: hidden;
+}
+.bar-chart:hover {
+  overflow-y: overlay;
 }

@@ -3,7 +3,12 @@ import MaterialTable from 'material-table';
 import PropTypes from 'prop-types';
 import { withRouter } from 'react-router-dom';
 import { connect } from 'react-redux';
-import { removePackage, setPackage, getPackages, editPackage } from '../../actions/profileActions';
+import {
+  removePackage,
+  setPackageForEdit,
+  getPackages,
+  editPackage
+} from '../../actions/profileActions';
 import Spinner from '../common/Spinner';
 import axios from 'axios';
 
@@ -13,17 +18,17 @@ class AllPackages extends React.Component {
     this.state = {
       columns: [
         { title: 'Customer Name', field: 'customername' },
-        { title: 'Customer Phone', field: 'customerphone', type: 'number' },
+        { title: 'Customer Phone', field: 'customerphone', type: 'numeric' },
         { title: 'Address', field: 'address' },
-        { title: 'Arrival Date', field: 'arrivaldate', type: 'date' },
+        { title: 'Arrival Date', field: 'arrivaldate' },
         {
           title: 'Vendor Name',
           field: 'vendorname',
           // lookup: { 1: 'ABC', 2: 'XYZ', 3: 'HIJ' },
         },
-        { title: 'COD', field: 'cod', type: 'number' },
-        { title: 'DC', field: 'dc', type: 'number' },
-        { title: 'Delivery Date', field: 'deliverdate', type: 'date' },
+        { title: 'COD', field: 'cod', type: 'numeric' },
+        { title: 'DC', field: 'dc', type: 'numeric' },
+        { title: 'Delivery Date', field: 'deliverdate' },
         {
           title: 'Rider Name',
           field: 'ridername',
@@ -35,7 +40,8 @@ class AllPackages extends React.Component {
           lookup: { delivered: 'Delivered', pending: 'Pending', returned: 'Returned' }
         }
       ],
-      data: props.data
+      data: props.data,
+      packageDetail: props.packageDetail
     };
 
     this.deletePackage = this.deletePackage.bind(this);
@@ -68,67 +74,66 @@ class AllPackages extends React.Component {
       cod: data.cod ? data.cod : "",
       dc: data.dc ? data.dc : ""
     }
-    console.log(packageData);
+    // console.log(packageData);
 
-    packageData.customerphone = packageData.customerphone.toString();
-    packageData.dc = packageData.dc.toString();
-    packageData.cod = packageData.cod.toString();
+    // packageData.customerphone = packageData.customerphone.toString();
+    // packageData.dc = packageData.dc.toString();
+    // packageData.cod = packageData.cod.toString();
 
-    console.log(packageData);
+    // console.log(packageData);
+
+    // Call Action
     this.props.editPackage(packageData);
-    // axios.post('api/profile/add-package', packageData)
-    //   .then(res => console.log('Success', res))
-    //   .catch(err => console.log('Failed', err))
+
   }
 
   getPackage(obj) {
     console.log(obj);
 
-    // this.props.history.push("/add-package");
     // Call Action
-    this.props.setPackage(obj, this.props.history);
+    this.props.setPackageForEdit(obj, this.props.history);
   }
 
   formatDate = date => {
     let formattedDate = date.toString().split('T')[0];
     formattedDate = new Date(formattedDate);
-    formattedDate = `${formattedDate.getDate()}/${formattedDate.getMonth() + 1}/${formattedDate.getFullYear()}`;
+    formattedDate = `${formattedDate.getDate()}.${formattedDate.getMonth() + 1}.${formattedDate.getFullYear()}`;
     return formattedDate;
   }
 
   render() {
-    const { loading, packageEdit } = this.props.profile;
+    const { loading } = this.props.profile;
     const { data } = this.state;
     let packageContent;
 
-    console.log(packageEdit)
     if (loading) {
       packageContent = <Spinner />
     } else if (Object.entries(data).length === 0 && data.constructor === Object) {
       packageContent = <Spinner />
     } else {
 
-      // for (let i in data) {
-      //   if (data[i].arrivaldate) {
-      //     data[i].arrivaldate = this.formatDate(data[i].arrivaldate);
-      //   }
-      //   if (data[i].deliverdate) {
-      //     data[i].deliverdate = this.formatDate(data[i].deliverdate);
-      //   }
-      // }
+      for (let i in data) {
+        if (data[i].arrivaldate) {
+          data[i].arrivaldate = data[i].arrivaldate.toString().split('T')[0];
+        }
+        if (data[i].deliverdate) {
+          data[i].deliverdate = data[i].deliverdate.toString().split('T')[0];
+        }
+      }
 
       packageContent =
         <MaterialTable
-          title="Recent Packages"
+          title={this.state.packageDetail + " Packages"}
           columns={this.state.columns}
           data={this.state.data}
+          errors={this.props.errors}
           editable={{
             onRowUpdate: (newData, oldData) =>
               new Promise(resolve => {
                 setTimeout(() => {
                   resolve();
-                  // this.getPackage(newData);
-                  this.editPackage(newData);
+                  this.getPackage(newData);
+                  // this.editPackage(newData);
                 }, 600);
                 const data = [...this.state.data];
                 data[data.indexOf(oldData)] = newData;
@@ -159,7 +164,7 @@ class AllPackages extends React.Component {
 
 AllPackages.propTypes = {
   removePackage: PropTypes.func.isRequired,
-  setPackage: PropTypes.func.isRequired,
+  setPackageForEdit: PropTypes.func.isRequired,
   editPackage: PropTypes.func.isRequired,
   getPackages: PropTypes.func.isRequired
 }
@@ -169,4 +174,4 @@ const mapStateToProps = (state) => ({
   profile: state.profile
 });
 
-export default connect(mapStateToProps, { removePackage, setPackage, getPackages, editPackage })(withRouter(AllPackages));
+export default connect(mapStateToProps, { removePackage, setPackageForEdit, getPackages, editPackage })(withRouter(AllPackages));

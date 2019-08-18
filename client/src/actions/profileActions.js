@@ -11,7 +11,8 @@ import {
   GET_VENDORS,
   GET_VENDOR_PROFILES,
   GET_PACKAGES,
-  SET_PACKAGE
+  SET_PACKAGE_FOR_EDIT,
+  REMOVE_PACKAGE_FOR_EDIT
 } from './types';
 
 // Get current profile
@@ -160,15 +161,22 @@ export const getPackages = () => dispatch => {
     );
 }
 
-// Set Package ID
-export const setPackage = (obj, history) => dispatch => {
+// Set Package for Edit
+export const setPackageForEdit = (obj, history) => dispatch => {
   dispatch(setProfileLoading());
   dispatch({
-    type: SET_PACKAGE,
+    type: SET_PACKAGE_FOR_EDIT,
     payload: obj
   })
   history.push('/add-package');
   dispatch(setProfileLoading());
+}
+
+// Remove Package for Edit
+export const removePackageForEdit = () => dispatch => {
+  dispatch({
+    type: REMOVE_PACKAGE_FOR_EDIT
+  })
 }
 
 // Add Package
@@ -210,8 +218,6 @@ export const removePackage = (packageID) => dispatch => {
         payload: err.response.data
       })
     );
-  // dispatch(setProfileLoading());
-
 }
 
 // Delete Account & Profile

@@ -106,6 +106,8 @@ router.post(
     if (req.body.cod) packageFields.cod = req.body.cod;
     if (req.body.dc) packageFields.dc = req.body.dc;
     if (req.body.status) packageFields.status = req.body.status;
+    if (req.body.arrivaldate) packageFields.arrivaldate = req.body.arrivaldate;
+    if (req.body.deliverdate) packageFields.deliverdate = req.body.deliverdate;
 
     if (req.body.ridername) {
       Rider.findOne({ "name": req.body.ridername })

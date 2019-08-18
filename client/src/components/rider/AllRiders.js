@@ -5,10 +5,15 @@ import Spinner from '../common/Spinner';
 import RiderProfileItem from './RiderProfileItem';
 import { getRiderProfiles, getRiders } from '../../actions/profileActions';
 
-class RiderProfiles extends Component {
+class AllRiders extends Component {
   componentDidMount() {
     this.props.getRiderProfiles();
     this.props.getRiders();
+  }
+
+  handleClick = (id) => {
+    console.log("asd", id);
+    localStorage.setItem('RiderID', id);
   }
 
   render() {
@@ -21,7 +26,7 @@ class RiderProfiles extends Component {
     } else {
       if (riders.length > 0) {
         riderItems = riders.map(rider => (
-          <RiderProfileItem key={rider._id} rider={rider} user={user} />
+          <RiderProfileItem key={rider._id} rider={rider} user={user} handleClick={() => this.handleClick(rider._id)} />
         ));
       } else {
         riderItems = <h4>No rider profiles found...</h4>;
@@ -37,7 +42,9 @@ class RiderProfiles extends Component {
               <p className="lead text-center">
                 See Your All Riders Here
               </p>
-              {riderItems}
+              <div className="card-group">
+                {riderItems}
+              </div>
             </div>
           </div>
         </div>
@@ -46,7 +53,7 @@ class RiderProfiles extends Component {
   }
 }
 
-RiderProfiles.propTypes = {
+AllRiders.propTypes = {
   getRiderProfiles: PropTypes.func.isRequired,
   getRiders: PropTypes.func.isRequired,
   profile: PropTypes.object.isRequired
@@ -57,4 +64,4 @@ const mapStateToProps = state => ({
   auth: state.auth
 });
 
-export default connect(mapStateToProps, { getRiderProfiles, getRiders })(RiderProfiles);
+export default connect(mapStateToProps, { getRiderProfiles, getRiders })(AllRiders);

@@ -7,7 +7,8 @@ import {
   GET_VENDORS,
   GET_VENDOR_PROFILES,
   GET_PACKAGES,
-  SET_PACKAGE
+  SET_PACKAGE_FOR_EDIT,
+  REMOVE_PACKAGE_FOR_EDIT
 } from '../actions/types';
 
 const initialState = {
@@ -63,10 +64,16 @@ export default function (state = initialState, action) {
         packages: action.payload,
         loading: false
       };
-    case SET_PACKAGE:
+    case SET_PACKAGE_FOR_EDIT:
       return {
         ...state,
         packageEdit: action.payload,
+        loading: false
+      }
+    case REMOVE_PACKAGE_FOR_EDIT:
+      return {
+        ...state,
+        packageEdit: {},
         loading: false
       }
     case CLEAR_CURRENT_PROFILE:

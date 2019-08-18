@@ -4,14 +4,15 @@ import { withRouter } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import TextFieldGroup from '../common/TextFieldGroup';
 import SelectListGroup from '../common/SelectListGroup';
-import { addPackage, getVendors, getRiders } from '../../actions/profileActions';
+import { addPackage, getVendors, getRiders, removePackageForEdit } from '../../actions/profileActions';
 import Spinner from '../common/Spinner';
+import isEmpty from '../../validation/is-empty';
 
 class AddPackage extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      data: props.packageData,
+      // data: props.packageData,
       vendorname: '',
       customername: '',
       customerphone: '',
@@ -21,13 +22,13 @@ class AddPackage extends Component {
       deliverdate: '',
       cod: '',
       dc: '',
+      status: 'pending',
       errors: {},
       hashValue: 'Add Package'
     }
 
     this.onSubmit = this.onSubmit.bind(this);
     this.onChange = this.onChange.bind(this);
-    this.changeState = this.changeState.bind(this);
   }
 
   componentDidMount() {
@@ -40,44 +41,79 @@ class AddPackage extends Component {
       this.setState({ errors: nextProps.errors })
     }
 
-    console.log(nextProps);
-    // const { packageEdit } = this.props.profile;
-    // if (packageEdit) {
-    //   console.log(packageEdit)
-    //   this.setState({
-    //     vendorname: packageEdit.vendorname,
-    //     customername: packageEdit.customername,
-    //     customerphone: packageEdit.customerphone,
-    //     address: packageEdit.address,
-    //     arrivaldate: packageEdit.arrivaldate,
-    //     ridername: packageEdit.ridername,
-    //     deliverdate: packageEdit.deliverdate,
-    //     cod: packageEdit.cod,
-    //     dc: packageEdit.dc,
-    //     hashValue: 'Edit Package'
-    //   })
-    // }
+    const { packageEdit } = this.props.profile;
+
+    if (Object.entries(packageEdit).length === 0 && packageEdit.constructor === Object) {
+      this.setState({
+        hashValue: 'Add Package'
+      })
+    } else {
+      this.setState({
+        vendorname: packageEdit.vendorname,
+        customername: packageEdit.customername,
+        customerphone: packageEdit.customerphone.toString(),
+        address: packageEdit.address,
+        arrivaldate: packageEdit.arrivaldate,
+        ridername: packageEdit.ridername,
+        deliverdate: packageEdit.deliverdate,
+        cod: isEmpty(packageEdit.cod) ? packageEdit.cod : packageEdit.cod.toString(),
+        dc: isEmpty(packageEdit.dc) ? packageEdit.dc : packageEdit.dc.toString(),
+        status: packageEdit.status,
+        hashValue: 'Edit Package'
+      })
+    }
+  }
+
+  componentWillUnmount() {
+    this.props.removePackageForEdit();
   }
 
   onSubmit(e) {
     e.preventDefault();
 
-    const packageData = {
-      vendorname: this.state.vendorname,
-      customername: this.state.customername,
-      customerphone: this.state.customerphone,
-      address: this.state.address,
-      arrivaldate: this.state.arrivaldate,
-      ridername: this.state.ridername,
-      deliverdate: this.state.deliverdate,
-      cod: this.state.cod,
-      dc: this.state.dc
-    };
+    let packageData;
+
+    const { packageEdit } = this.props.profile;
+
+    if (Object.entries(packageEdit).length > 0 && packageEdit.constructor === Object) {
+      // packageData.customerphone = packageData.customerphone.toString();
+      // packageData.dc = packageData.dc.toString();
+      // packageData.cod = packageData.cod.toString();
+
+      console.log(packageEdit._id);
+      packageData = {
+        vendorname: this.state.vendorname,
+        customername: this.state.customername,
+        customerphone: this.state.customerphone,
+        address: this.state.address,
+        arrivaldate: this.state.arrivaldate,
+        ridername: this.state.ridername,
+        deliverdate: this.state.deliverdate,
+        cod: this.state.cod,
+        dc: this.state.dc,
+        status: this.state.status,
+        _id: packageEdit._id
+      };
+
+    } else {
+      packageData = {
+        vendorname: this.state.vendorname,
+        customername: this.state.customername,
+        customerphone: this.state.customerphone,
+        address: this.state.address,
+        arrivaldate: this.state.arrivaldate,
+        ridername: this.state.ridername,
+        deliverdate: this.state.deliverdate,
+        cod: this.state.cod,
+        dc: this.state.dc,
+        status: this.state.status
+      };
+    }
 
     console.log(packageData)
 
     // Call an action
-    // this.props.addPackage(packageData, this.props.history);
+    this.props.addPackage(packageData, this.props.history);
 
   }
 
@@ -86,7 +122,7 @@ class AddPackage extends Component {
   }
 
   getDropdownList(arr) {
-    var list = [{ label: "* Choose Vendor/Rider", value: '' }]
+    var list = [{ label: "* Choose...", value: '' }]
 
     if (arr.length > 0) {
       for (let i = 0; i < arr.length; i++) {
@@ -95,36 +131,18 @@ class AddPackage extends Component {
     } else {
       list = []
     }
+    console.log(list);
     return list;
-  }
-
-  changeState(obj) {
-    console.log(obj);
-    // this.setState({
-    // customername: obj.customername,
-    // customerphone: obj.customerphone,
-    // address: obj.address,
-    // arrivaldate: obj.arrivaldate,
-    // ridername: obj.ridername,
-    // deliverdate: obj.deliverdate,
-    // cod: obj.cod,
-    // dc: obj.dc,
-    // hashValue: 'Edit Package'
-    // })
   }
 
   render() {
     const { errors } = this.props;
-    const { vendors, riders, loading, packageEdit } = this.props.profile;
+    const { vendors, riders, loading } = this.props.profile;
+    console.log(this.props.profile);
 
     let vendorSelection = this.getDropdownList(vendors);
     let riderSelection = this.getDropdownList(riders);
     let allVendors, allRiders;
-
-    console.log(packageEdit)
-    if (packageEdit !== {}) {
-      this.changeState(packageEdit);
-    }
 
     if (vendors === {} || loading) {
       allVendors = <Spinner />
@@ -231,6 +249,14 @@ class AddPackage extends Component {
                     error={errors.dc}
                     info="Delivery charges on this package"
                   />
+                  <SelectListGroup
+                    name="status"
+                    options={[{ label: "Pending", value: "pending" }, { label: "Delivered", value: "delivered" }, { label: "Returned", value: "returned" }]}
+                    value={this.state.status}
+                    onChange={this.onChange}
+                    error={errors.status}
+                    info="Progress of this Package"
+                  />
                   <input
                     type="submit"
                     value="Submit"
@@ -254,12 +280,15 @@ const mapStateToProps = (state) => ({
 AddPackage.propTypes = {
   profile: PropTypes.object.isRequired,
   errors: PropTypes.object.isRequired,
+  addPackage: PropTypes.func.isRequired,
   getRiders: PropTypes.func.isRequired,
   getVendors: PropTypes.func.isRequired,
+  removePackageForEdit: PropTypes.func.isRequired
 }
 
 export default connect(mapStateToProps, {
   addPackage,
   getRiders,
-  getVendors
+  getVendors,
+  removePackageForEdit
 })(withRouter(AddPackage));

@@ -5,7 +5,7 @@ import { connect } from 'react-redux';
 
 class Landing extends Component {
   componentDidMount() {
-    if(this.props.auth.isAuthenticated) {
+    if (this.props.auth.isAuthenticated) {
       this.props.history.push('/dashboard');
     }
   }
@@ -17,7 +17,7 @@ class Landing extends Component {
           <div className="container">
             <div className="row">
               <div className="col-md-12 text-center">
-                <h1 className="display-3 mb-4"> Courier Service
+                <h1 className="display-3 mb-4 text-white-50"> Courier Service
                 </h1>
                 <p className="lead"> Manage your Courier Service with ease </p>
                 <hr />
@@ -37,7 +37,7 @@ Landing.propTypes = {
 }
 
 const mapStateToProps = (state) => ({
-  auth: state.auth 
+  auth: state.auth
 });
 
 export default connect(mapStateToProps, { Landing })(Landing);
