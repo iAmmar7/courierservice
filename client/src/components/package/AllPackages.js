@@ -41,7 +41,6 @@ class AllPackages extends React.Component {
         }
       ],
       data: props.data,
-      packageDetail: props.packageDetail
     };
 
     this.deletePackage = this.deletePackage.bind(this);
@@ -123,7 +122,7 @@ class AllPackages extends React.Component {
 
       packageContent =
         <MaterialTable
-          title={this.state.packageDetail + " Packages"}
+          title={""}
           columns={this.state.columns}
           data={this.state.data}
           errors={this.props.errors}
@@ -155,7 +154,7 @@ class AllPackages extends React.Component {
     }
 
     return (
-      <div>
+      <div style={{ width: '100%' }}>
         {packageContent}
       </div>
     );

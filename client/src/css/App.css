@@ -58,3 +58,17 @@ img {
 .bar-chart:hover {
   overflow-y: overlay;
 }
+
+.expansion-list {
+  list-style: none;
+}
+
+.btn-group {
+  padding-top: 0px;
+  padding-bottom: 0px;
+  margin-top: -25px;
+}
+
+.dummy-btn {
+  cursor: auto;
+}

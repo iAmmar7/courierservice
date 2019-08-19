@@ -3,14 +3,12 @@ import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import Spinner from '../common/Spinner';
 import SimplePieChart from '../charts/PieChart';
+import SimpleExpansionPanel from '../package/ExpansionPanel';
 import AllPackages from '../package/AllPackages';
 import { getRiderProfiles, getRiders, getPackages } from '../../actions/profileActions';
 
 class RiderProfile extends Component {
-  constructor(props) {
-    super(props);
 
-  }
   componentDidMount() {
     this.props.getRiderProfiles();
     this.props.getRiders();
@@ -22,14 +20,14 @@ class RiderProfile extends Component {
   }
 
   dateFormat = date => {
-    var newDate = new Date(date);
+    let newDate = new Date(date);
     return newDate.toDateString();
   }
 
   render() {
     const { riders, loading, packages } = this.props.profile;
     const { user } = this.props.auth;
-    let riderCard, riderTable, riderCardData = {}, riderTableData = [];
+    let riderCard, riderTable, riderCardData = {}, riderTableData = [], monthlyData = {};
 
     // Get Rider Top Card
     if (riders === null || loading) {
@@ -70,24 +68,38 @@ class RiderProfile extends Component {
 
     // Get Rider Table
     if (Object.entries(this.props.profile).length > 0) {
-      console.log(this.props.profile);
 
       if (Object.entries(packages).length === 0 && packages.constructor === Object) {
         riderTable = <Spinner />
       } else {
-        console.log(packages);
-        for (var i = 0; i < packages.length; i++) {
+        for (let i = 0; i < packages.length; i++) {
           if (packages[i].ridername === riderCardData.name) {
-            console.log(packages[i]);
             riderTableData.push(packages[i])
           }
         }
-        console.log(riderTableData);
-        riderTable = (
-          <li>
-            <AllPackages data={riderTableData} packageDetail={riderCardData.name} />
-          </li>
 
+        for (let j in riderTableData) {
+          var arrivalMonth = new Date(riderTableData[j].arrivaldate).getMonth();
+
+          if (monthlyData[arrivalMonth]) {
+            monthlyData[arrivalMonth].push(riderTableData[j]);
+          } else {
+            monthlyData[arrivalMonth] = [];
+            monthlyData[arrivalMonth].push(riderTableData[j]);
+          }
+        }
+
+        // Object.keys(monthlyData).map(item => console.log(monthlyData[item][0].customername));
+
+
+        let months = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"]
+
+        riderTable = (
+          Object.keys(monthlyData).reverse().map(item =>
+            <li key={item}>
+              <SimpleExpansionPanel heading={months[item]} data={monthlyData[item]} />
+            </li>
+          )
         )
       }
     }
@@ -102,7 +114,9 @@ class RiderProfile extends Component {
                 See Your Rider Here
               </p>
               {riderCard}
-              {riderTable}
+              <ul className="expansion-list">
+                {riderTable}
+              </ul>
             </div>
           </div>
         </div>

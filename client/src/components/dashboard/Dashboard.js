@@ -45,6 +45,7 @@ class Dashboard extends Component {
       dashboardContent = (
         <div>
           <p className="lead text-muted">Welcome back <span className="font-weight-bold">{user.name}!</span></p>
+
           {/* STATISTIC */}
           <section className="statistic statistic2">
             <div className="container">
@@ -211,7 +212,12 @@ class Dashboard extends Component {
       if (Object.entries(packages).length === 0 && packages.constructor === Object) {
         packageContent = <Spinner />
       } else {
-        packageContent = <AllPackages data={packages} packageDetail="Recent" />
+        packageContent = (
+          <div className="m-t-30">
+            <h3 className="title-3 m-b-0">Recent Packages</h3>
+            <AllPackages data={packages} />
+          </div>
+        )
       }
     }
 
