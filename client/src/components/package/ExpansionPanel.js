@@ -24,9 +24,6 @@ class SimpleExpansionPanel extends Component {
         heading: {
           fontSize: theme.typography.pxToRem(15),
           fontWeight: theme.typography.fontWeightRegular
-        },
-        topPanel: {
-          paddingBottom: '0px'
         }
       }))
     }
@@ -40,13 +37,28 @@ class SimpleExpansionPanel extends Component {
 
   render() {
     const classes = this.style.useStyles;
+    const { data } = this.state;
+    const { salary, pending, heading, delivered, returned } = this.props;
 
-    let table;
-    if (this.state.data === undefined) {
+    let table, riderOrVendor;
+    if (data === undefined) {
       table = <Spinner />
     } else {
-      if (this.state.data.length > 0) {
-        table = <AllPackages data={this.state.data} />
+      if (data.length > 0) {
+        table = <AllPackages data={data} />
+        if (salary || salary === 0) {
+          riderOrVendor = (
+            <button type="button" className="btn btn-secondary px-5 btn-sal">
+              Salary <span className="badge badge-light">{salary}</span>
+            </button>
+          )
+        } else if (pending) {
+          riderOrVendor = (
+            <button type="button" className="btn btn-secondary mr-4 px-4">
+              Pending <span className="badge badge-light">{pending}</span>
+            </button>
+          )
+        }
       } else {
         table = <Spinner />
       }
@@ -60,20 +72,21 @@ class SimpleExpansionPanel extends Component {
             aria-controls="panel1a-content"
             id="panel1a-header"
           >
-            <Typography className={classes.heading}>{this.props.heading}</Typography>
+            <Typography className={classes.heading}>{heading}</Typography>
           </ExpansionPanelSummary>
           <div>
-            <ExpansionPanelDetails className={classes.topPanel}>
+            <ExpansionPanelDetails>
               {table}
             </ExpansionPanelDetails>
             <ExpansionPanelDetails>
-              <div className="btn-group" role="group" aria-label="...">
-                <button type="button" className="btn btn-success mr-4 dummy-btn">
-                  Delivered <span className="badge badge-light">14</span>
+              <div className="all-btn" role="group">
+                <button type="button" className="btn btn-success mr-4 px-4">
+                  Delivered <span className="badge badge-light">{delivered}</span>
                 </button>
-                <button type="button" className="btn btn-danger">
-                  Returned <span className="badge badge-light">4</span>
+                <button type="button" className="btn btn-danger px-4">
+                  Returned <span className="badge badge-light">{returned}</span>
                 </button>
+                {riderOrVendor}
               </div>
             </ExpansionPanelDetails>
           </div>

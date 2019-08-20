@@ -63,12 +63,36 @@ img {
   list-style: none;
 }
 
-.btn-group {
+.all-btn {
   padding-top: 0px;
   padding-bottom: 0px;
-  margin-top: -25px;
+  margin-top: -20px;
+  width: 100%;
+  display: flex;
+  justify-content: flex-start;
 }
 
-.dummy-btn {
-  cursor: auto;
+.btn-sal {
+  margin-left: auto;
+}
+
+.pie-chart {
+  margin-top: -30px;
+  margin-left: auto;
+}
+
+
+@media screen and (max-width: 992px) {
+  .display-card {
+    text-align: center;
+  }
+  .display-card > .col-lg-2 > img {
+    width: 13em;
+  }
+  .pie-chart-container {
+    text-align: center;
+  }
+  .pie-chart {
+    display: inline-block;
+  }
 }

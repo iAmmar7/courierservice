@@ -7,18 +7,18 @@ import { GET_ERRORS, SET_CURRENT_USER } from './types';
 // Register User
 export const registerUser = (userData, history) => dispatch => {
   axios.post('/api/users/register', userData)
-  .then(res => history.push('/login'))      // 1-Details
-  .catch(err => 
-    dispatch({
-      type: GET_ERRORS,
-      payload: err.response.data
-    })
-  );
+    .then(res => history.push('/login'))      // 1-Details
+    .catch(err =>
+      dispatch({
+        type: GET_ERRORS,
+        payload: err.response.data
+      })
+    );
 };
 
 // Login - Get User Token
 export const loginUser = userData => dispatch => {
-  axios.post('/api/users/login',userData)
+  axios.post('/api/users/login', userData)
     .then(res => {
       // Save to localStorage
       const { token } = res.data;
@@ -31,7 +31,7 @@ export const loginUser = userData => dispatch => {
       // Set current user
       dispatch(setCurrentUser(decoded));
     })
-    .catch(err => 
+    .catch(err =>
       dispatch({
         type: GET_ERRORS,
         payload: err.response.data
@@ -43,7 +43,7 @@ export const loginUser = userData => dispatch => {
 export const setCurrentUser = (decoded) => {
   return {
     type: SET_CURRENT_USER,
-    payload: decoded  
+    payload: decoded
   };
 };
 
@@ -51,6 +51,7 @@ export const setCurrentUser = (decoded) => {
 export const logoutUser = () => dispatch => {
   // Remove token from localStorage
   localStorage.removeItem('jwtToken');
+  localStorage.removeItem('RiderID');
   // Remove auth header for future request
   setAuthToken(false);
   // Set current user to {} which will set isAuthenticated to false
