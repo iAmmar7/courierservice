@@ -2,13 +2,12 @@ import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import {
-  getCurrentProfile,
-  deleteAccount,
-  getRiders,
-  getVendors,
-  getPackages
-} from '../../actions/profileActions';
+
+import { getCurrentProfile, deleteAccount } from '../../actions/profileActions';
+import { getPackages } from '../../actions/packageActions';
+import { getRiders } from '../../actions/riderActions';
+import { getVendors } from '../../actions/vendorActions';
+
 import Spinner from '../common/Spinner';
 import AllPackages from '../package/AllPackages';
 import SimpleBarChart from '../charts/BarChart';

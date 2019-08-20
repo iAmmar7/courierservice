@@ -3,7 +3,7 @@ import { connect } from 'react-redux';
 import { withRouter } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import TextFieldGroup from '../common/TextFieldGroup';
-import { addRider } from '../../actions/profileActions';
+import { addRider } from '../../actions/riderActions';
 
 class AddRider extends Component {
   constructor(props) {
@@ -21,7 +21,7 @@ class AddRider extends Component {
   }
 
   componentWillReceiveProps(nextProps) {
-    if(nextProps.errors) {
+    if (nextProps.errors) {
       this.setState({ errors: nextProps.errors })
     }
   }
@@ -41,7 +41,7 @@ class AddRider extends Component {
   }
 
   onChange(e) {
-    this.setState({ [e.target.name] : e.target.value })
+    this.setState({ [e.target.name]: e.target.value })
   }
 
   render() {
@@ -118,4 +118,4 @@ AddRider.propTypes = {
   errors: PropTypes.object.isRequired
 }
 
-export default connect(mapStateToProps, {addRider})(withRouter(AddRider));
+export default connect(mapStateToProps, { addRider })(withRouter(AddRider));

@@ -3,7 +3,7 @@ import { connect } from 'react-redux';
 import { withRouter } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import TextFieldGroup from '../common/TextFieldGroup';
-import { addVendor } from '../../actions/profileActions';
+import { addVendor } from '../../actions/vendorActions';
 
 class AddVendor extends Component {
   constructor(props) {
@@ -21,7 +21,7 @@ class AddVendor extends Component {
   }
 
   componentWillReceiveProps(nextProps) {
-    if(nextProps.errors) {
+    if (nextProps.errors) {
       this.setState({ errors: nextProps.errors })
     }
   }
@@ -41,7 +41,7 @@ class AddVendor extends Component {
   }
 
   onChange(e) {
-    this.setState({ [e.target.name] : e.target.value })
+    this.setState({ [e.target.name]: e.target.value })
   }
 
   render() {
@@ -117,4 +117,4 @@ AddVendor.propTypes = {
   errors: PropTypes.object.isRequired
 }
 
-export default connect(mapStateToProps, {addVendor})(withRouter(AddVendor));
+export default connect(mapStateToProps, { addVendor })(withRouter(AddVendor));

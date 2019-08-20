@@ -49,12 +49,12 @@ class SimpleExpansionPanel extends Component {
         if (salary || salary === 0) {
           riderOrVendor = (
             <button type="button" className="btn btn-secondary px-5 btn-sal">
-              Salary <span className="badge badge-light">{salary}</span>
+              Salary <span className="badge badge-light">{salary} PKR</span>
             </button>
           )
         } else if (pending) {
           riderOrVendor = (
-            <button type="button" className="btn btn-secondary mr-4 px-4">
+            <button type="button" className="btn btn-secondary px-4">
               Pending <span className="badge badge-light">{pending}</span>
             </button>
           )
@@ -83,7 +83,7 @@ class SimpleExpansionPanel extends Component {
                 <button type="button" className="btn btn-success mr-4 px-4">
                   Delivered <span className="badge badge-light">{delivered}</span>
                 </button>
-                <button type="button" className="btn btn-danger px-4">
+                <button type="button" className="btn btn-danger mr-4 px-4">
                   Returned <span className="badge badge-light">{returned}</span>
                 </button>
                 {riderOrVendor}

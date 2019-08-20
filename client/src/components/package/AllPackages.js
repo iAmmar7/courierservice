@@ -8,7 +8,7 @@ import {
   setPackageForEdit,
   getPackages,
   editPackage
-} from '../../actions/profileActions';
+} from '../../actions/packageActions';
 import Spinner from '../common/Spinner';
 import axios from 'axios';
 

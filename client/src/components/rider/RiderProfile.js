@@ -5,7 +5,8 @@ import Spinner from '../common/Spinner';
 import SimplePieChart from '../charts/PieChart';
 import SimpleExpansionPanel from '../package/ExpansionPanel';
 
-import { getRiderProfiles, getRiders, getPackages } from '../../actions/profileActions';
+import { getRiderProfiles, getRiders } from '../../actions/riderActions';
+import { getPackages } from '../../actions/packageActions';
 
 class RiderProfile extends Component {
   constructor() {
@@ -128,13 +129,14 @@ class RiderProfile extends Component {
         riderTable = (
           Object.keys(monthlyData).reverse().map(item => {
             let delivered = 0, returned = 0, salary = 0;
-            monthlyData[item].map(innerItem => {
-              if (innerItem.status === "delivered") {
+            for (let i of monthlyData[item]) {
+              console.log(i)
+              if (i.status === "delivered") {
                 delivered++;
-              } else if (innerItem.status === "returned") {
+              } else if (i.status === "returned") {
                 returned++;
               }
-            })
+            }
             salary = delivered * riderCardData.chargesperdelivery;
 
             return (

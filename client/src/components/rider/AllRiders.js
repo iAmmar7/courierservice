@@ -3,7 +3,7 @@ import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import Spinner from '../common/Spinner';
 import RiderProfileItem from './RiderProfileItem';
-import { getRiderProfiles, getRiders } from '../../actions/profileActions';
+import { getRiderProfiles, getRiders } from '../../actions/riderActions';
 
 class AllRiders extends Component {
   componentDidMount() {

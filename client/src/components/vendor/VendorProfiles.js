@@ -3,7 +3,7 @@ import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import Spinner from '../common/Spinner';
 import VendorProfileItem from './VendorProfileItem';
-import { getVendorProfiles, getVendors } from '../../actions/profileActions';
+import { getVendorProfiles, getVendors } from '../../actions/vendorActions';
 
 class VendorProfiles extends Component {
   componentDidMount() {

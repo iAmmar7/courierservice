@@ -2,9 +2,13 @@ import React, { Component } from 'react'
 import { connect } from 'react-redux';
 import { withRouter } from 'react-router-dom';
 import PropTypes from 'prop-types';
+
+import { addPackage, removePackageForEdit } from '../../actions/packageActions';
+import { getRiders } from '../../actions/riderActions';
+import { getVendors } from '../../actions/vendorActions';
+
 import TextFieldGroup from '../common/TextFieldGroup';
 import SelectListGroup from '../common/SelectListGroup';
-import { addPackage, getVendors, getRiders, removePackageForEdit } from '../../actions/profileActions';
 import Spinner from '../common/Spinner';
 import isEmpty from '../../validation/is-empty';
 
@@ -12,7 +16,6 @@ class AddPackage extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      // data: props.packageData,
       vendorname: '',
       customername: '',
       customerphone: '',
