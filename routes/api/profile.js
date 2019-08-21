@@ -28,7 +28,7 @@ const Package = require('../../models/Package');
 // @access  Public
 router.get("/test", (req, res) => res.json({ msg: "Profile Works" }));
 
-// @route   POST api/profile/add_rider
+// @route   POST api/profile/add-rider
 // @desc    Add rider
 // @access  Private
 router.post(
@@ -49,13 +49,27 @@ router.post(
     if (req.body.contact) riderFields.contact = req.body.contact;
     if (req.body.chargesperdelivery) riderFields.chargesperdelivery = req.body.chargesperdelivery;
 
-    new Rider(riderFields).save()
-      .then(rider => res.json(rider))
-      .catch(err => console.log(err));
+    if (req.body._id) {
+      Rider.findOne({ "_id": req.body._id })
+        .then(rider => {
+          if (!rider) {
+            errors.norider = "There is no Rider with this ID";
+            res.status(404).json(errors);
+          } else {
+            Rider.updateOne({ "_id": req.body._id }, { $set: riderFields })
+              .then(res.json(rider))
+              .catch(err => console.log(err))
+          }
+        })
+    } else {
+      new Rider(riderFields).save()
+        .then(rider => res.json(rider))
+        .catch(err => console.log(err));
+    }
   }
 );
 
-// @route   POST api/profile/add_vendor
+// @route   POST api/profile/add-vendor
 // @desc    Add vendor
 // @access  Private
 router.post(
@@ -76,14 +90,28 @@ router.post(
     if (req.body.contact) vendorFields.contact = req.body.contact;
     if (req.body.address) vendorFields.address = req.body.address;
 
-    new Vendor(vendorFields).save()
-      .then(vendor => res.json(vendor))
-      .catch(err => console.log(err));
+    if (req.body._id) {
+      Vendor.findOne({ "_id": req.body._id })
+        .then(vendor => {
+          if (!vendor) {
+            errors.novendor = "There is no Vendor with this ID";
+            res.status(404).json(errors);
+          } else {
+            Vendor.updateOne({ "_id": req.body._id }, { $set: vendorFields })
+              .then(res.json(vendor))
+              .catch(err => console.log(err))
+          }
+        })
+    } else {
+      new Vendor(vendorFields).save()
+        .then(vendor => res.json(vendor))
+        .catch(err => console.log(err));
+    }
   }
 );
 
 // @route   POST api/profile/add_package
-// @desc    Create or Edit package
+// @desc    Add or Edit package
 // @access  Private
 router.post(
   '/add-package',

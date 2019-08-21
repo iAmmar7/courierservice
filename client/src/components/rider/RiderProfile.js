@@ -52,6 +52,10 @@ class RiderProfile extends Component {
     })
   }
 
+  componentWillUnmount() {
+    localStorage.removeItem("RiderID");
+  }
+
   dateFormat = date => {
     let newDate = new Date(date);
     return newDate.toDateString();
