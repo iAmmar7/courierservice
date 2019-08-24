@@ -7,8 +7,8 @@ import {
   GET_VENDORS,
   GET_VENDOR_PROFILES,
   GET_PACKAGES,
-  SET_PACKAGE_FOR_EDIT,
-  REMOVE_PACKAGE_FOR_EDIT
+  SET_DATA_FOR_EDIT,
+  REMOVE_DATA_FOR_EDIT
 } from '../actions/types';
 
 const initialState = {
@@ -17,7 +17,7 @@ const initialState = {
   vendors: {},
   packages: {},
   // profiles: null,
-  packageEdit: {},
+  editData: {},
   loading: false
 };
 
@@ -64,16 +64,16 @@ export default function (state = initialState, action) {
         packages: action.payload,
         loading: false
       };
-    case SET_PACKAGE_FOR_EDIT:
+    case SET_DATA_FOR_EDIT:
       return {
         ...state,
-        packageEdit: action.payload,
+        editData: action.payload,
         loading: false
       }
-    case REMOVE_PACKAGE_FOR_EDIT:
+    case REMOVE_DATA_FOR_EDIT:
       return {
         ...state,
-        packageEdit: {},
+        editData: {},
         loading: false
       }
     case CLEAR_CURRENT_PROFILE:

@@ -2,7 +2,10 @@ import React, { Component } from 'react'
 import { connect } from 'react-redux';
 import { withRouter } from 'react-router-dom';
 import PropTypes from 'prop-types';
+
 import TextFieldGroup from '../common/TextFieldGroup';
+
+import { removeDataForEdit } from '../../actions/profileActions';
 import { addRider } from '../../actions/riderActions';
 
 class AddRider extends Component {
@@ -13,11 +16,31 @@ class AddRider extends Component {
       contact: '',
       chargesperdelivery: '',
       hiredate: Date.now(),
-      errors: {}
+      errors: {},
+      hashValue: "Add Rider",
+      tagLine: "Let's add some information to hire a new rider"
     }
 
     this.onSubmit = this.onSubmit.bind(this);
     this.onChange = this.onChange.bind(this);
+  }
+
+  componentDidMount() {
+    console.log(this.props.profile);
+    const { editData } = this.props.profile;
+
+    if (editData !== undefined) {
+      if (Object.entries(editData).length > 0 && editData.constructor === Object) {
+        this.setState({
+          name: editData.name,
+          contact: editData.contact,
+          chargesperdelivery: editData.chargesperdelivery,
+          hiredate: editData.hiredate,
+          hashValue: 'Edit Package',
+          tagLine: "Edit your rider information here!"
+        })
+      }
+    }
   }
 
   componentWillReceiveProps(nextProps) {
@@ -26,15 +49,36 @@ class AddRider extends Component {
     }
   }
 
+  componentWillUnmount() {
+    this.props.removeDataForEdit();
+  }
+
   onSubmit(e) {
     e.preventDefault();
 
-    const riderData = {
-      name: this.state.name,
-      contact: this.state.contact,
-      chargesperdelivery: this.state.chargesperdelivery,
-      hiredate: this.state.hiredate
-    };
+    let riderData;
+
+    const { editData } = this.props.profile;
+
+    if (Object.entries(editData).length > 0 && editData.constructor === Object) {
+      riderData = {
+        name: this.state.name,
+        contact: this.state.contact.toString(),
+        chargesperdelivery: this.state.chargesperdelivery.toString(),
+        hiredate: this.state.hiredate,
+        _id: editData._id
+      };
+      let newDate = new Date(this.state.hiredate);
+      riderData.hiredate = newDate;
+
+    } else {
+      riderData = {
+        name: this.state.name,
+        contact: this.state.contact,
+        chargesperdelivery: this.state.chargesperdelivery,
+        hiredate: this.state.hiredate
+      }
+    }
 
     // Call an action
     this.props.addRider(riderData, this.props.history);
@@ -53,10 +97,8 @@ class AddRider extends Component {
           <div className="container">
             <div className="row">
               <div className="col-md-8 m-auto">
-                <h1 className="display-4 text-center">Add Rider</h1>
-                <p className="lead text-center">
-                  Let's add some information to hire a new rider
-                </p>
+                <h1 className="display-4 text-center">{this.state.hashValue}</h1>
+                <p className="lead text-center">{this.state.tagLine}</p>
                 <small className="d-block pb-3">* = required fields</small>
                 <form onSubmit={this.onSubmit}>
                   <TextFieldGroup
@@ -71,7 +113,7 @@ class AddRider extends Component {
                     placeholder="* Contact"
                     name="contact"
                     type="number"
-                    value={this.state.contact}
+                    value={this.state.contact.toString()}
                     onChange={this.onChange}
                     error={errors.contact}
                     info="Phone number of new rider"
@@ -80,7 +122,7 @@ class AddRider extends Component {
                     placeholder="Charges Per Delivery"
                     name="chargesperdelivery"
                     type="number"
-                    value={this.state.chargesperdelivery}
+                    value={this.state.chargesperdelivery.toString()}
                     onChange={this.onChange}
                     error={errors.chargesperdelivery}
                     info="An amount that a rider will charge per delivery"
@@ -88,7 +130,7 @@ class AddRider extends Component {
                   <TextFieldGroup
                     name="hiredate"
                     type="date"
-                    value={this.state.hiredate}
+                    value={this.state.hiredate.toString()}
                     onChange={this.onChange}
                     error={errors.hiredate}
                     info="When did you hire this rider?"
@@ -109,13 +151,15 @@ class AddRider extends Component {
 }
 
 const mapStateToProps = (state) => ({
-  profile: state.riders,
+  profile: state.profile,
   errors: state.errors
 })
 
 AddRider.propTypes = {
   profile: PropTypes.object.isRequired,
-  errors: PropTypes.object.isRequired
+  errors: PropTypes.object.isRequired,
+  addRider: PropTypes.func.isRequired,
+  removeDataForEdit: PropTypes.func.isRequired
 }
 
-export default connect(mapStateToProps, { addRider })(withRouter(AddRider));
+export default connect(mapStateToProps, { addRider, removeDataForEdit })(withRouter(AddRider));

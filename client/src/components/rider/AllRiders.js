@@ -12,7 +12,6 @@ class AllRiders extends Component {
   }
 
   handleClick = (id) => {
-    console.log("asd", id);
     localStorage.setItem('RiderID', id);
   }
 

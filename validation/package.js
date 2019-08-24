@@ -4,20 +4,20 @@ const isEmpty = require('./is_empty');
 module.exports = function validatePackageInput(data) {
   let errors = {};
 
-  data.vendorname = !isEmpty(data.vendorname) ? data.vendorname : '';
-  data.ridername = !isEmpty(data.ridername) ? data.ridername : '';
+  data.vendor = !isEmpty(data.vendor) ? data.vendor : '';
+  data.rider = !isEmpty(data.rider) ? data.rider : '';
   data.customername = !isEmpty(data.customername) ? data.customername : '';
   data.customerphone = !isEmpty(data.customerphone) ? data.customerphone : '';
   data.address = !isEmpty(data.address) ? data.address : '';
   data.status = !isEmpty(data.status) ? data.status : 'pending';
 
-  if (Validator.isEmpty(data.vendorname)) {
-    errors.vendorname = "Vendor name is required";
+  if (Validator.isEmpty(data.vendor)) {
+    errors.vendor = "Vendor name is required";
   }
 
-  // if(data.ridername) {
-  //   if(Validator.isEmpty(data.ridername)) {
-  //     errors.ridername = "Rider name is required";
+  // if(data.rider) {
+  //   if(Validator.isEmpty(data.rider)) {
+  //     errors.rider = "Rider name is required";
   //   }
   // }
 

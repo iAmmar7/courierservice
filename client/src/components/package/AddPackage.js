@@ -3,7 +3,8 @@ import { connect } from 'react-redux';
 import { withRouter } from 'react-router-dom';
 import PropTypes from 'prop-types';
 
-import { addPackage, removePackageForEdit } from '../../actions/packageActions';
+import { removeDataForEdit } from '../../actions/profileActions';
+import { addPackage } from '../../actions/packageActions';
 import { getRiders } from '../../actions/riderActions';
 import { getVendors } from '../../actions/vendorActions';
 
@@ -44,31 +45,31 @@ class AddPackage extends Component {
       this.setState({ errors: nextProps.errors })
     }
 
-    const { packageEdit } = this.props.profile;
+    const { editData } = this.props.profile;
 
-    if (Object.entries(packageEdit).length === 0 && packageEdit.constructor === Object) {
+    if (Object.entries(editData).length === 0 && editData.constructor === Object) {
       this.setState({
         hashValue: 'Add Package'
       })
     } else {
       this.setState({
-        vendorname: packageEdit.vendorname,
-        customername: packageEdit.customername,
-        customerphone: packageEdit.customerphone.toString(),
-        address: packageEdit.address,
-        arrivaldate: packageEdit.arrivaldate,
-        ridername: packageEdit.ridername,
-        deliverdate: packageEdit.deliverdate,
-        cod: isEmpty(packageEdit.cod) ? packageEdit.cod : packageEdit.cod.toString(),
-        dc: isEmpty(packageEdit.dc) ? packageEdit.dc : packageEdit.dc.toString(),
-        status: packageEdit.status,
+        vendorname: editData.vendorname,
+        customername: editData.customername,
+        customerphone: editData.customerphone.toString(),
+        address: editData.address,
+        arrivaldate: editData.arrivaldate,
+        ridername: editData.ridername,
+        deliverdate: editData.deliverdate,
+        cod: isEmpty(editData.cod) ? editData.cod : editData.cod.toString(),
+        dc: isEmpty(editData.dc) ? editData.dc : editData.dc.toString(),
+        status: editData.status,
         hashValue: 'Edit Package'
       })
     }
   }
 
   componentWillUnmount() {
-    this.props.removePackageForEdit();
+    this.props.removeDataForEdit();
   }
 
   onSubmit(e) {
@@ -76,14 +77,11 @@ class AddPackage extends Component {
 
     let packageData;
 
-    const { packageEdit } = this.props.profile;
+    const { editData } = this.props.profile;
 
-    if (Object.entries(packageEdit).length > 0 && packageEdit.constructor === Object) {
-      // packageData.customerphone = packageData.customerphone.toString();
-      // packageData.dc = packageData.dc.toString();
-      // packageData.cod = packageData.cod.toString();
+    if (Object.entries(editData).length > 0 && editData.constructor === Object) {
 
-      console.log(packageEdit._id);
+      console.log(editData._id);
       packageData = {
         vendorname: this.state.vendorname,
         customername: this.state.customername,
@@ -95,7 +93,7 @@ class AddPackage extends Component {
         cod: this.state.cod,
         dc: this.state.dc,
         status: this.state.status,
-        _id: packageEdit._id
+        _id: editData._id
       };
 
     } else {
@@ -286,12 +284,12 @@ AddPackage.propTypes = {
   addPackage: PropTypes.func.isRequired,
   getRiders: PropTypes.func.isRequired,
   getVendors: PropTypes.func.isRequired,
-  removePackageForEdit: PropTypes.func.isRequired
+  removeDataForEdit: PropTypes.func.isRequired
 }
 
 export default connect(mapStateToProps, {
   addPackage,
   getRiders,
   getVendors,
-  removePackageForEdit
+  removeDataForEdit
 })(withRouter(AddPackage));

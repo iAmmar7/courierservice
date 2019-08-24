@@ -6,6 +6,8 @@ import {
   CLEAR_CURRENT_PROFILE,
   GET_ERRORS,
   SET_CURRENT_USER,
+  SET_DATA_FOR_EDIT,
+  REMOVE_DATA_FOR_EDIT
 } from './types';
 
 // Get current profile
@@ -55,6 +57,30 @@ export const deleteAccount = () => dispatch => {
         })
       );
   }
+}
+
+// Set Data for Edit
+export const setDataForEdit = (obj, history, id) => dispatch => {
+  dispatch(setProfileLoading());
+  dispatch({
+    type: SET_DATA_FOR_EDIT,
+    payload: obj
+  })
+  if (id === "package") {
+    history.push('/add-package');
+  } else if (id === "rider") {
+    history.push('/add-rider');
+  } else if (id === "vendor") {
+    history.push('/add-vendor');
+  }
+  dispatch(setProfileLoading());
+}
+
+// Remove Package for Edit
+export const removeDataForEdit = () => dispatch => {
+  dispatch({
+    type: REMOVE_DATA_FOR_EDIT
+  })
 }
 
 // Profile Loading

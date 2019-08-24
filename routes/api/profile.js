@@ -137,26 +137,27 @@ router.post(
     if (req.body.arrivaldate) packageFields.arrivaldate = req.body.arrivaldate;
     if (req.body.deliverdate) packageFields.deliverdate = req.body.deliverdate;
 
-    if (req.body.ridername) {
-      Rider.findOne({ "name": req.body.ridername })
+    if (req.body.rider) {
+      Rider.findOne({ "_id": req.body.rider })
         .then(rider => {
           if (!rider) {
-            errors.norider = "Rider name does not exist";
+            errors.norider = "Rider ID does not exist";
             res.status(404).json(errors);
           } else {
-            packageFields.ridername = req.body.ridername;
+            packageFields.rider = req.body.rider;
           }
         })
+        .catch(err => res.status(404).json({ ridernotfound: "Rider ID is not exist" }))
     }
 
-    if (req.body.vendorname) {
-      Vendor.findOne({ "name": req.body.vendorname })
+    if (req.body.vendor) {
+      Vendor.findOne({ "_id": req.body.vendor })
         .then(vendor => {
           if (!vendor) {
-            errors.noVendor = "Vendor name does not exist";
+            errors.noVendor = "Vendor ID does not exist";
             res.status(404).json(errors);
           } else {
-            packageFields.vendorname = req.body.vendorname;
+            packageFields.vendor = req.body.vendor;
 
             if (req.body._id) {
               Package.findOne({ "_id": req.body._id })
@@ -176,7 +177,8 @@ router.post(
                 .catch(err => console.log(err));
             }
           }
-        });
+        })
+        .catch(err => res.status(404).json({ vendornotfound: "Vendor ID is not exist" }));
     }
   }
 );

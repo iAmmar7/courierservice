@@ -1,10 +1,12 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
+
 import Spinner from '../common/Spinner';
 import SimplePieChart from '../charts/PieChart';
 import SimpleExpansionPanel from '../package/ExpansionPanel';
 
+import { setDataForEdit } from '../../actions/profileActions';
 import { getRiderProfiles, getRiders } from '../../actions/riderActions';
 import { getPackages } from '../../actions/packageActions';
 
@@ -26,10 +28,10 @@ class RiderProfile extends Component {
 
   componentWillMount() {
     this.props.getPackages();
+    this.props.getRiders();
   }
 
   componentWillReceiveProps(nextProps) {
-    console.log(nextProps);
     const { packages, riders } = nextProps.profile;
     let rider, delivered = 0, returned = 0;
 
@@ -52,13 +54,16 @@ class RiderProfile extends Component {
     })
   }
 
-  componentWillUnmount() {
-    localStorage.removeItem("RiderID");
-  }
-
   dateFormat = date => {
     let newDate = new Date(date);
     return newDate.toDateString();
+  }
+
+  setData(data) {
+    data.hiredate = data.hiredate.toString().split('T')[0];
+
+    // Call Action
+    this.props.setDataForEdit(data, this.props.history, "rider")
   }
 
   render() {
@@ -73,12 +78,15 @@ class RiderProfile extends Component {
       if (localStorage.getItem("RiderID")) {
         for (let i = 0; i < riders.length; i++) {
           if (riders[i]._id === localStorage.getItem("RiderID")) {
+            riderCardData._id = riders[i]._id;
             riderCardData.name = riders[i].name;
             riderCardData.contact = riders[i].contact;
             riderCardData.chargesperdelivery = riders[i].chargesperdelivery;
-            riderCardData.hiredate = this.dateFormat(riders[i].hiredate);
+            riderCardData.hiredate = riders[i].hiredate;
+            riderCardData.formatDate = this.dateFormat(riders[i].hiredate);
           }
         }
+
         riderCard = (
           <div className="card text-white bg-dark mb-4 p-2" >
             <div className="d-flex justify-content-between row display-card">
@@ -88,11 +96,11 @@ class RiderProfile extends Component {
               <div className="card-body col-lg-6">
                 <div className="card-heading">
                   <h5 className="card-title h2">{riderCardData.name}</h5>
-                  <button type="button" className="btn btn-outline-light py-1">Edit Profile</button>
+                  <button type="button" className="btn btn-outline-light py-1" onClick={() => this.setData(riderCardData)}>Edit Profile</button>
                 </div>
                 <p className="card-text">Charges Per Delivery: <span className="props">{riderCardData.chargesperdelivery}</span></p>
                 <p className="card-text">Contact: <span className="props">{riderCardData.contact}</span></p>
-                <p className="card-text">Hire Date: <span className="props">{riderCardData.hiredate}</span></p>
+                <p className="card-text">Hire Date: <span className="props">{riderCardData.formatDate}</span></p>
               </div>
               <div className="col-lg-4 pie-chart-container">
                 <SimplePieChart deliver={this.state.allDelivered} return={this.state.allReturned} />
@@ -101,56 +109,55 @@ class RiderProfile extends Component {
           </div>
         )
       } else {
-        riderCard = <h4>No rider profiles found...</h4>;
+        riderCard = <h4 className="p-4">No rider profiles found...</h4>;
       }
     }
 
     // Get Rider Table
-    if (Object.entries(this.props.profile).length > 0) {
 
-      if (Object.entries(packages).length === 0 && packages.constructor === Object) {
-        riderTable = <Spinner />
-      } else {
-        for (let i = 0; i < packages.length; i++) {
-          if (packages[i].ridername === riderCardData.name) {
-            riderTableData.push(packages[i])
-          }
+
+    if (Object.entries(packages).length === 0 && packages.constructor === Object) {
+      riderTable = <Spinner />
+    } else {
+
+      for (let i = 0; i < packages.length; i++) {
+        if (packages[i].ridername === riderCardData.name) {
+          riderTableData.push(packages[i])
         }
-
-        for (let j in riderTableData) {
-          var arrivalMonth = new Date(riderTableData[j].arrivaldate).getMonth();
-
-          if (monthlyData[arrivalMonth]) {
-            monthlyData[arrivalMonth].push(riderTableData[j]);
-          } else {
-            monthlyData[arrivalMonth] = [];
-            monthlyData[arrivalMonth].push(riderTableData[j]);
-          }
-        }
-
-        let months = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"]
-
-        riderTable = (
-          Object.keys(monthlyData).reverse().map(item => {
-            let delivered = 0, returned = 0, salary = 0;
-            for (let i of monthlyData[item]) {
-              console.log(i)
-              if (i.status === "delivered") {
-                delivered++;
-              } else if (i.status === "returned") {
-                returned++;
-              }
-            }
-            salary = delivered * riderCardData.chargesperdelivery;
-
-            return (
-              <li key={item}>
-                <SimpleExpansionPanel data={monthlyData[item]} heading={months[item]} delivered={delivered} returned={returned} salary={salary} />
-              </li>
-            )
-          })
-        )
       }
+
+      for (let j in riderTableData) {
+        var arrivalMonth = new Date(riderTableData[j].arrivaldate).getMonth();
+
+        if (monthlyData[arrivalMonth]) {
+          monthlyData[arrivalMonth].push(riderTableData[j]);
+        } else {
+          monthlyData[arrivalMonth] = [];
+          monthlyData[arrivalMonth].push(riderTableData[j]);
+        }
+      }
+
+      let months = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"]
+
+      riderTable = (
+        Object.keys(monthlyData).reverse().map(item => {
+          let delivered = 0, returned = 0, salary = 0;
+          for (let i of monthlyData[item]) {
+            if (i.status === "delivered") {
+              delivered++;
+            } else if (i.status === "returned") {
+              returned++;
+            }
+          }
+          salary = delivered * riderCardData.chargesperdelivery;
+
+          return (
+            <li key={item}>
+              <SimpleExpansionPanel data={monthlyData[item]} heading={months[item]} delivered={delivered} returned={returned} salary={salary} />
+            </li>
+          )
+        })
+      )
     }
 
     return (
@@ -178,6 +185,7 @@ RiderProfile.propTypes = {
   getRiderProfiles: PropTypes.func.isRequired,
   getRiders: PropTypes.func.isRequired,
   getPackages: PropTypes.func.isRequired,
+  setDataForEdit: PropTypes.func.isRequired,
   profile: PropTypes.object.isRequired
 };
 
@@ -186,4 +194,4 @@ const mapStateToProps = state => ({
   auth: state.auth
 });
 
-export default connect(mapStateToProps, { getRiderProfiles, getRiders, getPackages })(RiderProfile);
+export default connect(mapStateToProps, { getRiderProfiles, getRiders, getPackages, setDataForEdit })(RiderProfile);

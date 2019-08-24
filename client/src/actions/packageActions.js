@@ -2,9 +2,7 @@ import axios from 'axios';
 
 import {
   GET_ERRORS,
-  GET_PACKAGES,
-  SET_PACKAGE_FOR_EDIT,
-  REMOVE_PACKAGE_FOR_EDIT
+  GET_PACKAGES
 } from './types';
 
 import { setProfileLoading } from './profileActions';
@@ -25,24 +23,6 @@ export const getPackages = () => dispatch => {
         payload: {}
       })
     );
-}
-
-// Set Package for Edit
-export const setPackageForEdit = (obj, history) => dispatch => {
-  dispatch(setProfileLoading());
-  dispatch({
-    type: SET_PACKAGE_FOR_EDIT,
-    payload: obj
-  })
-  history.push('/add-package');
-  dispatch(setProfileLoading());
-}
-
-// Remove Package for Edit
-export const removePackageForEdit = () => dispatch => {
-  dispatch({
-    type: REMOVE_PACKAGE_FOR_EDIT
-  })
 }
 
 // Add Package

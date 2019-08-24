@@ -30,7 +30,7 @@ export const getRiders = () => dispatch => {
 // Add Rider
 export const addRider = (riderData, history) => dispatch => {
   axios.post('/api/profile/add-rider', riderData)
-    .then(res => history.push('/dashboard'))
+    .then(res => history.goBack())
     .catch(err =>
       dispatch({
         type: GET_ERRORS,

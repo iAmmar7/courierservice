@@ -31,12 +31,14 @@ const PackageSchema = new Schema({
     type: String,
     required: true
   },
-  vendorname: {
-    type: String,
+  vendor: {
+    type: Schema.Types.ObjectId,
+    ref: "vendors",
     required: true
   },
-  ridername: {
-    type: String
+  vendor: {
+    type: Schema.Types.ObjectId,
+    ref: "riders"
   },
   cod: {
     type: Number

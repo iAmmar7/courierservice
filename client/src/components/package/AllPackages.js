@@ -3,12 +3,10 @@ import MaterialTable from 'material-table';
 import PropTypes from 'prop-types';
 import { withRouter } from 'react-router-dom';
 import { connect } from 'react-redux';
-import {
-  removePackage,
-  setPackageForEdit,
-  getPackages,
-  editPackage
-} from '../../actions/packageActions';
+
+import { setDataForEdit } from '../../actions/profileActions';
+import { removePackage, getPackages, editPackage } from '../../actions/packageActions';
+
 import Spinner from '../common/Spinner';
 import axios from 'axios';
 
@@ -45,15 +43,12 @@ class AllPackages extends React.Component {
 
     this.deletePackage = this.deletePackage.bind(this);
     this.editPackage = this.editPackage.bind(this);
-    this.getPackage = this.getPackage.bind(this);
+    this.setPackage = this.setPackage.bind(this);
   }
 
   deletePackage(packageId) {
-    console.log(packageId);
 
     // Call Action
-    // this.props.removePackage(packageId);
-
     axios.delete(`/api/profile/all-packages/${packageId}`)
       .then(res => console.log(res))
       .catch(err => console.log(err));
@@ -73,24 +68,16 @@ class AllPackages extends React.Component {
       cod: data.cod ? data.cod : "",
       dc: data.dc ? data.dc : ""
     }
-    // console.log(packageData);
-
-    // packageData.customerphone = packageData.customerphone.toString();
-    // packageData.dc = packageData.dc.toString();
-    // packageData.cod = packageData.cod.toString();
-
-    // console.log(packageData);
 
     // Call Action
     this.props.editPackage(packageData);
 
   }
 
-  getPackage(obj) {
-    console.log(obj);
+  setPackage(obj) {
 
     // Call Action
-    this.props.setPackageForEdit(obj, this.props.history);
+    this.props.setDataForEdit(obj, this.props.history, "package");
   }
 
   formatDate = date => {
@@ -131,7 +118,7 @@ class AllPackages extends React.Component {
               new Promise(resolve => {
                 setTimeout(() => {
                   resolve();
-                  this.getPackage(newData);
+                  this.setPackage(newData);
                   // this.editPackage(newData);
                 }, 600);
                 const data = [...this.state.data];
@@ -163,7 +150,7 @@ class AllPackages extends React.Component {
 
 AllPackages.propTypes = {
   removePackage: PropTypes.func.isRequired,
-  setPackageForEdit: PropTypes.func.isRequired,
+  setDataForEdit: PropTypes.func.isRequired,
   editPackage: PropTypes.func.isRequired,
   getPackages: PropTypes.func.isRequired
 }
@@ -173,4 +160,4 @@ const mapStateToProps = (state) => ({
   profile: state.profile
 });
 
-export default connect(mapStateToProps, { removePackage, setPackageForEdit, getPackages, editPackage })(withRouter(AllPackages));
+export default connect(mapStateToProps, { removePackage, setDataForEdit, getPackages, editPackage })(withRouter(AllPackages));
