@@ -36,7 +36,7 @@ const PackageSchema = new Schema({
     ref: "vendors",
     required: true
   },
-  vendor: {
+  rider: {
     type: Schema.Types.ObjectId,
     ref: "riders"
   },

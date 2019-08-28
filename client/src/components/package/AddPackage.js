@@ -17,18 +17,19 @@ class AddPackage extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      vendorname: '',
+      vendor: '',
       customername: '',
       customerphone: '',
       address: '',
       arrivaldate: '',
-      ridername: '',
+      rider: '',
       deliverdate: '',
       cod: '',
       dc: '',
       status: 'pending',
       errors: {},
-      hashValue: 'Add Package'
+      hashValue: 'Add Package',
+      loading: false
     }
 
     this.onSubmit = this.onSubmit.bind(this);
@@ -41,6 +42,8 @@ class AddPackage extends Component {
   }
 
   componentWillReceiveProps(nextProps) {
+    this.setState({ loading: false })
+
     if (nextProps.errors) {
       this.setState({ errors: nextProps.errors })
     }
@@ -53,12 +56,12 @@ class AddPackage extends Component {
       })
     } else {
       this.setState({
-        vendorname: editData.vendorname,
+        vendor: editData.vendor,
         customername: editData.customername,
         customerphone: editData.customerphone.toString(),
         address: editData.address,
         arrivaldate: editData.arrivaldate,
-        ridername: editData.ridername,
+        rider: editData.rider,
         deliverdate: editData.deliverdate,
         cod: isEmpty(editData.cod) ? editData.cod : editData.cod.toString(),
         dc: isEmpty(editData.dc) ? editData.dc : editData.dc.toString(),
@@ -75,20 +78,21 @@ class AddPackage extends Component {
   onSubmit(e) {
     e.preventDefault();
 
+    this.setState({ loading: true })
+
     let packageData;
 
     const { editData } = this.props.profile;
 
     if (Object.entries(editData).length > 0 && editData.constructor === Object) {
 
-      console.log(editData._id);
       packageData = {
-        vendorname: this.state.vendorname,
+        vendor: this.state.vendor,
         customername: this.state.customername,
         customerphone: this.state.customerphone,
         address: this.state.address,
         arrivaldate: this.state.arrivaldate,
-        ridername: this.state.ridername,
+        rider: this.state.rider,
         deliverdate: this.state.deliverdate,
         cod: this.state.cod,
         dc: this.state.dc,
@@ -98,12 +102,12 @@ class AddPackage extends Component {
 
     } else {
       packageData = {
-        vendorname: this.state.vendorname,
+        vendor: this.state.vendor,
         customername: this.state.customername,
         customerphone: this.state.customerphone,
         address: this.state.address,
         arrivaldate: this.state.arrivaldate,
-        ridername: this.state.ridername,
+        rider: this.state.rider,
         deliverdate: this.state.deliverdate,
         cod: this.state.cod,
         dc: this.state.dc,
@@ -115,7 +119,6 @@ class AddPackage extends Component {
 
     // Call an action
     this.props.addPackage(packageData, this.props.history);
-
   }
 
   onChange(e) {
@@ -127,19 +130,16 @@ class AddPackage extends Component {
 
     if (arr.length > 0) {
       for (let i = 0; i < arr.length; i++) {
-        list = [...list, { label: arr[i].name, value: arr[i].name }];
+        list = [...list, { label: arr[i].name, value: arr[i]._id }];
       }
-    } else {
-      list = []
     }
-    console.log(list);
     return list;
   }
 
   render() {
+    console.log(this.state.loading)
     const { errors } = this.props;
     const { vendors, riders, loading } = this.props.profile;
-    console.log(this.props.profile);
 
     let vendorSelection = this.getDropdownList(vendors);
     let riderSelection = this.getDropdownList(riders);
@@ -150,11 +150,11 @@ class AddPackage extends Component {
     } else {
       allVendors = (
         <SelectListGroup
-          name="vendorname"
+          name="vendor"
           options={vendorSelection}
-          value={this.state.vendorname}
+          value={this.state.vendor}
           onChange={this.onChange}
-          error={errors.vendorname}
+          error={errors.vendor}
           info="Select a vendor from whom this package is recieved"
         />
       );
@@ -165,14 +165,21 @@ class AddPackage extends Component {
     } else {
       allRiders = (
         <SelectListGroup
-          name="ridername"
+          name="rider"
           options={riderSelection}
-          value={this.state.ridername}
+          value={this.state.rider}
           onChange={this.onChange}
-          error={errors.ridername}
+          error={errors.rider}
           info="Select a rider who delivered this package"
         />
       );
+    }
+
+    let submitButton;
+    if (this.state.loading) {
+      submitButton = <button type="submit" className="btn btn-info btn-block mt-4 disabled">Loading..</button>
+    } else {
+      submitButton = <button type="submit" value="Submit" className="btn btn-info btn-block mt-4">Submit</button>
     }
 
     return (
@@ -258,11 +265,7 @@ class AddPackage extends Component {
                     error={errors.status}
                     info="Progress of this Package"
                   />
-                  <input
-                    type="submit"
-                    value="Submit"
-                    className="btn btn-info btn-block mt-4"
-                  />
+                  {submitButton}
                 </form>
               </div>
             </div>

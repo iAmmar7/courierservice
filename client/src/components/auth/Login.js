@@ -10,7 +10,8 @@ class Login extends Component {
     this.state = {
       email: '',
       password: '',
-      errors: {}
+      errors: {},
+      loading: false
     };
 
     this.onChange = this.onChange.bind(this);
@@ -24,6 +25,8 @@ class Login extends Component {
   }
 
   componentWillReceiveProps(nextProps) {
+    this.setState({ loading: false })
+
     if (nextProps.auth.isAuthenticated) {
       this.props.history.push('/dashboard');
     }
@@ -40,6 +43,12 @@ class Login extends Component {
   onSubmit(e) {
     e.preventDefault();
 
+    console.log("clicked")
+
+    this.setState({
+      loading: true
+    })
+
     const userData = {
       email: this.state.email,
       password: this.state.password
@@ -52,13 +61,20 @@ class Login extends Component {
   render() {
     const { errors } = this.state;
 
+    let button;
+    if (this.state.loading) {
+      button = <button type="button" className="btn btn-info btn-block mt-4 disabled">Loading...</button>
+    } else {
+      button = <button type="submit" value="Submit" className="btn btn-info btn-block mt-4">Sign In</button>
+    }
+
     return (
       <div className="login">
         <div className="container">
           <div className="row">
             <div className="col-md-8 m-auto">
               <h1 className="display-4 text-center">Log In</h1>
-              <p className="lead text-center">Sign in to your DevConnector account</p>
+              <p className="lead text-center">Sign in to your CourierService account</p>
               <form onSubmit={this.onSubmit}>
                 <TextFieldGroup
                   placeholder="Email Address"
@@ -77,8 +93,7 @@ class Login extends Component {
                   onChange={this.onChange}
                   error={errors.password}
                 />
-
-                <input type="submit" value="Submit" className="btn btn-info btn-block mt-4" />
+                {button}
               </form>
             </div>
           </div>

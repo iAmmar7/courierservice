@@ -147,7 +147,7 @@ router.post(
             packageFields.rider = req.body.rider;
           }
         })
-        .catch(err => res.status(404).json({ ridernotfound: "Rider ID is not exist" }))
+        .catch(err => res.status(404).json({ ridernotfound: "Rider ID is wrong" }))
     }
 
     if (req.body.vendor) {
@@ -178,7 +178,7 @@ router.post(
             }
           }
         })
-        .catch(err => res.status(404).json({ vendornotfound: "Vendor ID is not exist" }));
+        .catch(err => res.status(404).json({ vendornotfound: "Vendor ID is wrong" }));
     }
   }
 );

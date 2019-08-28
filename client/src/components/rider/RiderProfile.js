@@ -14,45 +14,45 @@ class RiderProfile extends Component {
   constructor() {
     super();
     this.state = {
-      allDelivered: 100,
-      allReturned: 100,
+      allDelivered: 1,
+      allReturned: 1,
       rendered: false
     }
   }
 
-  componentDidMount() {
-    this.props.getRiderProfiles();
-    this.props.getRiders();
-    this.props.getPackages();
-  }
+  // componentDidMount() {
+  //   this.props.getRiderProfiles();
+  //   this.props.getRiders();
+  //   this.props.getPackages();
+  // }
 
   componentWillMount() {
     this.props.getPackages();
     this.props.getRiders();
   }
 
-  componentWillReceiveProps(nextProps) {
-    const { packages, riders } = nextProps.profile;
-    let rider, delivered = 0, returned = 0;
+  // componentWillReceiveProps(nextProps) {
+  //   const { packages, riders } = nextProps.profile;
+  //   let rider, delivered = 0, returned = 0;
 
-    for (let i in riders) {
-      if (riders[i]._id === localStorage.getItem("RiderID")) {
-        rider = riders[i].name;
-      }
-    }
+  //   for (let i in riders) {
+  //     if (riders[i]._id === localStorage.getItem("RiderID")) {
+  //       rider = riders[i].name;
+  //     }
+  //   }
 
-    for (let i in packages) {
-      if (packages[i].ridername === rider) {
-        if (packages[i].status === "delivered") delivered++;
-        else if (packages[i].status === "returned") returned++;
-      }
-    }
+  //   for (let i in packages) {
+  //     if (packages[i].ridername === rider) {
+  //       if (packages[i].status === "delivered") delivered++;
+  //       else if (packages[i].status === "returned") returned++;
+  //     }
+  //   }
 
-    this.setState({
-      allDelivered: delivered,
-      allReturned: returned
-    })
-  }
+  //   this.setState({
+  //     allDelivered: delivered,
+  //     allReturned: returned
+  //   })
+  // }
 
   dateFormat = date => {
     let newDate = new Date(date);
@@ -114,14 +114,12 @@ class RiderProfile extends Component {
     }
 
     // Get Rider Table
-
-
     if (Object.entries(packages).length === 0 && packages.constructor === Object) {
       riderTable = <Spinner />
     } else {
 
       for (let i = 0; i < packages.length; i++) {
-        if (packages[i].ridername === riderCardData.name) {
+        if (packages[i].rider === riderCardData._id) {
           riderTableData.push(packages[i])
         }
       }

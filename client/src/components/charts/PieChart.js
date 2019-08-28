@@ -18,24 +18,23 @@ class SimplePieChart extends PureComponent {
     }
   }
 
-  // componentWillReceiveProps(nextProps) {
-  //   this.setState({
-  //     data: [
-  //       { name: 'Delivered', value: nextProps.deliver },
-  //       { name: 'Returned', value: nextProps.return }
-  //     ]
-  //   })
-  // }
+  componentWillReceiveProps(nextProps) {
+    if (nextProps.deliver !== 0 || nextProps.return !== 0) {
+      this.setState({
+        data: [
+          { name: 'Delivered', value: nextProps.deliver },
+          { name: 'Returned', value: nextProps.return }
+        ]
+      })
+    }
+  }
 
   render() {
     const { data } = this.state;
     return (
       <PieChart width={210} height={240} onMouseEnter={this.onPieEnter} className="pie-chart" >
         <Pie
-          data={[
-            { name: 'Delivered', value: this.props.deliver },
-            { name: 'Returned', value: this.props.return }
-          ]}
+          data={data}
           cx={80}
           cy={110}
           innerRadius={60}
