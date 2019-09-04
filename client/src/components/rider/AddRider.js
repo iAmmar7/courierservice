@@ -18,7 +18,8 @@ class AddRider extends Component {
       hiredate: Date.now(),
       errors: {},
       hashValue: "Add Rider",
-      tagLine: "Let's add some information to hire a new rider"
+      tagLine: "Let's add some information to hire a new rider",
+      loading: false
     }
 
     this.onSubmit = this.onSubmit.bind(this);
@@ -44,6 +45,8 @@ class AddRider extends Component {
   }
 
   componentWillReceiveProps(nextProps) {
+    this.setState({ loading: false });
+
     if (nextProps.errors) {
       this.setState({ errors: nextProps.errors })
     }
@@ -55,6 +58,8 @@ class AddRider extends Component {
 
   onSubmit(e) {
     e.preventDefault();
+
+    this.setState({ loading: true });
 
     let riderData;
 
@@ -90,6 +95,13 @@ class AddRider extends Component {
 
   render() {
     const { errors } = this.state;
+
+    let button;
+    if (this.state.loading) {
+      button = <button type="button" className="btn btn-secondary btn-block mt-4 disabled">Loading...</button>
+    } else {
+      button = <button type="submit" value="Submit" className="btn btn-dark btn-block mt-4">Submit</button>
+    }
 
     return (
       <div>
@@ -135,11 +147,7 @@ class AddRider extends Component {
                     error={errors.hiredate}
                     info="When did you hire this rider?"
                   />
-                  <input
-                    type="submit"
-                    value="Submit"
-                    className="btn btn-info btn-block mt-4"
-                  />
+                  {button}
                 </form>
               </div>
             </div>

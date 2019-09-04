@@ -37,7 +37,7 @@ class Navbar extends Component {
             <button className={classnames("nav-link dropdown-toggle", {
               "active" : pathname === '/add-package'
             })} 
-            id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+            id="navbarDropdown" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
               Package
             </button>
             <div className="dropdown-menu bg-dark" aria-labelledby="navbarDropdown">
@@ -53,23 +53,23 @@ class Navbar extends Component {
           {/* Vendors Link */}
           <li className="nav-item dropdown">
             <button className={classnames("nav-link dropdown-toggle", {
-              "active" : pathname === '/add-vendor' || pathname === '/all-vendors'
+              "active" : pathname === '/add-vendor' || pathname === '/all-vendors' || pathname === '/all-vendors/vendor'
             })} 
-            id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+            id="navbarDropdown" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
               Vendor
             </button>
             <div className="dropdown-menu bg-dark" aria-labelledby="navbarDropdown">
-              <NavLink 
-                to="/add-vendor"
-                className="dropdown-item text-secondary" 
-                activeClassName="bg-white text-dark active">
-                Add Vendor
-              </NavLink>
               <NavLink 
                 to="/all-vendors"
                 className="dropdown-item text-secondary" 
                 activeClassName="bg-white text-dark active">
                 Vendors Profile
+              </NavLink>
+              <NavLink 
+                to="/add-vendor"
+                className="dropdown-item text-secondary" 
+                activeClassName="bg-white text-dark active">
+                Add Vendor
               </NavLink>
             </div>
           </li>
@@ -77,23 +77,23 @@ class Navbar extends Component {
           {/* Riders Link */}
           <li className="nav-item dropdown">
             <button className={classnames("nav-link dropdown-toggle", {
-              "active" : pathname === '/add-rider' || pathname === '/all-riders'
+              "active" : pathname === '/add-rider' || pathname === '/all-riders' || pathname === '/all-riders/rider'
             })} 
-            id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+            id="navbarDropdown" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
               Rider
             </button>
             <div className="dropdown-menu bg-dark" aria-labelledby="navbarDropdown">
-              <NavLink 
-                to="/add-rider"
-                className="dropdown-item text-secondary" 
-                activeClassName="bg-white text-dark active">
-                Add Rider
-              </NavLink>
               <NavLink 
                 to="/all-riders"
                 className="dropdown-item text-secondary" 
                 activeClassName="bg-white text-dark active">
                 Riders Profile
+              </NavLink>
+              <NavLink 
+                to="/add-rider"
+                className="dropdown-item text-secondary" 
+                activeClassName="bg-white text-dark active">
+                Add Rider
               </NavLink>
             </div>
           </li>

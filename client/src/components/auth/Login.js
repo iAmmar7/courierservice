@@ -43,9 +43,7 @@ class Login extends Component {
   onSubmit(e) {
     e.preventDefault();
 
-    this.setState({
-      loading: true
-    })
+    this.setState({ loading: true });
 
     const userData = {
       email: this.state.email,

@@ -111,7 +111,7 @@ class Dashboard extends Component {
               <div className="col-md-12 col-lg-8">
                 {/* <!-- CHART--> */}
                 <div className="statistic-chart-1">
-                  <h3 className="title-3 m-b-30">chart</h3>
+                  <h3 className="title-3">chart</h3>
                   <div className="chart-wrap bar-chart">
                     <SimpleBarChart />
                   </div>
@@ -121,7 +121,7 @@ class Dashboard extends Component {
               <div className="col-md-12 col-lg-4">
                 {/* <!-- TOP CAMPAIGN--> */}
                 <div className="top-campaign">
-                  <h3 className="title-3 m-b-30">top vendors</h3>
+                  <h3 className="title-3">top vendors</h3>
                   <div className="table-responsive">
                     <table className="table table-top-campaign">
                       <tbody>
@@ -155,30 +155,6 @@ class Dashboard extends Component {
           </div>
         </section>
         {/* <!-- END STATISTIC CHART--> */}
-
-        <div className="d-flex justify-content-center">
-          <Link to='/add-rider' className="btn btn-lg btn-info mx-2">
-            Add New Rider
-            </Link>
-          <Link to='/add-vendor' className="btn btn-lg btn-info mx-2">
-            Add New Vendor
-            </Link>
-        </div>
-        <hr />
-        <div className="d-flex justify-content-center">
-          <Link to='/add-package' className="btn btn-dark btn-lg btn-block w-25 p-2">
-            Add New Package
-            </Link>
-        </div>
-        <hr />
-        <div className="d-flex justify-content-center">
-          <Link to='/all-riders' className="btn btn-lg btn-secondary mx-2 px-5">
-            Riders Profile
-            </Link>
-          <Link to='/all-vendors' className="btn btn-lg btn-secondary mx-2 px-5">
-            Vendors Profile
-            </Link>
-        </div>
       </div >
     );
 
@@ -208,7 +184,7 @@ class Dashboard extends Component {
 
         packageContent = (
           <div className="m-t-30" id="all-packages">
-            <h3 className="title-3 m-b-0">Recent Packages</h3>
+            <h3 className="title-5 m-b-0">Recent Packages</h3>
             <AllPackages data={packages} />
           </div>
         )

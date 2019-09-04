@@ -14,49 +14,11 @@ import { getVendors } from '../../actions/vendorActions';
 import isEmpty from "../../validation/is-empty";
 
 class RiderProfile extends Component {
-  constructor() {
-    super();
-    this.state = {
-      allDelivered: 1,
-      allReturned: 1,
-      rendered: false
-    }
-  }
-
-  // componentDidMount() {
-  //   this.props.getRiderProfiles();
-  //   this.props.getRiders();
-  //   this.props.getPackages();
-  // }
-
   componentWillMount() {
     this.props.getPackages();
     this.props.getRiders();
     this.props.getVendors();
   }
-
-  // componentWillReceiveProps(nextProps) {
-  //   const { packages, riders } = nextProps.profile;
-  //   let rider, delivered = 0, returned = 0;
-
-  //   for (let i in riders) {
-  //     if (riders[i]._id === localStorage.getItem("RiderID")) {
-  //       rider = riders[i].name;
-  //     }
-  //   }
-
-  //   for (let i in packages) {
-  //     if (packages[i].ridername === rider) {
-  //       if (packages[i].status === "delivered") delivered++;
-  //       else if (packages[i].status === "returned") returned++;
-  //     }
-  //   }
-
-  //   this.setState({
-  //     allDelivered: delivered,
-  //     allReturned: returned
-  //   })
-  // }
 
   dateFormat = date => {
     let newDate = new Date(date);
@@ -75,10 +37,12 @@ class RiderProfile extends Component {
     const { user } = this.props.auth;
     let riderCard, riderTable, riderCardData = {}, riderTableData = [], monthlyData = {};
 
-    // Get Rider Top Card
-    if (riders === null || isEmpty(vendors) || loading) {
+    if (riders === null || isEmpty(vendors) || loading || isEmpty(packages)) {
       riderCard = <Spinner />;
+      riderTable = <Spinner />;
     } else {
+
+      // Get Rider Top Card
       if (localStorage.getItem("RiderID")) {
         for (let i = 0; i < riders.length; i++) {
           if (riders[i]._id === localStorage.getItem("RiderID")) {
@@ -91,6 +55,16 @@ class RiderProfile extends Component {
           }
         }
 
+        // Pie Chart Data
+        let rider, allDelivered = 0, allReturned = 0;
+        for (let i in packages) {
+          if (packages[i].rider === riderCardData._id) {
+            if (packages[i].status === "delivered") allDelivered++;
+            else if (packages[i].status === "returned") allReturned++;
+          }
+        }
+        
+        // Display top Card
         riderCard = (
           <div className="card text-white bg-dark mb-4 p-2" >
             <div className="d-flex justify-content-between row display-card">
@@ -107,82 +81,76 @@ class RiderProfile extends Component {
                 <p className="card-text">Hire Date: <span className="props">{riderCardData.formatDate}</span></p>
               </div>
               <div className="col-lg-4 pie-chart-container">
-                <SimplePieChart deliver={this.state.allDelivered} return={this.state.allReturned} />
+                <SimplePieChart delivered={allDelivered} return={allReturned} />
               </div>
             </div>
           </div>
+        );
+
+
+        // Get Rider Table
+        for (let i = 0; i < packages.length; i++) {
+          if (packages[i].rider === riderCardData._id) {
+            riderTableData.push(packages[i])
+          }
+        }
+  
+        for (let j in riderTableData) {
+          var arrivalMonth = new Date(riderTableData[j].arrivaldate).getMonth();
+  
+          if (monthlyData[arrivalMonth]) {
+            monthlyData[arrivalMonth].push(riderTableData[j]);
+          } else {
+            monthlyData[arrivalMonth] = [];
+            monthlyData[arrivalMonth].push(riderTableData[j]);
+          }
+        }
+  
+        let months = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"]
+  
+        console.log(monthlyData);
+  
+        //Extract Vendor Name from Vendor ID
+        for (let i in monthlyData) {
+          for (let j of monthlyData[i]) {
+            for (let k in vendors) {
+              if (j.vendor === vendors[k]._id) {
+                j.vendorname = vendors[k].name;
+              }
+            }
+          }
+        }
+  
+        //Extract Rider Name from Rider ID
+        for (let i in monthlyData) {
+          for (let j of monthlyData[i]) {
+            j.ridername = riderCardData.name;
+          }
+        }
+  
+        // Display bottom Tables
+        riderTable = (
+          Object.keys(monthlyData).reverse().map(item => {
+            let delivered = 0, returned = 0, salary = 0;
+            for (let i of monthlyData[item]) {
+              if (i.status === "delivered") {
+                delivered++;
+              } else if (i.status === "returned") {
+                returned++;
+              }
+            }
+            salary = delivered * riderCardData.chargesperdelivery;
+  
+            return (
+              <li key={item}>
+                <SimpleExpansionPanel data={monthlyData[item]} heading={months[item]} delivered={delivered} returned={returned} salary={salary} />
+              </li>
+            )
+          })
         )
       } else {
         riderCard = <h4 className="p-4">No rider profiles found...</h4>;
       }
-    }
-
-    // Get Rider Table
-    if (Object.entries(packages).length === 0 && packages.constructor === Object) {
-      riderTable = <Spinner />
-    } else {
-
-      for (let i = 0; i < packages.length; i++) {
-        if (packages[i].rider === riderCardData._id) {
-          riderTableData.push(packages[i])
-        }
-      }
-
-      for (let j in riderTableData) {
-        var arrivalMonth = new Date(riderTableData[j].arrivaldate).getMonth();
-
-        if (monthlyData[arrivalMonth]) {
-          monthlyData[arrivalMonth].push(riderTableData[j]);
-        } else {
-          monthlyData[arrivalMonth] = [];
-          monthlyData[arrivalMonth].push(riderTableData[j]);
-        }
-      }
-
-      let months = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"]
-
-      console.log(monthlyData);
-
-      //Extract Vendor Name from Vendor ID
-      for (let i in monthlyData) {
-        for (let j of monthlyData[i]) {
-          for (let k in vendors) {
-            if (j.vendor === vendors[k]._id) {
-              j.vendorname = vendors[k].name;
-            }
-          }
-        }
-      }
-
-      //Extract Rider Name from Rider ID
-      for (let i in monthlyData) {
-        for (let j of monthlyData[i]) {
-          j.ridername = riderCardData.name;
-        }
-      }
-
-      console.log(monthlyData);
-
-
-      riderTable = (
-        Object.keys(monthlyData).reverse().map(item => {
-          let delivered = 0, returned = 0, salary = 0;
-          for (let i of monthlyData[item]) {
-            if (i.status === "delivered") {
-              delivered++;
-            } else if (i.status === "returned") {
-              returned++;
-            }
-          }
-          salary = delivered * riderCardData.chargesperdelivery;
-
-          return (
-            <li key={item}>
-              <SimpleExpansionPanel data={monthlyData[item]} heading={months[item]} delivered={delivered} returned={returned} salary={salary} />
-            </li>
-          )
-        })
-      )
     }
 
     return (

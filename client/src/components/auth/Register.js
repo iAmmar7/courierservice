@@ -41,9 +41,7 @@ class Register extends Component {
   onSubmit(e) {
     e.preventDefault();
 
-    this.setState({
-      loading: true
-    })
+    this.setState({ loading: true })
 
     const newUser = {
       name: this.state.name,
@@ -63,7 +61,7 @@ class Register extends Component {
     if (this.state.loading) {
       button = <button type="button" className="btn btn-secondary btn-block mt-4 disabled">Loading...</button>
     } else {
-      button = <button type="submit" value="Submit" className="btn btn-dark btn-block mt-4">Sign In</button>
+      button = <button type="submit" value="Submit" className="btn btn-dark btn-block mt-4">Sign Up</button>
     }
 
     return (

@@ -175,11 +175,11 @@ class AddPackage extends Component {
       );
     }
 
-    let submitButton;
+    let button;
     if (this.state.loading) {
-      submitButton = <button type="submit" className="btn btn-info btn-block mt-4 disabled">Loading..</button>
+      button = <button type="button" className="btn btn-secondary btn-block mt-4 disabled">Loading...</button>
     } else {
-      submitButton = <button type="submit" value="Submit" className="btn btn-info btn-block mt-4">Submit</button>
+      button = <button type="submit" value="Submit" className="btn btn-dark btn-block mt-4">Submit</button>
     }
 
     return (
@@ -265,7 +265,7 @@ class AddPackage extends Component {
                     error={errors.status}
                     info="Progress of this Package"
                   />
-                  {submitButton}
+                  {button}
                 </form>
               </div>
             </div>

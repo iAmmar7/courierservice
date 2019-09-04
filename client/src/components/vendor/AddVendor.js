@@ -13,7 +13,8 @@ class AddVendor extends Component {
       contact: '',
       address: '',
       hiredate: Date.now(),
-      errors: {}
+      errors: {},
+      loading: false
     }
 
     this.onSubmit = this.onSubmit.bind(this);
@@ -21,6 +22,8 @@ class AddVendor extends Component {
   }
 
   componentWillReceiveProps(nextProps) {
+    this.setState({ loading: false });
+
     if (nextProps.errors) {
       this.setState({ errors: nextProps.errors })
     }
@@ -28,6 +31,8 @@ class AddVendor extends Component {
 
   onSubmit(e) {
     e.preventDefault();
+
+    this.setState({ loading: true });
 
     const vendorData = {
       name: this.state.name,
@@ -46,6 +51,13 @@ class AddVendor extends Component {
 
   render() {
     const { errors } = this.state;
+
+    let button;
+    if (this.state.loading) {
+      button = <button type="button" className="btn btn-secondary btn-block mt-4 disabled">Loading...</button>
+    } else {
+      button = <button type="submit" value="Submit" className="btn btn-dark btn-block mt-4">Submit</button>
+    }
 
     return (
       <div>
@@ -92,11 +104,7 @@ class AddVendor extends Component {
                     error={errors.hiredate}
                     info="When did this vendor hire you?"
                   />
-                  <input
-                    type="submit"
-                    value="Submit"
-                    className="btn btn-info btn-block mt-4"
-                  />
+                  {button}
                 </form>
               </div>
             </div>
