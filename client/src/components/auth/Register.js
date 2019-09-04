@@ -13,7 +13,8 @@ class Register extends Component {
       email: '',
       password: '',
       password2: '',
-      errors: {}
+      errors: {},
+      loading: false
     };
 
     this.onChange = this.onChange.bind(this);
@@ -26,6 +27,8 @@ class Register extends Component {
   }
 
   componentWillReceiveProps(nextProps) {
+    this.setState({ loading: false });
+
     if(nextProps.errors) {                        //REDUX state errors
       this.setState({errors: nextProps.errors})
     }
@@ -37,6 +40,10 @@ class Register extends Component {
 
   onSubmit(e) {
     e.preventDefault();
+
+    this.setState({
+      loading: true
+    })
 
     const newUser = {
       name: this.state.name,
@@ -52,13 +59,20 @@ class Register extends Component {
   render() {
     const { errors } = this.state;  //const errors = this.state.errors
 
+    let button;
+    if (this.state.loading) {
+      button = <button type="button" className="btn btn-secondary btn-block mt-4 disabled">Loading...</button>
+    } else {
+      button = <button type="submit" value="Submit" className="btn btn-dark btn-block mt-4">Sign In</button>
+    }
+
     return (
       <div className="register">
         <div className="container">
           <div className="row">
             <div className="col-md-8 m-auto">
               <h1 className="display-4 text-center">Sign Up</h1>
-              <p className="lead text-center">Create your DevConnector account</p>
+              <p className="lead text-center">Create your CourierService account</p>
               <form noValidate onSubmit={this.onSubmit}>
                 <TextFieldGroup 
                   placeholder="Name"
@@ -93,7 +107,7 @@ class Register extends Component {
                   onChange={this.onChange}
                   error={errors.password2}
                 />
-                <input type="submit" value="Submit" className="btn btn-info btn-block mt-4" />
+                {button}
               </form>
             </div>
           </div>

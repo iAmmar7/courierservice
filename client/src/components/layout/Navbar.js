@@ -1,6 +1,8 @@
 import React, { Component } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, NavLink, withRouter } from 'react-router-dom';
+import classnames from 'classnames';
 import PropTypes from 'prop-types';
+
 import { connect } from 'react-redux';
 import { logoutUser } from '../../actions/authActions';
 import { clearCurrentProfile } from '../../actions/profileActions';
@@ -14,36 +16,120 @@ class Navbar extends Component {
 
   render() {
     const { isAuthenticated, user } = this.props.auth;
+    const { pathname } = window.location;
+
+    console.log(pathname)
 
     const authLinks = (
-      <ul className="navbar-nav ml-auto">
-        <li className="nav-item">
-          <a 
-            href="/login" 
-            onClick={this.onLogoutClick.bind(this)} 
-            className="nav-link">
-            <img 
-              className="rounded-circle"
-              src={user.avatar} 
-              alt={user.name} 
-              style={{ width: '25px', marginRight: '5px' }}
-              title="You must have a Gravatar connected to your email to display an image"
-            />
-            Logout
+      <div className="collapse navbar-collapse" id="mobile-nav">
+        <ul className="navbar-nav">
+          <li className="nav-item">
+            <NavLink 
+              to="/dashboard"
+              className="nav-link" 
+              activeClassName="active">
+              Dashboard
+            </NavLink>
+          </li>
+
+          {/* Packages Link */}
+          <li className="nav-item dropdown">
+            <button className={classnames("nav-link dropdown-toggle", {
+              "active" : pathname === '/add-package'
+            })} 
+            id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+              Package
+            </button>
+            <div className="dropdown-menu bg-dark" aria-labelledby="navbarDropdown">
+              <NavLink 
+                to="/add-package"
+                className="dropdown-item text-secondary" 
+                activeClassName="bg-white text-dark active">
+                Add Package
+              </NavLink>
+            </div>
+          </li>
+
+          {/* Vendors Link */}
+          <li className="nav-item dropdown">
+            <button className={classnames("nav-link dropdown-toggle", {
+              "active" : pathname === '/add-vendor' || pathname === '/all-vendors'
+            })} 
+            id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+              Vendor
+            </button>
+            <div className="dropdown-menu bg-dark" aria-labelledby="navbarDropdown">
+              <NavLink 
+                to="/add-vendor"
+                className="dropdown-item text-secondary" 
+                activeClassName="bg-white text-dark active">
+                Add Vendor
+              </NavLink>
+              <NavLink 
+                to="/all-vendors"
+                className="dropdown-item text-secondary" 
+                activeClassName="bg-white text-dark active">
+                Vendors Profile
+              </NavLink>
+            </div>
+          </li>
+
+          {/* Riders Link */}
+          <li className="nav-item dropdown">
+            <button className={classnames("nav-link dropdown-toggle", {
+              "active" : pathname === '/add-rider' || pathname === '/all-riders'
+            })} 
+            id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+              Rider
+            </button>
+            <div className="dropdown-menu bg-dark" aria-labelledby="navbarDropdown">
+              <NavLink 
+                to="/add-rider"
+                className="dropdown-item text-secondary" 
+                activeClassName="bg-white text-dark active">
+                Add Rider
+              </NavLink>
+              <NavLink 
+                to="/all-riders"
+                className="dropdown-item text-secondary" 
+                activeClassName="bg-white text-dark active">
+                Riders Profile
+              </NavLink>
+            </div>
+          </li>
+        </ul>
+
+        <ul className="navbar-nav ml-auto">
+          <li className="nav-item">
+            <a
+              href="/login"
+              onClick={this.onLogoutClick.bind(this)}
+              className="nav-link">
+              <img
+                className="rounded-circle"
+                src={user.avatar}
+                alt={user.name}
+                style={{ width: '25px', marginRight: '5px' }}
+                title="You must have a Gravatar connected to your email to display an image"
+              />
+              Logout
           </a>
-        </li>
-      </ul>
+          </li>
+        </ul>
+      </div>
     );
 
     const guestLinks = (
-      <ul className="navbar-nav ml-auto">
-        <li className="nav-item">
-          <Link className="nav-link" to="/register">Sign Up</Link>
-        </li>
-        <li className="nav-item">
-          <Link className="nav-link" to="/login">Login</Link>
-        </li>
-      </ul>
+      <div className="collapse navbar-collapse" id="mobile-nav">
+        <ul className="navbar-nav ml-auto">
+          <li className="nav-item">
+            <NavLink to="/register" className="nav-link" activeClassName="active">Sign Up</NavLink>
+          </li>
+          <li className="nav-item">
+            <NavLink to="/login" className="nav-link" activeClassName="active">Login</NavLink>
+          </li>
+        </ul>
+      </div>
     );
 
     return (
@@ -53,12 +139,9 @@ class Navbar extends Component {
           <button className="navbar-toggler" type="button" data-toggle="collapse" data-target="#mobile-nav">
             <span className="navbar-toggler-icon"></span>
           </button>
-    
-          <div className="collapse navbar-collapse" id="mobile-nav">
 
-            {isAuthenticated ? authLinks : guestLinks}
+          {isAuthenticated ? authLinks : guestLinks}
 
-          </div>
         </div>
       </nav>
     )
@@ -74,4 +157,4 @@ const mapStateToProps = (state) => ({
   auth: state.auth
 });
 
-export default connect(mapStateToProps, { logoutUser, clearCurrentProfile })(Navbar);
+export default withRouter(connect(mapStateToProps, { logoutUser, clearCurrentProfile })(Navbar));

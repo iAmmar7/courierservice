@@ -48,7 +48,7 @@ class SimpleExpansionPanel extends Component {
         table = <AllPackages data={data} />
         if (salary || salary === 0) {
           riderOrVendor = (
-            <button type="button" className="btn btn-secondary px-5 btn-sal">
+            <button className="btn btn-secondary btn-block">
               Salary <span className="badge badge-light">{salary} PKR</span>
             </button>
           )
@@ -78,8 +78,24 @@ class SimpleExpansionPanel extends Component {
             <ExpansionPanelDetails>
               {table}
             </ExpansionPanelDetails>
-            <ExpansionPanelDetails>
-              <div className="all-btn" role="group">
+            <ExpansionPanelDetails className="container">
+              <div className="all-btn">
+                <div className="col-md-4 col-lg-2">
+                  <button className="btn btn-success btn-block">Delivered <span className="badge badge-light">{delivered}</span>
+                  </button>
+                </div>
+
+                <div className="col-md-4 col-lg-2">
+                  <button className="btn btn-danger btn-block">Returned <span className="badge badge-light">{returned}</span>
+                  </button>
+                </div>
+
+                <div className="col-md-4 col-lg-2 btn-sal">
+                  {riderOrVendor}
+                </div>
+              </div>
+
+              {/* <div className="all-btn" role="group">
                 <button type="button" className="btn btn-success mr-4 px-4">
                   Delivered <span className="badge badge-light">{delivered}</span>
                 </button>
@@ -87,7 +103,7 @@ class SimpleExpansionPanel extends Component {
                   Returned <span className="badge badge-light">{returned}</span>
                 </button>
                 {riderOrVendor}
-              </div>
+              </div> */}
             </ExpansionPanelDetails>
           </div>
         </ExpansionPanel>

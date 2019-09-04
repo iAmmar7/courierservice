@@ -9,6 +9,9 @@ import SimpleExpansionPanel from '../package/ExpansionPanel';
 import { setDataForEdit } from '../../actions/profileActions';
 import { getRiderProfiles, getRiders } from '../../actions/riderActions';
 import { getPackages } from '../../actions/packageActions';
+import { getVendors } from '../../actions/vendorActions';
+
+import isEmpty from "../../validation/is-empty";
 
 class RiderProfile extends Component {
   constructor() {
@@ -29,6 +32,7 @@ class RiderProfile extends Component {
   componentWillMount() {
     this.props.getPackages();
     this.props.getRiders();
+    this.props.getVendors();
   }
 
   // componentWillReceiveProps(nextProps) {
@@ -67,12 +71,12 @@ class RiderProfile extends Component {
   }
 
   render() {
-    const { riders, loading, packages } = this.props.profile;
+    const { loading, packages, riders, vendors } = this.props.profile;
     const { user } = this.props.auth;
     let riderCard, riderTable, riderCardData = {}, riderTableData = [], monthlyData = {};
 
     // Get Rider Top Card
-    if (riders === null || loading) {
+    if (riders === null || isEmpty(vendors) || loading) {
       riderCard = <Spinner />;
     } else {
       if (localStorage.getItem("RiderID")) {
@@ -137,6 +141,29 @@ class RiderProfile extends Component {
 
       let months = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"]
 
+      console.log(monthlyData);
+
+      //Extract Vendor Name from Vendor ID
+      for (let i in monthlyData) {
+        for (let j of monthlyData[i]) {
+          for (let k in vendors) {
+            if (j.vendor === vendors[k]._id) {
+              j.vendorname = vendors[k].name;
+            }
+          }
+        }
+      }
+
+      //Extract Rider Name from Rider ID
+      for (let i in monthlyData) {
+        for (let j of monthlyData[i]) {
+          j.ridername = riderCardData.name;
+        }
+      }
+
+      console.log(monthlyData);
+
+
       riderTable = (
         Object.keys(monthlyData).reverse().map(item => {
           let delivered = 0, returned = 0, salary = 0;
@@ -182,6 +209,7 @@ class RiderProfile extends Component {
 RiderProfile.propTypes = {
   getRiderProfiles: PropTypes.func.isRequired,
   getRiders: PropTypes.func.isRequired,
+  getVendors: PropTypes.func.isRequired,
   getPackages: PropTypes.func.isRequired,
   setDataForEdit: PropTypes.func.isRequired,
   profile: PropTypes.object.isRequired
@@ -192,4 +220,4 @@ const mapStateToProps = state => ({
   auth: state.auth
 });
 
-export default connect(mapStateToProps, { getRiderProfiles, getRiders, getPackages, setDataForEdit })(RiderProfile);
+export default connect(mapStateToProps, { getRiderProfiles, getRiders, getVendors, getPackages, setDataForEdit })(RiderProfile);

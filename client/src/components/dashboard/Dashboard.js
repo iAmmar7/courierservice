@@ -5,6 +5,8 @@ import { connect } from 'react-redux';
 
 import { getCurrentProfile, deleteAccount } from '../../actions/profileActions';
 import { getPackages } from '../../actions/packageActions';
+import { getRiders } from '../../actions/riderActions';
+import { getVendors } from '../../actions/vendorActions';
 
 import Spinner from '../common/Spinner';
 import AllPackages from '../package/AllPackages';
@@ -23,10 +25,8 @@ class Dashboard extends Component {
   componentWillMount() {
     this.props.getCurrentProfile();
     this.props.getPackages();
-  }
-
-  componentWillReceiveProps(nextProps) {
-    console.log(nextProps)
+    this.props.getRiders();
+    this.props.getVendors();
   }
 
   onDeleteClick(e) {
@@ -35,7 +35,7 @@ class Dashboard extends Component {
 
   render() {
     const { user } = this.props.auth;
-    const { loading, packages } = this.props.profile;
+    const { loading, packages, vendors, riders } = this.props.profile;
 
     let dashboardContent, packageContent;
 
@@ -182,15 +182,32 @@ class Dashboard extends Component {
       </div >
     );
 
-    console.log(packages)
-
     if (packages !== undefined) {
 
       if (Object.entries(packages).length === 0 && packages.constructor === Object) {
         packageContent = <Spinner />
       } else {
+
+        //Extract Vendor Name from Vendor ID
+        for (let i in packages) {
+          for (let j in vendors) {
+            if (packages[i].vendor === vendors[j]._id) {
+              packages[i].vendorname = vendors[j].name;
+            }
+          }
+        }
+
+        //Extract Rider Name from Rider ID
+        for (let i in packages) {
+          for (let j in riders) {
+            if (packages[i].rider === riders[j]._id) {
+              packages[i].ridername = riders[j].name;
+            }
+          }
+        }
+
         packageContent = (
-          <div className="m-t-30">
+          <div className="m-t-30" id="all-packages">
             <h3 className="title-3 m-b-0">Recent Packages</h3>
             <AllPackages data={packages} />
           </div>
@@ -226,6 +243,8 @@ const mapStateToProps = (state) => ({
 Dashboard.propTypes = {
   getCurrentProfile: PropTypes.func.isRequired,
   getPackages: PropTypes.func.isRequired,
+  getRiders: PropTypes.func.isRequired,
+  getVendors: PropTypes.func.isRequired,
   deleteAccount: PropTypes.func.isRequired,
   auth: PropTypes.object.isRequired,
   profile: PropTypes.object.isRequired
@@ -234,5 +253,7 @@ Dashboard.propTypes = {
 export default connect(mapStateToProps, {
   getCurrentProfile,
   getPackages,
+  getRiders,
+  getVendors,
   deleteAccount,
 })(Dashboard);

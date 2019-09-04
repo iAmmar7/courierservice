@@ -6,8 +6,6 @@ import { connect } from 'react-redux';
 
 import { setDataForEdit } from '../../actions/profileActions';
 import { getPackages, editPackage } from '../../actions/packageActions';
-import { getRiders } from '../../actions/riderActions';
-import { getVendors } from '../../actions/vendorActions';
 
 import Spinner from '../common/Spinner';
 import axios from 'axios';
@@ -48,14 +46,8 @@ class AllPackages extends React.Component {
     this.setPackage = this.setPackage.bind(this);
   }
 
-  componentWillMount() {
-    this.props.getRiders();
-    this.props.getVendors();
-  }
-
   componentWillReceiveProps(nextProps) {
     this.setState({ data: nextProps.data })
-    console.log(nextProps)
   }
 
   deletePackage(packageId) {
@@ -100,7 +92,7 @@ class AllPackages extends React.Component {
   }
 
   render() {
-    const { loading, riders, vendors } = this.props.profile;
+    const { loading } = this.props.profile;
     const { data } = this.state;
     let packageContent;
 
@@ -108,29 +100,7 @@ class AllPackages extends React.Component {
       packageContent = <Spinner />
     } else if (Object.entries(data).length === 0 && data.constructor === Object) {
       packageContent = <Spinner />
-    } else if (Object.entries(riders).length === 0 && riders.constructor === Object) {
-      packageContent = <Spinner />
-    } else if (Object.entries(vendors).length === 0 && vendors.constructor === Object) {
-      packageContent = <Spinner />
     } else {
-      console.log(data)
-
-      for (let i in data) {
-        for (let j in vendors) {
-          if (data[i].vendor === vendors[j]._id) {
-            data[i].vendorname = vendors[j].name;
-          }
-        }
-      }
-      for (let i in data) {
-        for (let j in riders) {
-          if (data[i].rider === riders[j]._id) {
-            data[i].ridername = riders[j].name;
-          }
-        }
-      }
-
-      console.log(data)
 
       for (let i in data) {
         if (data[i].arrivaldate) {
@@ -185,9 +155,7 @@ class AllPackages extends React.Component {
 AllPackages.propTypes = {
   setDataForEdit: PropTypes.func.isRequired,
   editPackage: PropTypes.func.isRequired,
-  getPackages: PropTypes.func.isRequired,
-  getRiders: PropTypes.func.isRequired,
-  getVendors: PropTypes.func.isRequired
+  getPackages: PropTypes.func.isRequired
 }
 
 const mapStateToProps = (state) => ({
@@ -195,4 +163,4 @@ const mapStateToProps = (state) => ({
   profile: state.profile
 });
 
-export default connect(mapStateToProps, { setDataForEdit, getPackages, editPackage, getRiders, getVendors })(withRouter(AllPackages));
+export default connect(mapStateToProps, { setDataForEdit, getPackages, editPackage })(withRouter(AllPackages));

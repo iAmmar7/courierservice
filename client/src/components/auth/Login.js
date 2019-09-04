@@ -43,8 +43,6 @@ class Login extends Component {
   onSubmit(e) {
     e.preventDefault();
 
-    console.log("clicked")
-
     this.setState({
       loading: true
     })
@@ -63,9 +61,9 @@ class Login extends Component {
 
     let button;
     if (this.state.loading) {
-      button = <button type="button" className="btn btn-info btn-block mt-4 disabled">Loading...</button>
+      button = <button type="button" className="btn btn-secondary btn-block mt-4 disabled">Loading...</button>
     } else {
-      button = <button type="submit" value="Submit" className="btn btn-info btn-block mt-4">Sign In</button>
+      button = <button type="submit" value="Submit" className="btn btn-dark btn-block mt-4">Sign In</button>
     }
 
     return (
