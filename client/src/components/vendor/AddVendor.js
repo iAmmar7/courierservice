@@ -2,7 +2,10 @@ import React, { Component } from 'react'
 import { connect } from 'react-redux';
 import { withRouter } from 'react-router-dom';
 import PropTypes from 'prop-types';
+
 import TextFieldGroup from '../common/TextFieldGroup';
+
+import { removeDataForEdit } from '../../actions/profileActions';
 import { addVendor } from '../../actions/vendorActions';
 
 class AddVendor extends Component {
@@ -14,11 +17,30 @@ class AddVendor extends Component {
       address: '',
       hiredate: Date.now(),
       errors: {},
+      hashValue: "Add Vendor",
+      tagLine: "Let's add some information to add a new vendor",
       loading: false
     }
 
     this.onSubmit = this.onSubmit.bind(this);
     this.onChange = this.onChange.bind(this);
+  }
+
+  componentDidMount() {
+    const { editData } = this.props.profile;
+
+    if (editData !== undefined) {
+      if (Object.entries(editData).length > 0 && editData.constructor === Object) {
+        this.setState({
+          name: editData.name,
+          contact: editData.contact,
+          address: editData.address,
+          hiredate: editData.hiredate,
+          hashValue: 'Edit Vendor',
+          tagLine: "Edit your vendor information here!"
+        })
+      }
+    }
   }
 
   componentWillReceiveProps(nextProps) {
@@ -29,17 +51,38 @@ class AddVendor extends Component {
     }
   }
 
+  componentWillUnmount() {
+    this.props.removeDataForEdit();
+  }
+
   onSubmit(e) {
     e.preventDefault();
 
     this.setState({ loading: true });
 
-    const vendorData = {
-      name: this.state.name,
-      contact: this.state.contact,
-      address: this.state.address,
-      hiredate: this.state.hiredate
-    };
+    let vendorData;
+
+    const { editData } = this.props.profile;
+
+    if (Object.entries(editData).length > 0 && editData.constructor === Object) {
+      vendorData = {
+        name: this.state.name,
+        contact: this.state.contact.toString(),
+        address: this.state.address,
+        hiredate: this.state.hiredate,
+        _id: editData._id
+      };
+      let newDate = new Date(this.state.hiredate);
+      vendorData.hiredate = newDate;
+
+    } else {
+      vendorData = {
+        name: this.state.name,
+        contact: this.state.contact,
+        address: this.state.address,
+        hiredate: this.state.hiredate
+      }
+    }
 
     // Call an action
     this.props.addVendor(vendorData, this.props.history);
@@ -65,10 +108,8 @@ class AddVendor extends Component {
           <div className="container">
             <div className="row">
               <div className="col-md-8 m-auto">
-                <h1 className="display-4 text-center">Add Vendor</h1>
-                <p className="lead text-center">
-                  Let's add some information of our new vendor
-                </p>
+                <h1 className="display-4 text-center">{this.state.hashValue}</h1>
+                <p className="lead text-center">{this.state.tagLine}</p>
                 <small className="d-block pb-3">* = required fields</small>
                 <form onSubmit={this.onSubmit}>
                   <TextFieldGroup
@@ -83,26 +124,26 @@ class AddVendor extends Component {
                     placeholder="* Contact"
                     name="contact"
                     type="number"
-                    value={this.state.contact}
+                    value={this.state.contact.toString()}
                     onChange={this.onChange}
                     error={errors.contact}
                     info="Phone number of new vendor"
                   />
                   <TextFieldGroup
-                    placeholder="* Address"
+                    placeholder="Charges Per Delivery"
                     name="address"
                     value={this.state.address}
                     onChange={this.onChange}
                     error={errors.address}
-                    info="Address of new vendor"
+                    info="Address of your new vendor"
                   />
                   <TextFieldGroup
                     name="hiredate"
                     type="date"
-                    value={this.state.hiredate}
+                    value={this.state.hiredate.toString()}
                     onChange={this.onChange}
                     error={errors.hiredate}
-                    info="When did this vendor hire you?"
+                    info="When did you add this vendor?"
                   />
                   {button}
                 </form>
@@ -116,13 +157,15 @@ class AddVendor extends Component {
 }
 
 const mapStateToProps = (state) => ({
-  profile: state.vendors,
+  profile: state.profile,
   errors: state.errors
 })
 
 AddVendor.propTypes = {
   profile: PropTypes.object.isRequired,
-  errors: PropTypes.object.isRequired
+  errors: PropTypes.object.isRequired,
+  addVendor: PropTypes.func.isRequired,
+  removeDataForEdit: PropTypes.func.isRequired
 }
 
-export default connect(mapStateToProps, { addVendor })(withRouter(AddVendor));
+export default connect(mapStateToProps, { addVendor, removeDataForEdit })(withRouter(AddVendor));

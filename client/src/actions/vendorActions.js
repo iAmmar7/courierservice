@@ -49,7 +49,7 @@ export const getVendors = () => dispatch => {
 // Add Vendor
 export const addVendor = (vendorData, history) => dispatch => {
   axios.post('/api/profile/add-vendor', vendorData)
-    .then(res => history.push('/dashboard'))
+    .then(res => history.goBack())
     .catch(err =>
       dispatch({
         type: GET_ERRORS,

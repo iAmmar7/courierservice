@@ -1,32 +1,31 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
+import { Link } from 'react-router-dom';
+
+import LetterAvatars from '../common/Avatar';
 
 class VendorProfileItem extends Component {
   render() {
-    const { vendor, user } = this.props;
+    const { vendor, handleClick } = this.props;
 
     return (
-      <div className="card text-white bg-dark mb-3" >
-        <div className="row">
-          <div className="col-2">
-            <img src={user.avatar} alt="" className="rounded-circle" />
-          </div>
-          <div className="card-body">
-            <h5 className="card-title">{vendor.name}</h5>
-            <p className="card-text">Address: {vendor.address}</p>
-            <p className="card-text">Contact: {vendor.contact}</p>
-            <p className="card-text">Hire Date: {vendor.hiredate}</p>
+      <Link className="col-lg-3 col-md-4" to='/all-vendors/vendor' onClick={handleClick}>
+        <div className="card text-white bg-dark m-3 p-2 card-item" >
+          <div className="card-header"><LetterAvatars name={vendor.name.charAt(0) + vendor.name.charAt(1)} /></div>
+          <div className="card-body text-center">
+            <h5 className="card-title h4">{vendor.name}</h5>
+            <p className="card-text">{vendor.contact}</p>
+            <p className="card-text">{vendor.address}</p>
+            <p className="card-text">{vendor.hiredate.toString().split('T')[0]}</p>
           </div>
         </div>
-      </div>
+      </Link>
     );
   }
 }
 
 VendorProfileItem.propTypes = {
-  profile: PropTypes.object.isRequired,
-  vendor: PropTypes.object.isRequired,
-  user: PropTypes.object.isRequired,
+  vendor: PropTypes.object.isRequired
 };
 
 export default VendorProfileItem;

@@ -27,7 +27,6 @@ class AddRider extends Component {
   }
 
   componentDidMount() {
-    console.log(this.props.profile);
     const { editData } = this.props.profile;
 
     if (editData !== undefined) {
@@ -37,7 +36,7 @@ class AddRider extends Component {
           contact: editData.contact,
           chargesperdelivery: editData.chargesperdelivery,
           hiredate: editData.hiredate,
-          hashValue: 'Edit Package',
+          hashValue: 'Edit Rider',
           tagLine: "Edit your rider information here!"
         })
       }

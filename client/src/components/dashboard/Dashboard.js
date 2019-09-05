@@ -15,12 +15,6 @@ import SimpleBarChart from '../charts/BarChart';
 import CountUp from 'react-countup';
 
 class Dashboard extends Component {
-  // componentDidMount() {
-  //   this.props.getCurrentProfile();
-  //   this.props.getRiders();
-  //   this.props.getVendors();
-  //   this.props.getPackages();
-  // }
 
   componentWillMount() {
     this.props.getCurrentProfile();

@@ -18,15 +18,13 @@ class Navbar extends Component {
     const { isAuthenticated, user } = this.props.auth;
     const { pathname } = window.location;
 
-    console.log(pathname)
-
     const authLinks = (
       <div className="collapse navbar-collapse" id="mobile-nav">
         <ul className="navbar-nav">
           <li className="nav-item">
-            <NavLink 
+            <NavLink
               to="/dashboard"
-              className="nav-link" 
+              className="nav-link"
               activeClassName="active">
               Dashboard
             </NavLink>
@@ -35,15 +33,15 @@ class Navbar extends Component {
           {/* Packages Link */}
           <li className="nav-item dropdown">
             <button className={classnames("nav-link dropdown-toggle", {
-              "active" : pathname === '/add-package'
-            })} 
-            id="navbarDropdown" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+              "active": pathname === '/add-package'
+            })}
+              id="navbarDropdown" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
               Package
             </button>
             <div className="dropdown-menu bg-dark" aria-labelledby="navbarDropdown">
-              <NavLink 
+              <NavLink
                 to="/add-package"
-                className="dropdown-item text-secondary" 
+                className="dropdown-item text-secondary"
                 activeClassName="bg-white text-dark active">
                 Add Package
               </NavLink>
@@ -53,21 +51,21 @@ class Navbar extends Component {
           {/* Vendors Link */}
           <li className="nav-item dropdown">
             <button className={classnames("nav-link dropdown-toggle", {
-              "active" : pathname === '/add-vendor' || pathname === '/all-vendors' || pathname === '/all-vendors/vendor'
-            })} 
-            id="navbarDropdown" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+              "active": pathname === '/add-vendor' || pathname === '/all-vendors' || pathname === '/all-vendors/vendor'
+            })}
+              id="navbarDropdown" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
               Vendor
             </button>
             <div className="dropdown-menu bg-dark" aria-labelledby="navbarDropdown">
-              <NavLink 
+              <NavLink
                 to="/all-vendors"
-                className="dropdown-item text-secondary" 
+                className="dropdown-item text-secondary"
                 activeClassName="bg-white text-dark active">
                 Vendors Profile
               </NavLink>
-              <NavLink 
+              <NavLink
                 to="/add-vendor"
-                className="dropdown-item text-secondary" 
+                className="dropdown-item text-secondary"
                 activeClassName="bg-white text-dark active">
                 Add Vendor
               </NavLink>
@@ -77,21 +75,21 @@ class Navbar extends Component {
           {/* Riders Link */}
           <li className="nav-item dropdown">
             <button className={classnames("nav-link dropdown-toggle", {
-              "active" : pathname === '/add-rider' || pathname === '/all-riders' || pathname === '/all-riders/rider'
-            })} 
-            id="navbarDropdown" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+              "active": pathname === '/add-rider' || pathname === '/all-riders' || pathname === '/all-riders/rider'
+            })}
+              id="navbarDropdown" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
               Rider
             </button>
             <div className="dropdown-menu bg-dark" aria-labelledby="navbarDropdown">
-              <NavLink 
+              <NavLink
                 to="/all-riders"
-                className="dropdown-item text-secondary" 
+                className="dropdown-item text-secondary"
                 activeClassName="bg-white text-dark active">
                 Riders Profile
               </NavLink>
-              <NavLink 
+              <NavLink
                 to="/add-rider"
-                className="dropdown-item text-secondary" 
+                className="dropdown-item text-secondary"
                 activeClassName="bg-white text-dark active">
                 Add Rider
               </NavLink>
@@ -141,7 +139,6 @@ class Navbar extends Component {
           </button>
 
           {isAuthenticated ? authLinks : guestLinks}
-
         </div>
       </nav>
     )

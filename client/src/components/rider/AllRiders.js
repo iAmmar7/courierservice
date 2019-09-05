@@ -1,7 +1,9 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
+
 import Spinner from '../common/Spinner';
+
 import RiderProfileItem from './RiderProfileItem';
 import { getRiderProfiles, getRiders } from '../../actions/riderActions';
 
@@ -34,17 +36,13 @@ class AllRiders extends Component {
 
     return (
       <div className="profiles">
-        <div className="container">
-          <div className="row">
-            <div className="col-md-12">
-              <h1 className="display-4 text-center">Riders Profiles</h1>
-              <p className="lead text-center">
-                See Your All Riders Here
+        <div className="col-md-12">
+          <h1 className="display-4 text-center">Riders Profile</h1>
+          <p className="lead text-center">
+            See Your All Riders Here
               </p>
-              <div className="card-group">
-                {riderItems}
-              </div>
-            </div>
+          <div className="card-group">
+            {riderItems}
           </div>
         </div>
       </div>

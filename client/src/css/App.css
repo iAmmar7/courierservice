@@ -59,23 +59,28 @@ img {
   overflow-y: overlay;
 }
 
+/* Expansion List in Rider/Vendor Profiles */
 .expansion-list {
   list-style: none;
 }
 
-.all-btn {
-  padding-top: 0px;
+.all-buttons {
+  padding-top: 5px;
   padding-bottom: 0px;
-  margin-top: -20px;
   width: 100%;
   display: flex;
-  justify-content: flex-start;
+  justify-content: center;
+  flex-wrap: wrap;
+  align-items: center;
 }
 
-.btn-sal {
-  margin-left: auto;
+@media screen and (min-width: 600px) {
+  .btn-sal {
+    margin-left: auto;
+  }
 }
 
+/* Pie Chart */
 .pie-chart {
   margin-top: -30px;
   margin-left: auto;
@@ -95,5 +100,18 @@ img {
   }
   .pie-chart {
     display: inline-block;
+  }
+}
+
+@media screen and (max-width: 600px) {
+  .container {
+    max-width: 100%;
+  }
+}
+
+@media screen and (max-width: 450px) {
+  .col-md-12 {
+    padding-right: 0px;
+    padding-left: 0px;
   }
 }

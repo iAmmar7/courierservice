@@ -21,7 +21,8 @@ import AddRider from './components/rider/AddRider';
 import AllRiders from './components/rider/AllRiders';
 import RiderProfile from './components/rider/RiderProfile';
 import AddVendor from './components/vendor/AddVendor';
-import VendorProfiles from './components/vendor/VendorProfiles';
+import AllVendors from './components/vendor/AllVendors';
+import VendorProfile from './components/vendor/VendorProfile';
 import AddPackage from './components/package/AddPackage';
 
 import './css/App.css';
@@ -79,10 +80,13 @@ class App extends Component {
                 <PrivateRoute exact path="/all-riders" component={AllRiders} />
               </Switch>
               <Switch>
-                <PrivateRoute exact path="/all-vendors" component={VendorProfiles} />
+                <PrivateRoute exact path="/all-vendors" component={AllVendors} />
               </Switch>
               <Switch>
                 <PrivateRoute exact path="/all-riders/rider" component={RiderProfile} />
+              </Switch>
+              <Switch>
+                <PrivateRoute exact path="/all-vendors/vendor" component={VendorProfile} />
               </Switch>
             </div>
             <Footer />
