@@ -1,12 +1,12 @@
 import React from 'react';
-import spinner from './spinner.gif';
+import spinner from './Spinner.gif';
 
 export default () => {
   return (
     <div>
-      <img 
+      <img
         src={spinner}
-        style={{ width: '200px', margin:'auto', display: 'block' }}
+        style={{ width: '100px', margin: 'auto', display: 'block', color: 'red' }}
         alt="Loading..."
       />
     </div>

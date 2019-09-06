@@ -26,7 +26,7 @@ const data = [
     name: 'Jul', revenue: 3490, income: 4300, amt: 2100,
   },
   {
-    name: 'Aug', revenue: 2000, income: 12800, amt: 2290,
+    name: 'Aug', revenue: 2000, income: 14800, amt: 2290,
   },
   {
     name: 'Sep', revenue: 2780, income: 3908, amt: 2000,
@@ -47,18 +47,16 @@ export default class SimpleBarChart extends PureComponent {
   render() {
     return (
       <BarChart
-        width={650}
+        width={700}
         height={300}
         data={data}
-        margin={{
-          top: 0, right: 0, left: 0, bottom: 0,
-        }}
+        style={{ fill: "#fff" }}
       >
-        {/* <CartesianGrid strokeDasharray="3 3" /> */}
-        <XAxis dataKey="name" />
-        <YAxis />
-        <Tooltip />
-        <Legend />
+        {/* <CartesianGrid style={{ fill: "#fff" }} strokeDasharray="3 3" /> */}
+        <XAxis dataKey="name" style={{ fill: "#fff" }} />
+        <YAxis style={{ fill: "#fff" }} />
+        <Tooltip style={{ fill: "#fff" }} />
+        <Legend style={{ fill: "#fff" }} />
         <Bar dataKey="income" fill="#00b26f" />
         <Bar dataKey="revenue" fill="#fa4251" />
       </BarChart>

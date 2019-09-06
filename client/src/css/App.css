@@ -52,11 +52,14 @@ img {
   font-size: 130%;
 }
 
+/* Bar Chart on Dashboard */
 .bar-chart {
+  width: 100%;
   overflow-y: hidden;
 }
-.bar-chart:hover {
-  overflow-y: overlay;
+
+.bg-stats {
+  background-color: rgb(55, 71, 79);
 }
 
 /* Expansion List in Rider/Vendor Profiles */
@@ -110,7 +113,11 @@ img {
 }
 
 @media screen and (max-width: 450px) {
-  .col-md-12 {
+  .col-profile {
+    padding-right: 0px;
+    padding-left: 0px;
+  }
+  .container {
     padding-right: 0px;
     padding-left: 0px;
   }
