@@ -2,7 +2,6 @@ import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import CountUp from 'react-countup';
 
 import { getCurrentProfile, deleteAccount } from '../../actions/profileActions';
 import { getPackages } from '../../actions/packageActions';
@@ -16,6 +15,7 @@ import SimpleBarChart from '../charts/BarChart';
 import TopVendors from '../vendor/TopVendors';
 
 import isEmpty from '../../validation/is-empty';
+import Statistics from './Statistics';
 
 class Dashboard extends Component {
 
@@ -34,65 +34,14 @@ class Dashboard extends Component {
     const { user } = this.props.auth;
     const { loading, packages, vendors, riders } = this.props.profile;
 
-    let dashboardStats, dashboardChart, packageContent, monthlyData = {};
+    let userName, dashboardStats, dashboardChart, packageContent, monthlyData = {};
 
-    // if (loading) {
-    //   dashboardStats = <Spinner />;
-    // } else {
-    dashboardStats = (
-      <div>
-        <p className="lead text-muted">Welcome back <span className="font-weight-bold">{user.name}!</span></p>
-
-        <section className="statistic statistic2">
-          <div className="row">
-            <div className="col-md-6 col-lg-3">
-              <div className="statistic__item statistic__item--green">
-                <h2 className="number">
-                  <CountUp start={50000} end={10368} delay={1} duration={3} />
-                </h2>
-                <span className="desc">Delivered</span>
-                <div className="icon">
-                  <i className="zmdi zmdi-cloud-done"></i>
-                </div>
-              </div>
-            </div>
-            <div className="col-md-6 col-lg-3">
-              <div className="statistic__item statistic__item--orange">
-                <h2 className="number">
-                  <CountUp end={388688} delay={1} duration={3} />
-                </h2>
-                <span className="desc">Pending</span>
-                <div className="icon">
-                  <i className="zmdi zmdi-network-warning"></i>
-                </div>
-              </div>
-            </div>
-            <div className="col-md-6 col-lg-3">
-              <div className="statistic__item statistic__item--red">
-                <h2 className="number">
-                  <CountUp end={1086} delay={1} duration={3} />
-                </h2>
-                <span className="desc">Returned</span>
-                <div className="icon">
-                  <i className="zmdi zmdi-minus-circle-outline"></i>
-                </div>
-              </div>
-            </div>
-            <div className="col-md-6 col-lg-3">
-              <div className="statistic__item statistic__item--blue">
-                <h2 className="number">
-                  <CountUp end={1060386} prefix="$" delay={1} duration={3} />
-                </h2>
-                <span className="desc">total earnings</span>
-                <div className="icon">
-                  <i className="zmdi zmdi-money"></i>
-                </div>
-              </div>
-            </div>
-          </div>
-        </section>
-      </div>
-    );
+    // Dashboard Welcome
+    if (!loading && user) {
+      userName = <p className="lead text-muted">Welcome back <span className="font-weight-bold">{user.name}!</span></p>
+    } else {
+      userName = <Spinner />
+    }
 
     // Dashboard Chart Contents
     dashboardChart = (
@@ -108,15 +57,16 @@ class Dashboard extends Component {
     );
 
 
-    // Dashboard Recent Packages
+    // Dashboard Stats, Charts, Recent Packages
     if (loading) {
-      packageContent = <Spinner />
+      packageContent = <Spinner />;
 
     } else if (isEmpty(packages)) {
-      packageContent = <AllPackages data={packages} />
+      packageContent = <AllPackages data={packages} />;
 
     } else {
 
+      // Dashboard Recent Packages
       for (let j in packages) {
         var arrivalMonth = new Date(packages[j].arrivaldate).getMonth();
 
@@ -129,8 +79,6 @@ class Dashboard extends Component {
       }
 
       let months = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
-
-      console.log(monthlyData);
 
       //Extract Vendor Name from Vendor ID
       for (let i in packages) {
@@ -174,33 +122,32 @@ class Dashboard extends Component {
     }
 
     return (
-      <div>
-        <div className="dashboard">
-          <div className="col-md-12">
-            <h1 className="display-4">Dashboard</h1>
-            {dashboardStats}
+      <div className="dashboard">
+        <div className="col-md-12">
+          <h1 className="display-4">Dashboard</h1>
 
-            <section style={{ height: 'auto' }
-            }>
-              <h3 className="h4 text-dark">Statistics</h3>
-              <div className="row" style={{ height: '100%' }
-              }>
-                {dashboardChart}
-
-                <TopVendors />
-
-              </div>
-            </section>
-
+          <div>
+            {userName}
+            <Statistics />
           </div>
+
+          <section style={{ height: 'auto' }} >
+            <h3 className="h4 text-dark">Statistics</h3>
+            <div className="row" style={{ height: '100%' }} >
+              {dashboardChart}
+              <TopVendors />
+            </div>
+          </section>
+
+          <div className="mt-5 col-profile" id="all-packages">
+            <h3 className="h4 text-dark">Recent Packages</h3>
+            <ul className="expansion-list">
+              {packageContent}
+            </ul>
+          </div>
+
         </div>
-        <div className="mt-5 col-profile" id="all-packages">
-          <h3 className="h4 text-dark">Recent Packages</h3>
-          <ul className="expansion-list">
-            {packageContent}
-          </ul>
-        </div>
-      </div >
+      </div>
     )
   }
 }

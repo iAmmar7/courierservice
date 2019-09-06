@@ -22,6 +22,7 @@ class TopVendors extends Component {
 
     if (loading) {
       topVendors = <tr style={{ marginTop: '80px' }}><td><Spinner /></td></tr>;
+
     } else if (isEmpty(packages)) {
       topVendors = (
         <tr>
