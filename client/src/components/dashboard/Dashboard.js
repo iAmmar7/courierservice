@@ -11,6 +11,7 @@ import { getVendors } from '../../actions/vendorActions';
 
 import Spinner from '../common/Spinner';
 import AllPackages from '../package/AllPackages';
+import SimpleExpansionPanel from '../package/ExpansionPanel';
 import SimpleBarChart from '../charts/BarChart';
 import TopVendors from '../vendor/TopVendors';
 
@@ -33,7 +34,7 @@ class Dashboard extends Component {
     const { user } = this.props.auth;
     const { loading, packages, vendors, riders } = this.props.profile;
 
-    let dashboardStats, dashboardChart, topVendors, packageContent;
+    let dashboardStats, dashboardChart, packageContent, monthlyData = {};
 
     // if (loading) {
     //   dashboardStats = <Spinner />;
@@ -95,7 +96,7 @@ class Dashboard extends Component {
 
     // Dashboard Chart Contents
     dashboardChart = (
-      < div className="col-md-12 col-lg-8 mb-5" style={{ height: '320px' }
+      <div className="col-md-12 col-lg-8 mb-5" style={{ height: '100%' }
       }>
         <div className="px-4 py-3 bg-stats">
           <h3 className="h5 text-white">Chart</h3>
@@ -108,10 +109,28 @@ class Dashboard extends Component {
 
 
     // Dashboard Recent Packages
-    if (isEmpty(packages) || isEmpty(vendors) || isEmpty(riders)) {
+    if (loading) {
       packageContent = <Spinner />
-      topVendors = <div style={{ marginTop: '80px' }}><Spinner /></div>
+
+    } else if (isEmpty(packages)) {
+      packageContent = <AllPackages data={packages} />
+
     } else {
+
+      for (let j in packages) {
+        var arrivalMonth = new Date(packages[j].arrivaldate).getMonth();
+
+        if (monthlyData[arrivalMonth]) {
+          monthlyData[arrivalMonth].push(packages[j]);
+        } else {
+          monthlyData[arrivalMonth] = [];
+          monthlyData[arrivalMonth].push(packages[j]);
+        }
+      }
+
+      let months = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
+
+      console.log(monthlyData);
 
       //Extract Vendor Name from Vendor ID
       for (let i in packages) {
@@ -131,14 +150,26 @@ class Dashboard extends Component {
         }
       }
 
-      // Top Vendors Table Data
-      topVendors = <TopVendors packages={packages} />
-
       packageContent = (
-        <div className="mt-5 col-profile" id="all-packages">
-          <h3 className="h4 text-dark">Recent Packages</h3>
-          <AllPackages data={packages} />
-        </div>
+        Object.keys(monthlyData).reverse().map(item => {
+          let delivered = 0, returned = 0, pending = 0, income = 0;
+          for (let i of monthlyData[item]) {
+            if (i.status === "delivered") {
+              delivered++;
+              income += i.cod;
+            } else if (i.status === "returned") {
+              returned++;
+            } else if (i.status === "pending") {
+              pending++;
+            }
+          }
+
+          return (
+            <li key={item}>
+              <SimpleExpansionPanel data={monthlyData[item]} heading={months[item]} delivered={delivered} returned={returned} pending={pending} income={income} />
+            </li>
+          )
+        })
       )
     }
 
@@ -149,32 +180,26 @@ class Dashboard extends Component {
             <h1 className="display-4">Dashboard</h1>
             {dashboardStats}
 
-            <section>
+            <section style={{ height: 'auto' }
+            }>
               <h3 className="h4 text-dark">Statistics</h3>
-              <div className="row">
+              <div className="row" style={{ height: '100%' }
+              }>
                 {dashboardChart}
 
-                {/* Top Vendors */}
-                <div className="col-md-12 col-lg-4" style={{ height: '320px' }}>
-                  <div className="px-4 py-3 bg-stats">
-                    <h3 className="h5 text-white">Top Vendors</h3>
-                    <div className="table-responsive" style={{
-                      height: '300px'
-                    }}>
-                      <table className="table table-top-campaign" style={{ height: '100%' }
-                      } >
-                        {topVendors}
-                      </table>
-                    </div>
-                  </div>
-                </div>
+                <TopVendors />
 
               </div>
             </section>
 
           </div>
         </div>
-        {packageContent}
+        <div className="mt-5 col-profile" id="all-packages">
+          <h3 className="h4 text-dark">Recent Packages</h3>
+          <ul className="expansion-list">
+            {packageContent}
+          </ul>
+        </div>
       </div >
     )
   }

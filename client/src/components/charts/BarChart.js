@@ -5,40 +5,40 @@ import {
 
 const data = [
   {
-    name: 'Jan', revenue: 4000, income: 2400, amt: 2400,
+    name: 'Jan', income: 12000, revenue: 4300, amt: 2400,
   },
   {
-    name: 'Feb', revenue: 3000, income: 1398, amt: 2210,
+    name: 'Feb', income: 16000, revenue: 5600, amt: 2210,
   },
   {
-    name: 'Mar', revenue: 2000, income: 9800, amt: 2290,
+    name: 'Mar', income: 21000, revenue: 9800, amt: 2290,
   },
   {
-    name: 'Apr', revenue: 2780, income: 3908, amt: 2000,
+    name: 'Apr', income: 27800, revenue: 10060, amt: 2000,
   },
   {
-    name: 'May', revenue: 1890, income: 4800, amt: 2181,
+    name: 'May', income: 18900, revenue: 6800, amt: 2181,
   },
   {
-    name: 'Jun', revenue: 2390, income: 3800, amt: 2500,
+    name: 'Jun', income: 23900, revenue: 13800, amt: 2500,
   },
   {
-    name: 'Jul', revenue: 3490, income: 4300, amt: 2100,
+    name: 'Jul', income: 34900, revenue: 20300, amt: 2100,
   },
   {
-    name: 'Aug', revenue: 2000, income: 14800, amt: 2290,
+    name: 'Aug', income: 20000, revenue: 14800, amt: 2290,
   },
   {
-    name: 'Sep', revenue: 2780, income: 3908, amt: 2000,
+    name: 'Sep', income: 27800, revenue: 19908, amt: 2000,
   },
   {
-    name: 'Oct', revenue: 1890, income: 4800, amt: 2181,
+    name: 'Oct', income: 18900, revenue: 9000, amt: 2181,
   },
   {
-    name: 'Nov', revenue: 2390, income: 3800, amt: 2500,
+    name: 'Nov', income: 23900, revenue: 10800, amt: 2500,
   },
   {
-    name: 'Dec', revenue: 3490, income: 4300, amt: 2100,
+    name: 'Dec', income: 34900, revenue: 19300, amt: 2100,
   },
 ];
 
@@ -57,8 +57,8 @@ export default class SimpleBarChart extends PureComponent {
         <YAxis style={{ fill: "#fff" }} />
         <Tooltip style={{ fill: "#fff" }} />
         <Legend style={{ fill: "#fff" }} />
-        <Bar dataKey="income" fill="#00b26f" />
-        <Bar dataKey="revenue" fill="#fa4251" />
+        <Bar dataKey="income" fill="#fa4251" />
+        <Bar dataKey="revenue" fill="#00b26f" />
       </BarChart>
     );
   }

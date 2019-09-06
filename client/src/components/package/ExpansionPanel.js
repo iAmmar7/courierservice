@@ -38,7 +38,7 @@ class SimpleExpansionPanel extends Component {
   render() {
     const classes = this.style.useStyles;
     const { data } = this.state;
-    const { salary, pending, heading, delivered, returned } = this.props;
+    const { salary, pending, heading, delivered, returned, income } = this.props;
 
     let table, riderOrVendor;
     if (data === undefined) {
@@ -46,19 +46,55 @@ class SimpleExpansionPanel extends Component {
     } else {
       if (data.length > 0) {
         table = <AllPackages data={data} />
+
         if (salary || salary === 0) {
           riderOrVendor = (
-            <button className="btn btn-secondary btn-sal">
-              Salary <span className="badge badge-light">{salary} PKR</span>
-            </button>
+            <div className="all-buttons">
+              <button className="btn btn-success mb-1">Delivered <span className="badge badge-light">{delivered}</span>
+              </button>
+
+              <button className="btn btn-danger mb-1 mx-3">Returned <span className="badge badge-light">{returned}</span>
+              </button>
+
+              <button className="btn btn-secondary btn-sal">
+                Salary <span className="badge badge-light">{salary} PKR</span>
+              </button>
+            </div>
+          )
+        } else if ((income || income === 0) && (pending || pending === 0)) {
+          riderOrVendor = (
+            <div className="all-buttons">
+              <button className="btn btn-success mb-1">Delivered <span className="badge badge-light">{delivered}</span>
+              </button>
+
+              <button className="btn btn-danger mb-1 mx-3">Returned <span className="badge badge-light">{returned}</span>
+              </button>
+
+              <button type="button" className="btn btn-warning mb-1">
+                Pending <span className="badge badge-light">{pending}</span>
+              </button>
+
+              <button type="button" className="btn btn-secondary btn-sal">
+                Income <span className="badge badge-light">{income} PKR</span>
+              </button>
+            </div>
           )
         } else if (pending || pending === 0) {
           riderOrVendor = (
-            <button type="button" className="btn btn-warning mb-1">
-              Pending <span className="badge badge-light">{pending}</span>
-            </button>
+            <div className="all-buttons">
+              <button className="btn btn-success mb-1">Delivered <span className="badge badge-light">{delivered}</span>
+              </button>
+
+              <button className="btn btn-danger mb-1 mx-3">Returned <span className="badge badge-light">{returned}</span>
+              </button>
+
+              <button type="button" className="btn btn-warning mb-1">
+                Pending <span className="badge badge-light">{pending}</span>
+              </button>
+            </div>
           )
         }
+
       } else {
         table = <Spinner />
       }
@@ -79,15 +115,15 @@ class SimpleExpansionPanel extends Component {
             </ExpansionPanelDetails>
             <ExpansionPanelDetails>
 
-              <div className="all-buttons">
+              {/* <div className="all-buttons">
                 <button className="btn btn-success mb-1">Delivered <span className="badge badge-light">{delivered}</span>
                 </button>
 
                 <button className="btn btn-danger mb-1 mx-3">Returned <span className="badge badge-light">{returned}</span>
-                </button>
+                </button> */}
 
-                {riderOrVendor}
-              </div>
+              {riderOrVendor}
+              {/* </div> */}
 
             </ExpansionPanelDetails>
           </div>
