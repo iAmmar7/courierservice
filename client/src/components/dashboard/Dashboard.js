@@ -34,7 +34,7 @@ class Dashboard extends Component {
     const { user } = this.props.auth;
     const { loading, packages, vendors, riders } = this.props.profile;
 
-    let userName, dashboardStats, dashboardChart, packageContent, monthlyData = {};
+    let userName, dashboardChart, packageContent, monthlyData = {};
 
     // Dashboard Welcome
     if (!loading && user) {
@@ -43,28 +43,19 @@ class Dashboard extends Component {
       userName = <Spinner />
     }
 
-    // Dashboard Chart Contents
-    dashboardChart = (
-      <div className="col-md-12 col-lg-8 mb-5" style={{ height: '100%' }
-      }>
-        <div className="px-4 py-3 bg-stats">
-          <h3 className="h5 text-white">Chart</h3>
-          <div className="bar-chart col-lg-12 text-white">
-            <SimpleBarChart />
-          </div>
-        </div>
-      </div>
-    );
-
-
     // Dashboard Stats, Charts, Recent Packages
     if (loading) {
       packageContent = <Spinner />;
+
+      dashboardChart = <div style={{ marginTop: '20px' }}><Spinner /></div>;;
 
     } else if (isEmpty(packages)) {
       packageContent = <AllPackages data={packages} />;
 
     } else {
+
+      // Dashboard Chart Contents
+      dashboardChart = <SimpleBarChart />;
 
       // Dashboard Recent Packages
       for (let j in packages) {
@@ -131,10 +122,17 @@ class Dashboard extends Component {
             <Statistics />
           </div>
 
-          <section style={{ height: 'auto' }} >
+          <section style={{ height: '100%' }} >
             <h3 className="h4 text-dark">Statistics</h3>
-            <div className="row" style={{ height: '100%' }} >
-              {dashboardChart}
+            <div className="row" style={{ height: 'auto' }} >
+              <div className="col-md-12 col-lg-8 mb-5" style={{ height: '100%' }}>
+                <div className="px-4 py-3 bg-stats">
+                  <h3 className="h5 text-white">Chart</h3>
+                  <div className="bar-chart col-lg-12 text-white" style={{ height: '300px' }}>
+                    {dashboardChart}
+                  </div>
+                </div>
+              </div>
               <TopVendors />
             </div>
           </section>

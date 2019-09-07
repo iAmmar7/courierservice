@@ -27,7 +27,6 @@ import AddPackage from './components/package/AddPackage';
 
 import './css/App.css';
 import './css/theme.css';
-import './css/material-design-iconic-font.css';
 
 // Check for Token
 if (localStorage.jwtToken) {
@@ -58,7 +57,7 @@ class App extends Component {
           <div className="App">
             <Navbar />
             <Route exact path="/" component={Landing} />
-            <div className="container">
+            <div>
               <Route exact path="/register" component={Register} />
               <Route exact path="/login" component={Login} />
               <Switch>

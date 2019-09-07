@@ -61,21 +61,19 @@ class TopVendors extends Component {
       topVendors = Object.keys(vendorTable).map((item, key) => {
         return (
           <tr key={key}>
-            <td>{item}</td>
-            <td className="h2">{vendorTable[item]} pckgs</td>
+            <td style={{ fontSize: '16px' }}><strong>{item}</strong></td>
+            <td style={{ color: "#00B26F", fontSize: '16px' }}>{vendorTable[item]} pckgs</td>
           </tr>
         )
       })
     }
 
     return (
-      <div className="col-md-12 col-lg-4" style={{ height: '100%' }}>
+      <div className="col-md-12 col-lg-4" style={{ height: 'auto' }}>
         <div className="px-4 py-3 bg-stats">
           <h3 className="h5 text-white">Top Vendors</h3>
-          <div className="table-responsive" style={{
-            height: '300px'
-          }}>
-            <table className="table table-top-campaign" style={{ height: '100%' }
+          <div className="table-responsive" style={{ height: '300px' }}>
+            <table className="table table-top-campaign" style={{ height: 'auto' }
             } >
               <tbody>
                 {topVendors}
