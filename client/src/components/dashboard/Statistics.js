@@ -6,7 +6,6 @@ import CountUp from 'react-countup';
 
 import { getPackages } from '../../actions/packageActions';
 
-import Spinner from '../common/Spinner';
 import isEmpty from '../../validation/is-empty';
 
 class Statistics extends Component {
@@ -23,7 +22,7 @@ class Statistics extends Component {
       delivered = 0; returned = 0; pending = 0; income = 0;
 
     } else {
-      for (let i in packages) {
+      for (var i in packages) {
         if (packages[i].status === "delivered") {
           delivered++;
           income += packages[i].cod;

@@ -57,7 +57,7 @@ class RiderProfile extends Component {
 
         // Pie Chart Data
         let allDelivered = 0, allReturned = 0;
-        for (let i in packages) {
+        for (var i in packages) {
           if (packages[i].rider === riderCardData._id) {
             if (packages[i].status === "delivered") allDelivered++;
             else if (packages[i].status === "returned") allReturned++;
@@ -89,42 +89,42 @@ class RiderProfile extends Component {
 
 
         // Get Rider Table
-        for (let i = 0; i < packages.length; i++) {
-          if (packages[i].rider === riderCardData._id) {
-            riderTableData.push(packages[i])
+        for (var j = 0; j < packages.length; j++) {
+          if (packages[j].rider === riderCardData._id) {
+            riderTableData.push(packages[j])
           }
         }
 
         if (riderTableData.length > 0) {
 
-          for (let j in riderTableData) {
-            var arrivalMonth = new Date(riderTableData[j].arrivaldate).getMonth();
+          for (var k in riderTableData) {
+            var arrivalMonth = new Date(riderTableData[k].arrivaldate).getMonth();
 
             if (monthlyData[arrivalMonth]) {
-              monthlyData[arrivalMonth].push(riderTableData[j]);
+              monthlyData[arrivalMonth].push(riderTableData[k]);
             } else {
               monthlyData[arrivalMonth] = [];
-              monthlyData[arrivalMonth].push(riderTableData[j]);
+              monthlyData[arrivalMonth].push(riderTableData[k]);
             }
           }
 
-          let months = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
+          var months = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
 
           //Extract Vendor Name from Vendor ID
-          for (let i in monthlyData) {
-            for (let j of monthlyData[i]) {
-              for (let k in vendors) {
-                if (j.vendor === vendors[k]._id) {
-                  j.vendorname = vendors[k].name;
+          for (var l in monthlyData) {
+            for (var m of monthlyData[l]) {
+              for (var n in vendors) {
+                if (m.vendor === vendors[n]._id) {
+                  m.vendorname = vendors[n].name;
                 }
               }
             }
           }
 
           //Extract Rider Name from Rider ID
-          for (let i in monthlyData) {
-            for (let j of monthlyData[i]) {
-              j.ridername = riderCardData.name;
+          for (var o in monthlyData) {
+            for (var p of monthlyData[o]) {
+              p.ridername = riderCardData.name;
             }
           }
 
@@ -132,7 +132,7 @@ class RiderProfile extends Component {
           riderTable = (
             Object.keys(monthlyData).reverse().map(item => {
               let delivered = 0, returned = 0, salary = 0;
-              for (let i of monthlyData[item]) {
+              for (var i of monthlyData[item]) {
                 if (i.status === "delivered") {
                   delivered++;
                 } else if (i.status === "returned") {

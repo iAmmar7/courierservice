@@ -57,7 +57,7 @@ class VendorProfile extends Component {
 
         // Pie Chart Data
         let allDelivered = 0, allReturned = 0;
-        for (let i in packages) {
+        for (var i in packages) {
           if (packages[i].vendor === vendorCardData._id) {
             if (packages[i].status === "delivered") allDelivered++;
             else if (packages[i].status === "returned") allReturned++;
@@ -97,7 +97,7 @@ class VendorProfile extends Component {
 
         if (vendorTableData.length > 0) {
 
-          for (let j in vendorTableData) {
+          for (var j in vendorTableData) {
             var arrivalMonth = new Date(vendorTableData[j].arrivaldate).getMonth();
 
             if (monthlyData[arrivalMonth]) {
@@ -113,20 +113,20 @@ class VendorProfile extends Component {
           console.log(monthlyData);
 
           //Extract Rider Name from Rider ID
-          for (let i in monthlyData) {
-            for (let j of monthlyData[i]) {
-              for (let k in riders) {
-                if (j.rider === riders[k]._id) {
-                  j.ridername = riders[k].name;
+          for (var k in monthlyData) {
+            for (var l of monthlyData[k]) {
+              for (var m in riders) {
+                if (l.rider === riders[m]._id) {
+                  l.ridername = riders[m].name;
                 }
               }
             }
           }
 
           //Extract Vendor Name from Vendor ID
-          for (let i in monthlyData) {
-            for (let j of monthlyData[i]) {
-              j.vendorname = vendorCardData.name;
+          for (var n in monthlyData) {
+            for (var o of monthlyData[n]) {
+              o.vendorname = vendorCardData.name;
             }
           }
 
@@ -134,7 +134,7 @@ class VendorProfile extends Component {
           vendorTable = (
             Object.keys(monthlyData).reverse().map(item => {
               let delivered = 0, returned = 0, pending = 0;
-              for (let i of monthlyData[item]) {
+              for (var i of monthlyData[item]) {
                 if (i.status === "delivered") {
                   delivered++;
                 } else if (i.status === "returned") {

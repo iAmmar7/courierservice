@@ -102,7 +102,7 @@ class AllPackages extends React.Component {
       packageContent = <Spinner />
     } else {
 
-      for (let i in data) {
+      for (var i in data) {
         if (data[i].arrivaldate) {
           data[i].arrivaldate = data[i].arrivaldate.toString().split('T')[0];
         }

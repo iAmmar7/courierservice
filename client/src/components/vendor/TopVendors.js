@@ -33,8 +33,8 @@ class TopVendors extends Component {
     } else {
 
       //Extract Vendor Name from Vendor ID
-      for (let i in packages) {
-        for (let j in vendors) {
+      for (var i in packages) {
+        for (var j in vendors) {
           if (packages[i].vendor === vendors[j]._id) {
             packages[i].vendorname = vendors[j].name;
           }
@@ -42,20 +42,20 @@ class TopVendors extends Component {
       }
 
       //Extract Rider Name from Rider ID
-      for (let i in packages) {
-        for (let j in riders) {
-          if (packages[i].rider === riders[j]._id) {
-            packages[i].ridername = riders[j].name;
+      for (var k in packages) {
+        for (var l in riders) {
+          if (packages[k].rider === riders[l]._id) {
+            packages[k].ridername = riders[l].name;
           }
         }
       }
 
       // Count Vendors packages
-      for (let i in packages) {
-        if (!vendorTable[packages[i].vendorname]) {
-          vendorTable[packages[i].vendorname] = 1;
+      for (var m in packages) {
+        if (!vendorTable[packages[m].vendorname]) {
+          vendorTable[packages[m].vendorname] = 1;
         } else {
-          vendorTable[packages[i].vendorname]++;
+          vendorTable[packages[m].vendorname]++;
         }
       }
       topVendors = Object.keys(vendorTable).map((item, key) => {

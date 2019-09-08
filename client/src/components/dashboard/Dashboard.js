@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-import { Link } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 
@@ -58,7 +57,7 @@ class Dashboard extends Component {
       dashboardChart = <SimpleBarChart />;
 
       // Dashboard Recent Packages
-      for (let j in packages) {
+      for (var j in packages) {
         var arrivalMonth = new Date(packages[j].arrivaldate).getMonth();
 
         if (monthlyData[arrivalMonth]) {
@@ -72,19 +71,19 @@ class Dashboard extends Component {
       let months = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
 
       //Extract Vendor Name from Vendor ID
-      for (let i in packages) {
-        for (let j in vendors) {
-          if (packages[i].vendor === vendors[j]._id) {
-            packages[i].vendorname = vendors[j].name;
+      for (var k in packages) {
+        for (var l in vendors) {
+          if (packages[k].vendor === vendors[l]._id) {
+            packages[k].vendorname = vendors[l].name;
           }
         }
       }
 
       //Extract Rider Name from Rider ID
-      for (let i in packages) {
-        for (let j in riders) {
-          if (packages[i].rider === riders[j]._id) {
-            packages[i].ridername = riders[j].name;
+      for (var m in packages) {
+        for (var n in riders) {
+          if (packages[m].rider === riders[n]._id) {
+            packages[m].ridername = riders[n].name;
           }
         }
       }
@@ -92,7 +91,7 @@ class Dashboard extends Component {
       packageContent = (
         Object.keys(monthlyData).reverse().map(item => {
           let delivered = 0, returned = 0, pending = 0, income = 0;
-          for (let i of monthlyData[item]) {
+          for (var i of monthlyData[item]) {
             if (i.status === "delivered") {
               delivered++;
               income += i.cod;
