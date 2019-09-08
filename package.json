@@ -1,9 +1,6 @@
 {
   "name": "courierservice",
   "version": "1.0.0",
-  "engines": {
-    "node": "10.14.2"
-  },
   "description": "Courier Service Management",
   "main": "server.js",
   "scripts": {
