@@ -2,6 +2,9 @@
   "name": "courierservice",
   "version": "1.0.0",
   "description": "Courier Service Management",
+  "engines": {
+    "node": "10.x"
+  },
   "main": "server.js",
   "scripts": {
     "client-install": "npm install --prefix client",
