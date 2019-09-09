@@ -56,11 +56,12 @@ class VendorProfile extends Component {
         }
 
         // Pie Chart Data
-        let allDelivered = 0, allReturned = 0;
+        let allDelivered = 0, allReturned = 0, allPending = 0;
         for (var i in packages) {
           if (packages[i].vendor === vendorCardData._id) {
             if (packages[i].status === "delivered") allDelivered++;
             else if (packages[i].status === "returned") allReturned++;
+            else if (packages[i].status === "pending") allPending++;
           }
         }
 
@@ -81,7 +82,7 @@ class VendorProfile extends Component {
                 <p className="card-text">Hire Date: <span className="props">{vendorCardData.formatDate}</span></p>
               </div>
               <div className="col-lg-4 pie-chart-container">
-                <SimplePieChart delivered={allDelivered} return={allReturned} />
+                <SimplePieChart delivered={allDelivered} return={allReturned} pending={allPending} />
               </div>
             </div>
           </div>
@@ -110,7 +111,6 @@ class VendorProfile extends Component {
 
           let months = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"]
 
-          console.log(monthlyData);
 
           //Extract Rider Name from Rider ID
           for (var k in monthlyData) {
@@ -162,7 +162,7 @@ class VendorProfile extends Component {
     }
 
     return (
-      <div className="profiles" >
+      <div className="profiles container" >
         <div className="row">
           <div className="col-md-12">
             <h1 className="display-4 text-center">Vendor Profile</h1>

@@ -4,7 +4,7 @@ import {
 } from 'recharts';
 
 
-const COLORS = ['#00b26f', '#fa4251'];
+const COLORS = ['#00b26f', '#fa4251', '#E69743'];
 
 
 class SimplePieChart extends PureComponent {
@@ -13,20 +13,34 @@ class SimplePieChart extends PureComponent {
     this.state = {
       data: [
         { name: 'Delivered', value: 100 },
-        { name: 'Returned', value: 100 }
+        { name: 'Returned', value: 100 },
+        { name: 'Pending', value: 100 }
       ]
     }
   }
 
   render() {
     const { data } = this.state;
+
+    let dispData, chartHeight = 260;
+    if (this.props.pending) {
+      dispData = [
+        { name: 'Delivered', value: this.props.delivered },
+        { name: 'Returned', value: this.props.returned },
+        { name: 'Pending', value: this.props.pending }
+      ];
+    } else {
+      chartHeight = 240;
+      dispData = [
+        { name: 'Delivered', value: this.props.delivered },
+        { name: 'Returned', value: this.props.returned }
+      ];
+    }
+
     return (
-      <PieChart width={210} height={240} onMouseEnter={this.onPieEnter} className="pie-chart" >
+      <PieChart width={210} height={chartHeight} onMouseEnter={this.onPieEnter} className="pie-chart" >
         <Pie
-          data={[
-            { name: 'Delivered', value: this.props.delivered },
-            { name: 'Returned', value: this.props.returned }
-          ]}
+          data={dispData}
           cx={80}
           cy={110}
           innerRadius={60}

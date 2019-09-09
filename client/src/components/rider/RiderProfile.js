@@ -159,7 +159,7 @@ class RiderProfile extends Component {
     }
 
     return (
-      <div className="profiles" >
+      <div className="profiles container" >
         <div className="row">
           <div className="col-md-12 col-profile">
             <h1 className="display-4 text-center">Rider Profile</h1>
