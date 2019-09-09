@@ -81,7 +81,7 @@ class RiderProfile extends Component {
                 <p className="card-text">Hire Date: <span className="props">{riderCardData.formatDate}</span></p>
               </div>
               <div className="col-lg-4 pie-chart-container">
-                <SimplePieChart delivered={allDelivered} return={allReturned} />
+                <SimplePieChart delivered={allDelivered} returned={allReturned} />
               </div>
             </div>
           </div>

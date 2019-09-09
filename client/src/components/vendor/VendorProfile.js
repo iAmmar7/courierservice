@@ -82,7 +82,7 @@ class VendorProfile extends Component {
                 <p className="card-text">Hire Date: <span className="props">{vendorCardData.formatDate}</span></p>
               </div>
               <div className="col-lg-4 pie-chart-container">
-                <SimplePieChart delivered={allDelivered} return={allReturned} pending={allPending} />
+                <SimplePieChart delivered={allDelivered} returned={allReturned} pending={allPending} />
               </div>
             </div>
           </div>
