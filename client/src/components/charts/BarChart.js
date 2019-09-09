@@ -1,6 +1,6 @@
 import React, { PureComponent } from 'react';
 import {
-  BarChart, Bar, XAxis, YAxis, Tooltip, Legend,
+  BarChart, Bar, XAxis, YAxis, Tooltip, Legend, ResponsiveContainer
 } from 'recharts';
 
 const data = [
@@ -46,19 +46,21 @@ export default class SimpleBarChart extends PureComponent {
 
   render() {
     return (
-      <BarChart
-        width={700}
-        height={300}
-        data={data}
-        style={{ fill: "#fff" }}
-      >
-        <XAxis dataKey="name" style={{ fill: "#fff" }} />
-        <YAxis style={{ fill: "#fff" }} />
-        <Tooltip />
-        <Legend />
-        <Bar dataKey="income" fill="#fa4251" />
-        <Bar dataKey="revenue" fill="#00b26f" />
-      </BarChart>
+      <ResponsiveContainer>
+        <BarChart
+          width={700}
+          height={300}
+          data={data}
+          style={{ fill: "#fff" }}
+        >
+          <XAxis dataKey="name" style={{ fill: "#fff" }} />
+          <YAxis style={{ fill: "#fff" }} />
+          <Tooltip />
+          <Legend />
+          <Bar dataKey="income" fill="#fa4251" />
+          <Bar dataKey="revenue" fill="#00b26f" />
+        </BarChart>
+      </ResponsiveContainer>
     );
   }
 }
