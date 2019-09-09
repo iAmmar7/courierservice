@@ -123,10 +123,6 @@ class AddPackage extends Component {
 
   onChange(e) {
     this.setState({ [e.target.name]: e.target.value })
-
-    if (this.state.rider && this.state.cod && this.state.dc) {
-      this.setState({ status: 'delivered' });
-    }
   }
 
   getDropdownList(arr) {
