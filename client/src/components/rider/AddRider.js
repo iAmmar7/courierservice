@@ -82,6 +82,8 @@ class AddRider extends Component {
         chargesperdelivery: this.state.chargesperdelivery,
         hiredate: this.state.hiredate
       }
+      let newDate = new Date(this.state.hiredate);
+      riderData.hiredate = newDate;
     }
 
     // Call an action

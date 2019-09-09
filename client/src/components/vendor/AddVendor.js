@@ -130,7 +130,7 @@ class AddVendor extends Component {
                     info="Phone number of new vendor"
                   />
                   <TextFieldGroup
-                    placeholder="Charges Per Delivery"
+                    placeholder="Address"
                     name="address"
                     value={this.state.address}
                     onChange={this.onChange}

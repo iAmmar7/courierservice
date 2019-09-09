@@ -48,6 +48,7 @@ router.post(
     if (req.body.name) riderFields.name = req.body.name;
     if (req.body.contact) riderFields.contact = req.body.contact;
     if (req.body.chargesperdelivery) riderFields.chargesperdelivery = req.body.chargesperdelivery;
+    if (req.body.hiredate) riderFields.hiredate = req.body.hiredate;
 
     if (req.body._id) {
       Rider.findOne({ "_id": req.body._id })
@@ -89,6 +90,7 @@ router.post(
     if (req.body.name) vendorFields.name = req.body.name;
     if (req.body.contact) vendorFields.contact = req.body.contact;
     if (req.body.address) vendorFields.address = req.body.address;
+    if (req.body.hiredate) vendorFields.hiredate = req.body.hiredate;
 
     if (req.body._id) {
       Vendor.findOne({ "_id": req.body._id })
