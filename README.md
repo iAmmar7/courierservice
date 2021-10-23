@@ -24,3 +24,5 @@ The application is deployed on Heroku. You can see it [here](https://agile-chamb
 - Express <img alt="Express" src="https://img.shields.io/badge/-Express-000000?style=flat-square&logo=express&logoColor=white" />
 - MongoDB <img alt="MongoDB" src="https://img.shields.io/badge/-MongoDB-13aa52?style=flat-square&logo=mongodb&logoColor=white" />
 - Heroku <img alt="Heroku" src="https://img.shields.io/badge/-Heroku-430098?style=flat-square&logo=heroku&logoColor=white" />
+
+_A whole list of dependencies can be found inside the package.json of server and client._
